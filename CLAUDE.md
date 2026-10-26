@@ -27,7 +27,8 @@ added to the same Worker (see README).
 
 Loose, atmospheric and image-led, not a tidy template. No eyebrow-heading-paragraph
 sections, card grids or progress bars. Few words: small, scattered, often handwritten
-(Nanum Pen Script) and slightly rotated. On the site the potato is the soft airbrushed
+(Special Elite typewriter; VT323 for the CRT counter), with rough ink edges and a slipped red layer.
+Texture over smoothness: printed/stippled sky, halftone clouds, halftone smoke and glows, film grain, dust, faint scan lines. On the site the potato is the soft airbrushed
 version (`potato-dreamy.webp`); the crisp print potato is for the logo only.
 
 ## Copy
