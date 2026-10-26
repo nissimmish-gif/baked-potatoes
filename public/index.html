@@ -64,9 +64,9 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
 .fc-label { font-family: var(--f-card); font-weight: 500; text-transform: lowercase; letter-spacing: -.015em; line-height: 1; }
 
 /* ---------- header card ---------- */
-.wordmark { position: fixed; z-index: 6; top: calc(10px + env(safe-area-inset-top, 0px)); left: 50%; transform: translateX(-50%); margin: 0;
+.wordmark { position: fixed; z-index: 6; top: calc(14px + env(safe-area-inset-top, 0px)); left: 50%; transform: translateX(-50%); margin: 0;
   font-family: "Arimo", Arial, sans-serif; font-weight: 700; font-size: 16px; line-height: .9; letter-spacing: -.02em; text-transform: lowercase; color: var(--cream); text-align: left; }
-.top { position: fixed; z-index: 5; top: calc(52px + env(safe-area-inset-top, 0px)); left: 50%; transform: translateX(-50%) rotate(-1deg); width: min(360px, calc(100vw - 32px)); }
+.top { position: fixed; z-index: 5; top: calc(58px + env(safe-area-inset-top, 0px)); left: 50%; transform: translateX(-50%) rotate(-1deg); width: min(360px, calc(100vw - 32px)); }
 .top .fc-frame { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 12px; padding: 7px 12px 7px 13px; }
 .top .ti { min-width: 0; }
 .top .fc-label { font-size: 22px; margin: 0; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; line-height: 1.02; }
@@ -76,7 +76,7 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
 .top .rate small { display: block; margin-top: 2px; font-size: 10.5px; font-weight: 500; text-transform: lowercase; white-space: nowrap; }
 
 /* ---------- the stack ---------- */
-.wall { position: fixed; inset: 0; z-index: 3; display: grid; place-items: center; padding: calc(144px + env(safe-area-inset-top, 0px)) 0 calc(118px + env(safe-area-inset-bottom, 0px)); }
+.wall { position: fixed; inset: 0; z-index: 3; display: grid; place-items: center; padding: calc(176px + env(safe-area-inset-top, 0px)) 0 calc(134px + env(safe-area-inset-bottom, 0px)); }
 .stack { position: relative; width: var(--W); height: calc(var(--W) * 1.5); }
 .poster { position: absolute; inset: 0; perspective: 1400px; touch-action: none; user-select: none; -webkit-user-select: none; }
 .poster.behind { pointer-events: none; }
@@ -196,7 +196,7 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
 
 /* ---------- how-to: side cards, caption, first-visit nudge ---------- */
 .deck { position: relative; width: var(--W); height: calc(var(--W) * 1.5); }
-.howto { position: absolute; left: -4px; right: -4px; top: 100%; margin-top: 14px; display: flex; justify-content: space-between; align-items: baseline; }
+.howto { position: absolute; left: -4px; right: -4px; top: 100%; margin-top: 22px; display: flex; justify-content: space-between; align-items: baseline; }
 .howto button { font-family: var(--f-card); font-weight: 500; font-size: 13px; text-transform: lowercase; color: var(--soft); padding: 6px 4px; white-space: nowrap; transition: color .2s ease, transform .2s ease; }
 .howto .pass { transform: translateX(calc(var(--pp, 0) * -6px)); }
 .howto .keep { transform: translateX(calc(var(--pk, 0) * 6px)); }
@@ -212,13 +212,13 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
 
 /* phones: smaller pieces, more sky between them */
 @media (max-width: 599px) {
-  .top { width: min(318px, calc(100vw - 56px)); top: calc(52px + env(safe-area-inset-top, 0px)); }
+  .top { width: min(318px, calc(100vw - 56px)); top: calc(58px + env(safe-area-inset-top, 0px)); }
   .top .fc-frame { gap: 9px; padding: 6px 10px 6px 11px; }
   .top .fc-label { font-size: 17px; }
   .top p { font-size: 10.5px; }
   .top .rate b { font-size: 18px; }
   .top .rate small { font-size: 9.5px; }
-  .wall { padding-top: calc(132px + env(safe-area-inset-top, 0px)); padding-bottom: calc(118px + env(safe-area-inset-bottom, 0px)); }
+  .wall { padding-top: calc(214px + env(safe-area-inset-top, 0px)); padding-bottom: calc(134px + env(safe-area-inset-bottom, 0px)); }
   .pill { bottom: calc(22px + env(safe-area-inset-bottom, 0px)); }
   .pill .fc-frame { gap: 15px; padding: 5px 12px 6px; }
   .pill button { font-size: 15px; }
@@ -247,7 +247,7 @@ div.sf { overflow: hidden; }
 .roll .tag { top: auto; bottom: 9%; z-index: 60; }
 
 /* grid view: every poster in a scrolling grid */
-.views { position: fixed; z-index: 11; right: max(16px, env(safe-area-inset-right, 0px)); top: calc(146px + env(safe-area-inset-top, 0px)); display: flex; padding: 3px; gap: 2px; border-radius: 10px;
+.views { position: fixed; z-index: 11; right: max(16px, env(safe-area-inset-right, 0px)); top: calc(158px + env(safe-area-inset-top, 0px)); display: flex; padding: 3px; gap: 2px; border-radius: 10px;
   background: rgba(255, 255, 255, .1); border: 1px solid rgba(255, 255, 255, .22); box-shadow: 0 8px 24px rgba(0, 0, 0, .35), inset 0 1px 0 rgba(255, 255, 255, .18);
   -webkit-backdrop-filter: blur(14px) saturate(1.4); backdrop-filter: blur(14px) saturate(1.4); }
 .views button { display: grid; place-items: center; width: 32px; height: 28px; border-radius: 7px; color: rgba(239, 228, 204, .7); transition: background .2s ease, color .2s ease; }
@@ -255,9 +255,8 @@ div.sf { overflow: hidden; }
 .views button[aria-pressed="true"] { background: rgba(255, 255, 255, .2); color: var(--cream); }
 @media (hover: hover) { .views button:hover { color: var(--cream); } }
 body.gridview .views { top: calc(16px + env(safe-area-inset-top, 0px)); }
-body.gridview .grid { padding-top: calc(64px + env(safe-area-inset-top, 0px)); }
-@media (max-width: 599px) { body:not(.gridview) .views { top: calc(134px + env(safe-area-inset-top, 0px)); } }
-@media (max-width: 599px) and (max-height: 720px) { .wall { padding-top: calc(178px + env(safe-area-inset-top, 0px)); } }
+body.gridview .grid { padding-top: calc(72px + env(safe-area-inset-top, 0px)); }
+@media (max-width: 599px) { body:not(.gridview) .views { top: calc(146px + env(safe-area-inset-top, 0px)); } }
 body.gridview .wall, body.gridview .top { display: none; }
 .grid { position: fixed; inset: 0; z-index: 4; overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch;
   padding: calc(18px + env(safe-area-inset-top, 0px)) 16px calc(96px + env(safe-area-inset-bottom, 0px)); }
@@ -495,7 +494,7 @@ body.gridview .wall, body.gridview .top { display: none; }
 
   // ---------- stack ----------
   var stack = document.getElementById('stack'), kindF = 'all', vibeF = 'all', seen = {};
-  function sizes() { var w = Math.min(innerWidth * (innerWidth < 600 ? .7 : .84), (innerHeight - 306) / 1.5, 380); document.documentElement.style.setProperty('--W', Math.round(w) + 'px'); }
+  function sizes() { var w = Math.min(innerWidth * (innerWidth < 600 ? .7 : .84), (innerHeight - (innerWidth < 600 ? 348 : 310)) / 1.5, 380); document.documentElement.style.setProperty('--W', Math.round(w) + 'px'); }
   var view = 'one', pin = null, grid = document.getElementById('grid'), tiles = document.getElementById('tiles');
   try { view = localStorage.getItem('baked-potatoes-view') === 'grid' ? 'grid' : 'one'; } catch (e) {}
   function setView(v) {
