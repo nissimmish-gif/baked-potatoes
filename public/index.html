@@ -7,212 +7,240 @@
 <meta name="description" content="What to watch when you're baked.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Arimo:wght@400;700&family=Instrument+Serif:ital@0;1&display=swap">
-<link rel="icon" href="potato-icon.webp" type="image/webp">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shrikhand&family=IBM+Plex+Mono:wght@400;600&family=Arimo:wght@400;700&display=swap">
 <style>
 [hidden] { display: none !important; }
 img { max-width: 100%; }
 body { margin: 0; }
-/* Layout: objects on a calm night surface. One real potato, pinned while you scroll: it warms,
-   steams, and gets loaded with vibe stickers. Then a stack of VHS tapes to swipe into your stash.
-   Editorial serif for the few big words, small Arimo labels for everything else. */
+/* Layout: a late-night 70s broadcast. One giant cel-animation eye on a turning sunburst with
+   acid colour burning behind it, scanner annotations around it, misprinted 70s display type.
+   Then a TV-guide channel list and printed program cards to swipe. Dark, single look. */
 :root {
-  --night: #141c3f;
-  --night-2: #1b2550;
-  --cream: #f1e3cc;
-  --dim: rgba(241, 227, 204, .55);
-  --line: rgba(241, 227, 204, .18);
-  --gold: #f2c14e;
-  --red: #e5452f;
-  --blue: #6d9be0;
-  --pink: #f29bb4;
-  --green: #79c98e;
-  --violet: #a58cf0;
+  --night: #11163a;
+  --night-2: #1a2154;
+  --cream: #f0dcbf;
+  --dim: rgba(240, 220, 191, .58);
+  --red: #ea4b32;
+  --yellow: #f4cf3a;
   --orange: #f08a3c;
-  --f-serif: "Instrument Serif", "Times New Roman", Georgia, serif;
-  --f-sans: "Arimo", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --pink: #ef98a6;
+  --blue: #3f63c8;
+  --sky: #7fa8e6;
+  --green: #5a9a3e;
+  --f-display: "Shrikhand", "Cooper Black", Georgia, serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  --f-sans: "Arimo", "Helvetica Neue", Arial, sans-serif;
   color-scheme: dark;
 }
 * { box-sizing: border-box; }
 html { background: var(--night); overflow-x: clip; }
-body { margin: 0; background: radial-gradient(120% 80% at 50% 30%, var(--night-2), var(--night) 70%); background-attachment: fixed; color: var(--cream);
-  font-family: var(--f-sans); font-size: 15px; line-height: 1.45; overflow-x: clip; }
+body { margin: 0; background: var(--night); color: var(--cream); font-family: var(--f-sans); font-size: 15px; line-height: 1.45; overflow-x: clip; }
 body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: var(--night); }
-body::after { content: ""; position: fixed; inset: 0; z-index: 40; pointer-events: none; background: url("grain.png"); background-size: 220px; opacity: .22; }
+body::after { content: ""; position: fixed; inset: 0; z-index: 60; pointer-events: none; background: url("grain.png"); background-size: 200px; opacity: .35; mix-blend-mode: overlay; }
 button { font: inherit; color: inherit; }
-:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
-p, h1, h2 { margin: 0; font-weight: 400; }
-.label { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--dim); }
-.serif { font-family: var(--f-serif); }
+:focus-visible { outline: 2px solid var(--yellow); outline-offset: 3px; }
+p, h1, h2, h3 { margin: 0; font-weight: 400; }
+.mono { font-family: var(--f-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; }
+/* misprint: the same words printed again in red, slipped */
+.mis { position: relative; display: inline-block; }
+.mis::before { content: attr(data-t); position: absolute; left: .045em; top: .05em; color: var(--red); z-index: -1; white-space: pre; }
 
-/* ---------- top bar ---------- */
-.bar { position: fixed; z-index: 20; top: env(safe-area-inset-top, 0px); left: 0; right: 0; display: flex; justify-content: space-between; align-items: center;
-  padding: 16px max(20px, env(safe-area-inset-right, 0px)) 16px max(20px, env(safe-area-inset-left, 0px)); }
-.wordmark { font-weight: 700; font-size: 15px; line-height: .95; letter-spacing: -.02em; color: var(--cream); text-decoration: none; }
-.stash-link { background: none; border: 0; cursor: pointer; font-size: 13px; letter-spacing: .02em; display: flex; gap: 8px; align-items: center; padding: 6px 0; }
-.stash-link b { font-weight: 700; min-width: 22px; height: 22px; border-radius: 99px; background: var(--cream); color: var(--night); display: grid; place-items: center; font-size: 12px; padding: 0 6px; }
-.stash-link.bump b { animation: bump .5s ease; }
-@keyframes bump { 40% { transform: scale(1.35); background: var(--gold); } }
+/* ---------- top strip ---------- */
+.strip { position: fixed; z-index: 20; top: env(safe-area-inset-top, 0px); left: 0; right: 0; display: flex; justify-content: space-between; align-items: center; gap: 12px;
+  padding: 12px max(16px, env(safe-area-inset-right, 0px)) 12px max(16px, env(safe-area-inset-left, 0px)); }
+.strip .brand { font-family: var(--f-display); font-size: 19px; line-height: 1; color: var(--cream); text-decoration: none; }
+.strip .live { display: flex; align-items: center; gap: 7px; color: var(--dim); }
+.strip .live i { width: 7px; height: 7px; border-radius: 50%; background: var(--red); animation: rec 1.6s steps(2) infinite; }
+@keyframes rec { 50% { opacity: .2; } }
+.stash-btn { background: var(--cream); color: var(--night); border: 0; border-radius: 99px; padding: 7px 13px; cursor: pointer; font-family: var(--f-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; font-weight: 600; }
+.stash-btn.bump { animation: bump .5s ease; }
+@keyframes bump { 40% { transform: scale(1.18) rotate(-4deg); background: var(--yellow); } }
 
-/* ---------- the potato ---------- */
-.oven { height: 360vh; position: relative; overflow-x: clip; }
+/* ---------- broadcast (hero) ---------- */
+.broadcast { height: 300vh; position: relative; }
 .stage { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; --p: 0; }
-.side { position: absolute; top: 50%; transform: translateY(-50%); }
-.side.l { left: max(20px, env(safe-area-inset-left, 0px)); }
-.side.r { right: max(20px, env(safe-area-inset-right, 0px)); text-align: right; }
-.count { position: absolute; left: max(20px, 6vw); top: 22vh; font-family: var(--f-serif); font-size: clamp(64px, 11vw, 150px); line-height: .8; letter-spacing: -.02em;
-  font-variant-numeric: tabular-nums; }
-.count sup { font-size: .32em; vertical-align: top; margin-left: 4px; color: var(--dim); }
-.count-l { position: absolute; left: max(20px, 6vw); top: calc(22vh + clamp(60px, 10vw, 136px)); }
-.spud { position: absolute; left: 50%; top: 52%; width: min(46vw, 62vh, 540px); transform: translate(-50%, -50%) rotate(-14deg); }
-.spud img.photo { display: block; width: 100%; height: auto; filter: saturate(calc(.75 + .5 * var(--p))) sepia(calc(.25 * var(--p))) brightness(calc(1.05 - .1 * var(--p))) contrast(calc(1 + .08 * var(--p))); }
-.spud::before { content: ""; position: absolute; left: 10%; right: 10%; bottom: -8%; height: 18%; border-radius: 50%; background: rgba(4, 6, 20, .55); filter: blur(18px); }
-.spud::after { content: ""; position: absolute; inset: -30% -25%; z-index: -1; border-radius: 50%; filter: blur(40px);
-  background: radial-gradient(circle, rgba(242, 160, 70, calc(.42 * var(--p))), transparent 62%); }
-.steam { position: absolute; left: 50%; bottom: 76%; width: 70%; height: 70%; transform: translateX(-50%) rotate(14deg); overflow: visible; opacity: calc(var(--p) * 1.3 - .15); }
-.steam path { fill: none; stroke: var(--cream); stroke-width: 2.2; stroke-linecap: round; opacity: .55; stroke-dasharray: 18 220; animation: rise 3.4s linear infinite; }
-.steam path:nth-child(2) { animation-delay: -1.1s; opacity: .4; }
-.steam path:nth-child(3) { animation-delay: -2.2s; opacity: .5; }
-.steam path:nth-child(4) { animation-delay: -.6s; opacity: .3; }
-@keyframes rise { from { stroke-dashoffset: 240; } to { stroke-dashoffset: 0; } }
-.tagline { position: absolute; left: 0; right: 0; bottom: max(36px, 8vh); text-align: center; font-family: var(--f-serif); font-size: clamp(26px, 3.4vw, 40px); line-height: 1.05; }
-.tagline em { color: var(--gold); }
-.tagline .label { display: block; margin-top: 10px; font-family: var(--f-sans); }
+.acid { position: absolute; inset: -10%; filter: blur(60px) saturate(1.4); opacity: .9; }
+.acid i { position: absolute; border-radius: 50%; animation: ooze 22s ease-in-out infinite alternate; }
+.acid i:nth-child(1) { width: 50vmax; height: 50vmax; left: 25%; top: 10%; background: var(--red); }
+.acid i:nth-child(2) { width: 38vmax; height: 38vmax; left: 45%; top: 40%; background: var(--yellow); animation-duration: 17s; }
+.acid i:nth-child(3) { width: 34vmax; height: 34vmax; left: 5%; top: 45%; background: var(--pink); animation-duration: 26s; }
+.acid i:nth-child(4) { width: 30vmax; height: 30vmax; left: 60%; top: -5%; background: var(--green); opacity: .7; animation-duration: 31s; }
+@keyframes ooze { 50% { transform: translate(6vw, -4vh) scale(1.15); } 100% { transform: translate(-4vw, 5vh) scale(.92); } }
+.fade { position: absolute; inset: 0; background: radial-gradient(ellipse 70% 60% at 50% 48%, transparent 30%, var(--night) 78%); }
+.rays { position: absolute; left: 50%; top: 42%; width: min(130vmin, 1100px); aspect-ratio: 1; translate: -50% -50%; border-radius: 50%;
+  background: repeating-conic-gradient(from 0deg, rgba(244, 207, 58, .9) 0deg 7deg, transparent 7deg 18deg);
+  -webkit-mask: radial-gradient(circle, #000 18%, transparent 70%); mask: radial-gradient(circle, #000 18%, transparent 70%);
+  animation: spin 80s linear infinite; mix-blend-mode: screen; opacity: calc(.35 + .4 * var(--p)); }
+.rays.two { background: repeating-conic-gradient(from 4deg, rgba(234, 75, 50, .8) 0deg 7deg, transparent 7deg 18deg); animation-duration: 110s; animation-direction: reverse; opacity: calc(.2 + .3 * var(--p)); }
+@keyframes spin { to { rotate: 360deg; } }
+.eye { position: absolute; left: 50%; top: 42%; width: min(58vmin, 480px); translate: -50% -50%; overflow: visible; }
+.eye .lid { transform-origin: 200px 60px; animation: blink 6.5s infinite; }
+@keyframes blink { 0%, 93%, 100% { transform: scaleY(0); } 96% { transform: scaleY(1); } }
+.notes .n { position: absolute; color: var(--cream); }
+.notes .n b { display: block; color: var(--yellow); font-weight: 600; }
+.notes svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.notes line { stroke: rgba(240, 220, 191, .6); stroke-width: 1; }
+.notes circle { fill: none; stroke: var(--yellow); stroke-width: 1.2; }
+.title { position: absolute; left: max(16px, 4vw); bottom: max(28px, 6vh); font-family: var(--f-display); font-size: clamp(46px, 8.6vw, 128px); line-height: .86; letter-spacing: -.01em; color: var(--cream);
+  transform: rotate(-3deg); transform-origin: left bottom; }
+.title .mis::before { left: .035em; top: .04em; }
+.title span { display: block; white-space: nowrap; }
+.title .y { color: var(--yellow); }
+.side-v { position: absolute; right: max(16px, 3vw); top: 50%; writing-mode: vertical-rl; transform: translateY(-50%) rotate(180deg); color: var(--dim); }
+.dial { position: absolute; right: max(56px, 6vw); top: 13vh; text-align: right; }
+.dial .big { font-family: var(--f-display); font-size: clamp(40px, 6vw, 80px); line-height: .9; color: var(--yellow); }
+.dial .big small { font-size: .45em; }
 
-/* ---------- stickers ---------- */
-.sticker { position: absolute; left: var(--x); top: var(--y); transform: translate(-50%, -50%) rotate(var(--r)); width: var(--w); border: 0; padding: 0; background: none;
-  cursor: pointer; filter: drop-shadow(0 3px 2px rgba(0, 0, 0, .35)); transition: transform .35s cubic-bezier(.2, 1.6, .4, 1), opacity .2s ease; }
-.sticker svg { display: block; width: 100%; height: auto; overflow: visible; }
-.sticker[data-on="false"] { opacity: 0; transform: translate(-50%, -50%) rotate(calc(var(--r) - 20deg)) scale(1.9); pointer-events: none; }
-.sticker:hover { transform: translate(-50%, -50%) rotate(var(--r)) scale(1.08); }
-.sticker[aria-pressed="true"] { transform: translate(-50%, -50%) rotate(var(--r)) scale(1.12); filter: drop-shadow(0 0 10px rgba(242, 193, 78, .9)); }
-.sticker text { font-family: var(--f-sans); font-weight: 700; letter-spacing: -.02em; }
-.sticker .serif-t { font-family: var(--f-serif); font-weight: 400; font-style: italic; letter-spacing: 0; }
-.peel-hint { position: absolute; right: max(20px, 6vw); top: 24vh; max-width: 13ch; text-align: right; opacity: calc((var(--p) - .9) * 10); }
+/* ---------- channel guide ---------- */
+.guide { position: relative; padding: 16vh max(16px, env(safe-area-inset-right, 0px)) 8vh max(16px, env(safe-area-inset-left, 0px)); max-width: 980px; margin: 0 auto; }
+.guide-head { display: flex; justify-content: space-between; align-items: end; gap: 16px; flex-wrap: wrap; border-bottom: 2px solid var(--cream); padding-bottom: 10px; }
+.guide-head h2 { font-family: var(--f-display); font-size: clamp(40px, 6.5vw, 76px); line-height: .9; transform: rotate(-2deg); }
+.guide-head h2 .y { color: var(--yellow); }
+.listing { list-style: none; margin: 0; padding: 0; }
+.ch { display: grid; grid-template-columns: 70px minmax(0, 1fr) auto; gap: 14px; align-items: baseline; width: 100%; background: none; border: 0; border-bottom: 1px dashed rgba(240, 220, 191, .25);
+  padding: 14px 4px; text-align: left; cursor: pointer; transition: background .15s ease; }
+.ch:hover { background: rgba(240, 220, 191, .06); }
+.ch .num { font-family: var(--f-mono); font-size: 12px; color: var(--dim); }
+.ch .nm { font-family: var(--f-display); font-size: clamp(24px, 3.4vw, 36px); line-height: 1; color: var(--c); }
+.ch .what { font-family: var(--f-mono); font-size: 11px; color: var(--dim); letter-spacing: .04em; text-align: right; max-width: 28ch; }
+.ch[aria-pressed="true"] { background: var(--c); }
+.ch[aria-pressed="true"] .nm, .ch[aria-pressed="true"] .num, .ch[aria-pressed="true"] .what { color: var(--night); }
 
-/* ---------- tapes ---------- */
-.tapes { position: relative; z-index: 2; padding: 12vh max(20px, env(safe-area-inset-right, 0px)) 18vh max(20px, env(safe-area-inset-left, 0px)); display: grid; justify-items: center; gap: 18px; }
-.tapes h2 { font-family: var(--f-serif); font-size: clamp(44px, 7vw, 84px); line-height: .95; text-align: center; letter-spacing: -.01em; }
-.tapes h2 em { color: var(--gold); }
-.filters { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; max-width: 640px; min-height: 48px; align-items: center; }
-.filters .sticker { position: relative; left: auto; top: auto; transform: rotate(var(--r)); --w: 92px; }
-.filters .sticker:hover { transform: rotate(var(--r)) scale(1.08); }
-.filters .sticker[aria-pressed="true"] { transform: rotate(var(--r)) scale(1.12); }
-.filters .clear { background: none; border: 0; cursor: pointer; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--dim); text-decoration: underline; padding: 6px; }
-.deck { position: relative; width: min(360px, 88vw); height: 330px; margin-top: 14px; touch-action: pan-y; outline: none; }
-.tape-card { position: absolute; left: 0; right: 0; top: 0; display: grid; gap: 14px; user-select: none; -webkit-user-select: none; cursor: grab; will-change: transform; transition: transform .35s ease; }
-.tape-card.dragging { cursor: grabbing; transition: none; }
-.tape-card.behind { pointer-events: none; }
-.tape-card.behind .cap { visibility: hidden; }
-.vhs { position: relative; aspect-ratio: 1.82; border-radius: 9px; background: linear-gradient(180deg, #2a2a30, #151519 60%, #0f0f12);
-  box-shadow: 0 1px 0 rgba(255, 255, 255, .12) inset, 0 -2px 0 rgba(0, 0, 0, .5) inset, 0 22px 40px rgba(2, 3, 12, .6); padding: 7% 6%; }
-.vhs::before { content: ""; position: absolute; inset: 3%; border-radius: 6px; border: 1px solid rgba(255, 255, 255, .05); }
-.lbl { position: relative; height: 54%; border-radius: 3px; background: var(--paper); color: #1d1a16; padding: 7px 10px; display: grid; grid-template-rows: auto 1fr auto; overflow: hidden;
-  box-shadow: 0 1px 0 rgba(255, 255, 255, .6) inset, 0 2px 4px rgba(0, 0, 0, .4); }
-.lbl::after { content: ""; position: absolute; inset: 0; background: url("grain.png"); background-size: 160px; opacity: .35; mix-blend-mode: multiply; }
-.lbl .stripe { position: absolute; left: 0; right: 0; top: 0; height: 6px; background: var(--ink); }
-.lbl .meta { font-size: 9px; letter-spacing: .14em; text-transform: uppercase; opacity: .65; margin-top: 4px; }
-.lbl .title { font-family: var(--f-serif); font-size: 27px; line-height: .95; align-self: center; letter-spacing: -.01em; }
-.lbl .foot { font-size: 9px; letter-spacing: .12em; text-transform: uppercase; opacity: .55; }
-.window { position: absolute; left: 22%; right: 22%; bottom: 9%; height: 25%; border-radius: 6px; background: #08080a; box-shadow: 0 0 0 2px #222 inset;
-  display: flex; justify-content: space-between; align-items: center; padding: 0 9%; }
-.reel { width: 20%; aspect-ratio: 1; border-radius: 50%; background: repeating-conic-gradient(#ddd 0 10deg, #555 10deg 60deg); box-shadow: 0 0 0 3px #1a1a1a; }
-.score-badge { position: absolute; right: -14px; top: -16px; width: 76px; z-index: 3; transform: rotate(12deg); filter: drop-shadow(0 3px 2px rgba(0, 0, 0, .4)); }
-.cap { display: grid; gap: 6px; padding: 0 4px; text-align: center; }
-.cap p { font-size: 14px; color: var(--cream); }
-.cap .label { font-size: 10px; }
-.flag { position: absolute; top: 38%; font-family: var(--f-serif); font-style: italic; font-size: 44px; opacity: 0; pointer-events: none; z-index: 4; }
-.flag.yes { right: -6px; color: var(--gold); transform: rotate(10deg); }
-.flag.no { left: -6px; color: var(--blue); transform: rotate(-10deg); }
-.ctrls { display: flex; gap: 40px; align-items: center; margin-top: 6px; }
-.ctrl { background: none; border: 0; cursor: pointer; font-family: var(--f-serif); font-size: 30px; padding: 4px 6px; color: var(--dim); }
-.ctrl.yes { color: var(--gold); }
-.ctrl:hover { color: var(--cream); }
-.done-msg { display: grid; place-items: center; gap: 10px; text-align: center; height: 100%; }
-.done-msg p.serif { font-size: 34px; }
+/* ---------- program cards ---------- */
+.programs { padding: 6vh max(16px, env(safe-area-inset-right, 0px)) 16vh max(16px, env(safe-area-inset-left, 0px)); display: grid; justify-items: center; gap: 18px; }
+.programs .mono { color: var(--dim); text-align: center; }
+.deck { position: relative; width: min(340px, 88vw); height: 500px; touch-action: pan-y; outline: none; margin-top: 8px; }
+.card { position: absolute; inset: 0; background: var(--cream); color: var(--night); padding: 12px; display: grid; grid-template-rows: auto auto 1fr; gap: 10px;
+  user-select: none; -webkit-user-select: none; cursor: grab; will-change: transform; transition: transform .35s ease; box-shadow: 8px 8px 0 var(--red); }
+.card::after { content: ""; position: absolute; inset: 0; background: url("grain.png"); background-size: 180px; opacity: .45; mix-blend-mode: multiply; pointer-events: none; }
+.card.dragging { cursor: grabbing; transition: none; }
+.card.behind { pointer-events: none; }
+.card .top { display: flex; justify-content: space-between; font-family: var(--f-mono); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; }
+.pic { position: relative; height: 240px; overflow: hidden; background: var(--a); }
+.pic i { position: absolute; border-radius: 50%; filter: blur(22px); }
+.pic .ray { position: absolute; inset: -40%; background: repeating-conic-gradient(from 0deg, rgba(255, 255, 255, .18) 0deg 6deg, transparent 6deg 16deg); }
+.pic .ttl { position: absolute; left: 10px; right: 10px; bottom: 10px; font-family: var(--f-display); font-size: 31px; line-height: .9; color: var(--cream); }
+.pic .ttl .mis::before { color: var(--night); left: .04em; top: .05em; }
+.body { display: grid; gap: 8px; align-content: start; }
+.score { display: flex; align-items: baseline; gap: 10px; border-top: 2px solid var(--night); padding-top: 8px; }
+.score b { font-family: var(--f-display); font-size: 34px; line-height: 1; font-weight: 400; color: var(--red); }
+.score span { font-family: var(--f-mono); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; }
+.blurb { font-size: 14px; line-height: 1.35; }
+.stamp { position: absolute; top: 70px; z-index: 5; font-family: var(--f-display); font-size: 40px; padding: 2px 12px; border: 4px solid currentColor; opacity: 0; pointer-events: none; background: rgba(240, 220, 191, .85); }
+.stamp.yes { right: 14px; color: var(--green); transform: rotate(10deg); }
+.stamp.no { left: 14px; color: var(--red); transform: rotate(-10deg); }
+.ctrls { display: flex; gap: 14px; }
+.ctrl { border: 2px solid var(--cream); background: none; padding: 10px 20px; cursor: pointer; font-family: var(--f-display); font-size: 22px; line-height: 1; }
+.ctrl.yes { background: var(--yellow); border-color: var(--yellow); color: var(--night); box-shadow: 4px 4px 0 var(--red); }
+.empty { position: absolute; inset: 0; background: var(--cream); color: var(--night); display: grid; place-content: center; justify-items: center; gap: 12px; padding: 24px; text-align: center; box-shadow: 8px 8px 0 var(--red); }
+.empty h3 { font-family: var(--f-display); font-size: 34px; line-height: .95; }
 
-/* ---------- stash shelf ---------- */
-.veil { position: fixed; inset: 0; z-index: 41; background: rgba(4, 6, 20, .6); }
-.shelf { position: fixed; left: 0; right: 0; bottom: 0; z-index: 42; max-height: 80vh; overflow-y: auto; border-radius: 22px 22px 0 0; background: #f1e3cc; color: #1d1a16;
-  padding: 22px max(20px, env(safe-area-inset-right, 0px)) calc(26px + env(safe-area-inset-bottom, 0px)) max(20px, env(safe-area-inset-left, 0px)); }
-.shelf-in { max-width: 620px; margin: 0 auto; display: grid; gap: 16px; }
-.shelf header { display: flex; justify-content: space-between; align-items: baseline; }
-.shelf h2 { font-family: var(--f-serif); font-size: 46px; line-height: 1; }
-.shelf .x { background: none; border: 0; cursor: pointer; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; text-decoration: underline; color: #1d1a16; }
-.spines { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
-.spine { display: grid; grid-template-columns: 10px minmax(0, 1fr) auto auto; gap: 12px; align-items: center; background: #17171b; color: #f1e3cc; border-radius: 4px; padding: 9px 12px 9px 0; }
-.spine i { align-self: stretch; background: var(--ink); border-radius: 4px 0 0 4px; }
-.spine b { font-family: var(--f-serif); font-weight: 400; font-size: 21px; line-height: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.spine small { font-size: 11px; letter-spacing: .08em; opacity: .7; white-space: nowrap; }
-.spine button { background: none; border: 0; cursor: pointer; color: #f1e3cc; opacity: .6; font-size: 18px; padding: 0 4px; }
-.shelf .empty { font-family: var(--f-serif); font-size: 24px; opacity: .7; }
+/* ---------- stash ---------- */
+.veil { position: fixed; inset: 0; z-index: 41; background: rgba(5, 6, 20, .6); }
+.sheet { position: fixed; left: 0; right: 0; bottom: 0; z-index: 42; max-height: 80vh; overflow-y: auto; background: var(--yellow); color: var(--night);
+  padding: 20px max(16px, env(safe-area-inset-right, 0px)) calc(24px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); box-shadow: 0 -8px 0 var(--red); }
+.sheet-in { max-width: 640px; margin: 0 auto; display: grid; gap: 12px; }
+.sheet header { display: flex; justify-content: space-between; align-items: baseline; }
+.sheet h2 { font-family: var(--f-display); font-size: 44px; line-height: 1; }
+.sheet .x { background: none; border: 0; cursor: pointer; font-family: var(--f-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; text-decoration: underline; color: var(--night); }
+.items { list-style: none; margin: 0; padding: 0; }
+.items li { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 12px; align-items: baseline; border-bottom: 1px dashed rgba(17, 22, 58, .4); padding: 10px 0; }
+.items b { font-family: var(--f-display); font-weight: 400; font-size: 22px; line-height: 1; }
+.items small { font-family: var(--f-mono); font-size: 11px; }
+.items button { background: none; border: 0; cursor: pointer; font-size: 18px; color: var(--night); }
+.sheet .none { font-family: var(--f-mono); font-size: 12px; }
+.toast { position: fixed; z-index: 45; left: 50%; bottom: calc(22px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%) rotate(-2deg); background: var(--yellow); color: var(--night);
+  font-family: var(--f-display); font-size: 20px; padding: 6px 14px; box-shadow: 4px 4px 0 var(--red); white-space: nowrap; }
+.foot { text-align: center; color: var(--dim); padding: 0 16px calc(36px + env(safe-area-inset-bottom, 0px)); }
 
-.toast { position: fixed; z-index: 45; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); font-family: var(--f-serif); font-style: italic; font-size: 24px; color: var(--gold); white-space: nowrap; }
-.foot { position: relative; z-index: 2; text-align: center; padding: 0 20px calc(40px + env(safe-area-inset-bottom, 0px)); }
-
-@media (max-width: 640px) {
-  .side { display: none; }
-  .spud { width: min(82vw, 52vh); top: 50%; }
-  .filters .sticker { --w: 70px; }
-  .score-badge { right: -6px; width: 64px; }
-  .count { top: 15vh; }
-  .count-l { top: calc(15vh + 58px); }
-  .peel-hint { top: 15vh; }
+@media (max-width: 700px) {
+  .eye { width: 82vw; top: 40%; }
+  .rays { top: 40%; }
+  .notes .hide-m { display: none; }
+  .side-v { display: none; }
+  .dial { right: 16px; }
+  .title { font-size: 9.2vw; }
+  .strip .live { display: none; }
+  .ch { grid-template-columns: 46px minmax(0, 1fr); }
+  .ch .what { grid-column: 2; text-align: left; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .steam path, .stash-link.bump b { animation: none !important; }
-  .sticker, .tape-card { transition: none !important; }
+  .acid i, .rays, .eye .lid, .strip .live i, .stash-btn.bump { animation: none !important; }
+  .card { transition: none !important; }
 }
 </style>
 </head>
 <body>
 
-<header class="bar">
-  <a class="wordmark" href="#top">baked<br>potatoes</a>
-  <button class="stash-link" id="open-stash" type="button" aria-haspopup="dialog">your stash <b id="stash-count">0</b></button>
+<header class="strip">
+  <a class="brand" href="#top">baked potatoes</a>
+  <span class="live mono"><i></i>on air · late night</span>
+  <button class="stash-btn" id="open-stash" type="button" aria-haspopup="dialog">Stash · <span id="stash-count">0</span></button>
 </header>
 
 <main id="top">
-  <section class="oven" aria-label="A potato baking as you scroll">
+  <section class="broadcast" aria-label="Opening titles">
     <div class="stage" id="stage">
-      <p class="side l label">Movies &amp; TV</p>
-      <p class="side r label">Rated for the couch</p>
-      <p class="count" aria-hidden="true"><span id="pct">0</span><sup>%</sup></p>
-      <p class="count-l label" id="stage-l">raw</p>
-      <div class="spud" id="spud">
-        <svg class="steam" viewBox="0 0 200 200" aria-hidden="true">
-          <path d="M70 200 C 50 160, 95 140, 72 100 S 90 40, 70 0"/>
-          <path d="M100 200 C 120 165, 80 130, 104 95 S 84 35, 106 0"/>
-          <path d="M130 200 C 112 160, 150 140, 128 100 S 146 45, 126 0"/>
-          <path d="M88 200 C 104 170, 74 150, 92 110 S 76 50, 94 10"/>
-        </svg>
-        <img class="photo" src="potato.webp" alt="A potato, loaded with vibe stickers as you scroll" width="764" height="689">
+      <div class="acid" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+      <div class="fade" aria-hidden="true"></div>
+      <div class="rays" aria-hidden="true"></div>
+      <div class="rays two" aria-hidden="true"></div>
+      <svg class="eye" id="eye" viewBox="0 0 400 400" role="img" aria-label="A big cartoon eye whose pupil widens as you scroll">
+        <g transform="translate(5 4)" opacity=".75"><circle cx="200" cy="200" r="150" fill="none" stroke="#ea4b32" stroke-width="5"/></g>
+        <circle cx="200" cy="200" r="150" fill="#f6ecd8" stroke="#16122a" stroke-width="3.5"/>
+        <path d="M120 300 Q200 350 290 290" fill="none" stroke="#e7cfae" stroke-width="20" stroke-linecap="round" opacity=".7"/>
+        <g id="veins" stroke="#ea4b32" stroke-width="2" fill="none" stroke-linecap="round" opacity="0">
+          <path d="M58 180 Q90 175 110 190 Q118 196 130 192"/><path d="M70 250 Q100 240 118 252"/><path d="M342 170 Q310 168 296 182 Q288 190 276 186"/>
+          <path d="M330 255 Q300 246 282 258"/><path d="M110 92 Q130 110 140 126"/><path d="M300 98 Q282 116 270 128"/>
+        </g>
+        <g id="iris">
+          <g transform="translate(4 3)"><circle cx="200" cy="200" r="72" fill="#ea4b32" opacity=".55"/></g>
+          <circle cx="200" cy="200" r="72" fill="#3f63c8" stroke="#16122a" stroke-width="3"/>
+          <g id="spokes" stroke="#1d2f78" stroke-width="3" stroke-linecap="round"></g>
+          <circle id="pupil" cx="200" cy="200" r="26" fill="#16122a"/>
+          <ellipse cx="178" cy="176" rx="12" ry="9" fill="#fff"/>
+          <circle cx="222" cy="214" r="4" fill="#fff" opacity=".8"/>
+        </g>
+        <g class="lid"><path d="M48 200 A152 152 0 0 1 352 200 L352 60 L48 60 Z" fill="#f08a3c" stroke="#16122a" stroke-width="3.5"/><path d="M52 200 A148 148 0 0 1 348 200" fill="none" stroke="#16122a" stroke-width="4"/></g>
+      </svg>
+      <div class="notes mono" aria-hidden="true">
+        <svg><line id="l1" /><line id="l2" class="hide-m"/><line id="l3" class="hide-m"/></svg>
+        <p class="n" id="n1">object (1)<b>eye.cel</b>pupil <span id="dil">0</span>% dilated</p>
+        <p class="n hide-m" id="n2">time<b>2:14 a.m.</b>blinks: slow</p>
+        <p class="n hide-m" id="n3">status<b id="stat">sober-ish</b>focus: drifting</p>
       </div>
-      <p class="peel-hint label">Each sticker is a vibe. Tap one.</p>
-      <p class="tagline" id="tagline">What to watch when<br>you're <em>baked</em>.<span class="label">Scroll to load it up</span></p>
+      <p class="side-v mono" aria-hidden="true">program guide for the couch · tonight and every night</p>
+      <div class="dial"><p class="mono">reading</p><p class="big"><span id="pct">0</span><small>%</small></p><p class="mono" id="dial-l">baked</p></div>
+      <h1 class="title"><span class="mis" data-t="what to watch">what to watch</span><span class="mis y" data-t="when you're baked">when you're baked</span></h1>
     </div>
   </section>
 
-  <section class="tapes" id="tapes" aria-labelledby="tapes-h">
-    <p class="label">Tonight's tapes</p>
-    <h2 id="tapes-h">Stash it, <em>or pass</em>.</h2>
-    <div class="filters" id="filters" role="group" aria-label="Filter by vibe"></div>
-    <div class="deck" id="deck" tabindex="0" aria-label="VHS tapes. Left and right arrow keys pass or stash."></div>
-    <div class="ctrls">
-      <button class="ctrl" id="pass" type="button">← pass</button>
-      <button class="ctrl yes" id="keep" type="button">stash →</button>
+  <section class="guide" id="guide" aria-labelledby="guide-h">
+    <div class="guide-head">
+      <h2 id="guide-h">tonight's <span class="y">channels</span></h2>
+      <p class="mono" style="color: var(--dim)">pick a channel · tap again to turn it off</p>
     </div>
+    <ul class="listing" id="listing"></ul>
+  </section>
+
+  <section class="programs" id="programs" aria-labelledby="prog-h">
+    <p class="mono" id="prog-h">now showing · <span id="now-ch">all channels</span></p>
+    <div class="deck" id="deck" tabindex="0" aria-label="Program cards. Left and right arrow keys pass or stash."></div>
+    <div class="ctrls">
+      <button class="ctrl" id="pass" type="button">pass</button>
+      <button class="ctrl yes" id="keep" type="button">stash it</button>
+    </div>
+    <p class="mono">swipe right to stash · left to pass</p>
   </section>
 </main>
-
-<p class="foot label">Prototype · Potato Scores are placeholders · Potato: USDA public-domain photo</p>
+<p class="foot mono">prototype · scores are placeholders · where to watch coming soon</p>
 
 <div class="veil" id="veil" hidden></div>
-<aside class="shelf" id="shelf" role="dialog" aria-modal="true" aria-labelledby="shelf-h" hidden>
-  <div class="shelf-in">
-    <header><h2 id="shelf-h">Your stash</h2><button class="x" id="close-stash" type="button">Close</button></header>
-    <ul class="spines" id="spines"></ul>
-    <p class="empty" id="shelf-empty">Nothing yet. Stash a tape and it lands here.</p>
+<aside class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-h" hidden>
+  <div class="sheet-in">
+    <header><h2 id="sheet-h">your stash</h2><button class="x" id="close-stash" type="button">close</button></header>
+    <ul class="items" id="items"></ul>
+    <p class="none" id="none">nothing stashed yet. swipe right on something.</p>
   </div>
 </aside>
 <p class="toast" id="toast" role="status" aria-live="polite" hidden></p>
@@ -222,48 +250,75 @@ p, h1, h2 { margin: 0; font-weight: 400; }
   'use strict';
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // ---------- vibes, drawn as die-cut stickers ----------
-  // shape, fill, ink, position on the potato (% of its box), width (% of potato), rotation
-  var VIBES = [
-    { id: 'couch', name: 'couch-locked', two: ['couch', 'locked'], shape: 'circle', bg: '#f2c14e', fg: '#1b1a2e', x: 30, y: 36, w: 23, r: -12 },
-    { id: 'eye', name: 'eye candy', two: ['eye', 'candy'], shape: 'star', bg: '#e5452f', fg: '#fff3dd', x: 64, y: 28, w: 26, r: 10 },
-    { id: 'plot', name: 'plot optional', two: ['plot', 'optional'], shape: 'pill', bg: '#6d9be0', fg: '#fff3dd', x: 70, y: 58, w: 30, r: -18, serif: true },
-    { id: 'giggle', name: 'giggle fits', two: ['giggle', 'fits!'], shape: 'blob', bg: '#f29bb4', fg: '#1b1a2e', x: 38, y: 64, w: 24, r: 8 },
-    { id: 'munch', name: 'munchie bait', two: ['munchie', 'bait'], shape: 'rect', bg: '#f08a3c', fg: '#1b1a2e', x: 50, y: 45, w: 27, r: 4 },
-    { id: 'brain', name: '2 a.m. big brain', two: ['2 a.m.', 'big brain'], shape: 'circle', bg: '#a58cf0', fg: '#fff3dd', x: 20, y: 56, w: 19, r: 16 },
-    { id: 'short', name: 'short trips', two: ['short', 'trips'], shape: 'burst', bg: '#79c98e', fg: '#1b1a2e', x: 83, y: 38, w: 19, r: -6 },
-    { id: 'sober', name: 'save for sober', two: ['save for', 'sober'], shape: 'pill', bg: '#f1e3cc', fg: '#1b1a2e', x: 56, y: 76, w: 26, r: -4, serif: true }
-  ];
-  function shapePath(shape) {
-    if (shape === 'circle') return '<circle cx="50" cy="50" r="46"/>';
-    if (shape === 'pill') return '<rect x="3" y="20" width="94" height="60" rx="30"/>';
-    if (shape === 'rect') return '<rect x="4" y="14" width="92" height="72" rx="10"/>';
-    if (shape === 'blob') return '<path d="M50 4 C78 2 98 22 95 50 C93 78 72 97 48 95 C22 94 3 74 5 48 C7 22 24 6 50 4 Z"/>';
-    var pts = [], n = shape === 'star' ? 5 : 12, ro = 47, ri = shape === 'star' ? 24 : 38;
-    for (var i = 0; i < n * 2; i++) { var a = -Math.PI / 2 + i * Math.PI / n, r = i % 2 ? ri : ro; pts.push((50 + Math.cos(a) * r).toFixed(1) + ',' + (50 + Math.sin(a) * r).toFixed(1)); }
-    return '<polygon points="' + pts.join(' ') + '" stroke-linejoin="round"/>';
+  // ---------- eye ----------
+  var spokes = document.getElementById('spokes');
+  for (var i = 0; i < 22; i++) {
+    var a = i / 22 * Math.PI * 2, l = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    l.setAttribute('x1', 200 + Math.cos(a) * 36); l.setAttribute('y1', 200 + Math.sin(a) * 36);
+    l.setAttribute('x2', 200 + Math.cos(a) * 64); l.setAttribute('y2', 200 + Math.sin(a) * 64);
+    spokes.appendChild(l);
   }
-  function stickerSVG(v) {
-    var s = shapePath(v.shape), fs = v.two[1].length > 7 ? 13 : 16;
-    var cls = v.serif ? ' class="serif-t"' : '';
-    if (v.serif) fs += 3;
-    return '<svg viewBox="-6 -6 112 112" aria-hidden="true">' +
-      '<g fill="#fbf4e6" stroke="#fbf4e6" stroke-width="12">' + s + '</g>' +
-      '<g fill="' + v.bg + '">' + s + '</g>' +
-      '<text x="50" y="47" text-anchor="middle" font-size="' + fs + '" fill="' + v.fg + '"' + cls + '>' + v.two[0] + '</text>' +
-      '<text x="50" y="' + (49 + fs) + '" text-anchor="middle" font-size="' + fs + '" fill="' + v.fg + '"' + cls + '>' + v.two[1] + '</text></svg>';
+  var eye = document.getElementById('eye'), iris = document.getElementById('iris'), pupil = document.getElementById('pupil'), veins = document.getElementById('veins');
+  var look = { x: 0, y: 0 }, aim = { x: 0, y: 0 }, P = 0;
+  addEventListener('pointermove', function (e) {
+    var r = eye.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+    var dx = e.clientX - cx, dy = e.clientY - cy, d = Math.hypot(dx, dy) || 1, m = Math.min(1, d / 400);
+    aim.x = dx / d * 48 * m; aim.y = dy / d * 44 * m;
+  }, { passive: true });
+  var t0 = 0;
+  function wander(t) {
+    if (!matchMedia('(pointer: fine)').matches) { aim.x = Math.sin(t / 1900) * 40; aim.y = Math.cos(t / 2600) * 26; }
+    look.x += (aim.x - look.x) * .08; look.y += (aim.y - look.y) * .08;
+    iris.setAttribute('transform', 'translate(' + look.x.toFixed(1) + ' ' + look.y.toFixed(1) + ')');
+    if (!reduce) requestAnimationFrame(wander);
   }
-  function scoreSVG(score) {
-    var t = tier(score), bg = t[2];
-    return '<svg viewBox="-6 -6 112 112" aria-hidden="true"><g fill="#fbf4e6" stroke="#fbf4e6" stroke-width="12">' + shapePath('burst') + '</g>' +
-      '<g fill="' + bg + '">' + shapePath('burst') + '</g>' +
-      '<text x="50" y="52" text-anchor="middle" font-size="28" font-weight="700" fill="#1b1a2e" font-family="Arimo, sans-serif">' + score + '%</text>' +
-      '<text x="50" y="68" text-anchor="middle" font-size="10.5" fill="#1b1a2e" font-family="Arimo, sans-serif" letter-spacing=".4">' + t[0].toUpperCase() + '</text></svg>';
-  }
+  requestAnimationFrame(wander);
 
-  // ---------- movies (placeholder scores) ----------
-  var INKS = ['#e5452f', '#6d9be0', '#f2c14e', '#79c98e', '#a58cf0', '#f29bb4', '#f08a3c'];
-  var PAPERS = ['#f4ead6', '#f0e2c6', '#eef0e6', '#f6e4dc'];
+  // ---------- notes and leader lines ----------
+  var stageEl = document.getElementById('stage');
+  var NOTES = [['n1', 'l1', -1, .78, .3], ['n2', 'l2', 1, .2, .25], ['n3', 'l3', 1, .78, .72]];
+  function placeNotes() {
+    var r = eye.getBoundingClientRect(), s = stageEl.getBoundingClientRect(), mobile = innerWidth <= 700;
+    NOTES.forEach(function (n) {
+      var el = document.getElementById(n[0]), ln = document.getElementById(n[1]);
+      var tx = r.left - s.left + r.width * (n[2] < 0 ? .22 : .8), ty = r.top - s.top + r.height * n[4];
+      var nx = n[2] < 0 ? Math.max(16, r.left - s.left - (mobile ? -10 : 150)) : r.right - s.left + 20, ny = r.top - s.top + r.height * n[3];
+      if (mobile && n[0] === 'n1') { nx = 16; ny = r.bottom - s.top + 8; }
+      el.style.left = nx + 'px'; el.style.top = ny + 'px';
+      var w = el.offsetWidth;
+      ln.setAttribute('x1', tx); ln.setAttribute('y1', ty);
+      ln.setAttribute('x2', n[2] < 0 ? nx + (mobile ? 40 : w) : nx); ln.setAttribute('y2', ny + 6);
+    });
+  }
+  addEventListener('resize', placeNotes); setTimeout(placeNotes, 60);
+  if (document.fonts) document.fonts.ready.then(placeNotes);
+
+  // ---------- scroll: the pupil dilates, the eye reddens ----------
+  var cast = document.querySelector('.broadcast'), pct = document.getElementById('pct'), dil = document.getElementById('dil'), stat = document.getElementById('stat'), dialL = document.getElementById('dial-l');
+  var STATES = [[0, 'sober-ish', 'not yet'], [.25, 'warming up', 'warming up'], [.5, 'half baked', 'half baked'], [.8, 'couch-bound', 'almost'], [.99, 'fully baked', 'fully loaded']];
+  function onScroll() {
+    var r = cast.getBoundingClientRect(), span = cast.offsetHeight - innerHeight;
+    P = Math.min(1, Math.max(0, -r.top / (span * .85)));
+    stageEl.style.setProperty('--p', P.toFixed(3));
+    pupil.setAttribute('r', (26 + 30 * P).toFixed(1));
+    veins.setAttribute('opacity', Math.max(0, (P - .3) * 1.4).toFixed(2));
+    pct.textContent = Math.round(P * 100); dil.textContent = Math.round(P * 100);
+    var st = STATES[0]; STATES.forEach(function (x) { if (P >= x[0]) st = x; }); stat.textContent = st[1]; dialL.textContent = st[2];
+  }
+  addEventListener('scroll', onScroll, { passive: true }); onScroll();
+
+  // ---------- data (placeholder scores) ----------
+  var CH = [
+    { id: 'couch', num: '02', name: 'couch-locked', what: 'comfort watches, zero effort', c: '#f4cf3a' },
+    { id: 'eye', num: '03', name: 'eye candy', what: 'colour turned all the way up', c: '#ea4b32' },
+    { id: 'plot', num: '05', name: 'plot optional', what: 'just look at it', c: '#7fa8e6' },
+    { id: 'giggle', num: '07', name: 'giggle fits', what: 'laughing at nothing', c: '#ef98a6' },
+    { id: 'brain', num: '09', name: '2 a.m. big brain', what: 'wait, what', c: '#b9a3f2' },
+    { id: 'munch', num: '11', name: 'munchie bait', what: 'food on screen', c: '#f08a3c' },
+    { id: 'short', num: '13', name: 'short trips', what: 'under 30 minutes', c: '#8fd08a' },
+    { id: 'sober', num: '99', name: 'save for sober', what: 'brilliant, not tonight', c: '#f0dcbf' }
+  ];
+  var PAL = [['#ea4b32', '#f4cf3a', '#ef98a6'], ['#3f63c8', '#ea4b32', '#f4cf3a'], ['#5a9a3e', '#f4cf3a', '#7fa8e6'], ['#7a3fa0', '#ef98a6', '#f08a3c'], ['#f08a3c', '#ea4b32', '#3f63c8'], ['#1d2f78', '#7fa8e6', '#ef98a6']];
   var MOVIES = [
     ['fp', 'Fantastic Planet', 1973, '72 min', ['plot', 'eye'], 94, 'A French cartoon about tiny humans kept as pets by giant blue aliens. You won\'t follow it. You don\'t need to.'],
     ['sv', 'Into the Spider-Verse', 2018, '117 min', ['eye', 'couch'], 96, 'Every frame looks like a comic book that came to life and had three espressos.'],
@@ -286,131 +341,97 @@ p, h1, h2 { margin: 0; font-weight: 400; }
     ['dc', 'Dazed and Confused', 1993, '102 min', ['couch'], 89, 'The last day of school, 1976. Nothing much happens, beautifully.'],
     ['ug', 'Uncut Gems', 2019, '135 min', ['sober'], 28, 'A gambler makes every wrong choice at full volume for two hours. Great film. Not tonight.'],
     ['ms', 'Midsommar', 2019, '148 min', ['sober'], 22, 'A sunny Swedish festival that goes very, very wrong. Save it for a clear head.']
-  ].map(function (m, i) {
-    return { id: m[0], title: m[1], year: m[2], length: m[3], cats: m[4], score: m[5], blurb: m[6], ink: INKS[i % INKS.length], paper: PAPERS[i % PAPERS.length], tilt: ((i * 37) % 9) - 4 };
-  });
+  ].map(function (m, k) { return { id: m[0], title: m[1], year: m[2], length: m[3], cats: m[4], score: m[5], blurb: m[6], pal: PAL[k % PAL.length], tilt: ((k * 37) % 9) - 4, slot: ['8:00', '9:30', '11:00', '12:30', '2:00', '3:15'][k % 6] }; });
   var byId = {}; MOVIES.forEach(function (m) { byId[m.id] = m; });
-  function vibe(id) { for (var i = 0; i < VIBES.length; i++) if (VIBES[i].id === id) return VIBES[i]; return null; }
-  function tier(s) { return s >= 75 ? ['fully loaded', 'tier-full', '#f2c14e'] : s >= 50 ? ['half baked', 'tier-half', '#f08a3c'] : ['cold potato', 'tier-cold', '#6d9be0']; }
+  function ch(id) { for (var k = 0; k < CH.length; k++) if (CH[k].id === id) return CH[k]; return null; }
+  function tier(s) { return s >= 75 ? 'fully loaded' : s >= 50 ? 'half baked' : 'cold potato'; }
 
   var KEY = 'baked-potatoes-stash', stash = [];
   try { stash = JSON.parse(localStorage.getItem(KEY) || '[]').filter(function (id) { return byId[id]; }); } catch (e) { stash = []; }
   function save() { try { localStorage.setItem(KEY, JSON.stringify(stash)); } catch (e) {} }
 
-  // ---------- potato stickers ----------
-  var spud = document.getElementById('spud'), filter = 'all';
-  var onPotato = VIBES.map(function (v, i) {
-    var b = document.createElement('button');
-    b.type = 'button'; b.className = 'sticker'; b.dataset.id = v.id; b.dataset.on = 'false';
-    b.style.setProperty('--x', v.x + '%'); b.style.setProperty('--y', v.y + '%'); b.style.setProperty('--w', v.w + '%'); b.style.setProperty('--r', v.r + 'deg');
-    b.setAttribute('aria-label', 'Show ' + v.name + ' picks');
-    b.innerHTML = stickerSVG(v);
-    b.addEventListener('click', function () { setFilter(v.id); document.getElementById('tapes').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' }); });
-    spud.appendChild(b); return b;
-  });
-
-  // ---------- bake on scroll ----------
-  var oven = document.querySelector('.oven'), stage = document.getElementById('stage'), pct = document.getElementById('pct'), stl = document.getElementById('stage-l');
-  var STAGES = [[0, 'raw'], [.2, 'warming up'], [.5, 'half baked'], [.8, 'almost'], [1, 'fully loaded']];
-  function onScroll() {
-    var r = oven.getBoundingClientRect(), span = oven.offsetHeight - innerHeight;
-    var P = Math.min(1, Math.max(0, -r.top / (span * .82)));
-    stage.style.setProperty('--p', P.toFixed(3));
-    pct.textContent = Math.round(P * 100);
-    var st = 'raw'; STAGES.forEach(function (x) { if (P >= x[0]) st = x[1]; }); stl.textContent = st;
-    onPotato.forEach(function (b, i) { b.dataset.on = String(P >= .12 + i * .1); });
-  }
-  addEventListener('scroll', onScroll, { passive: true }); onScroll();
-
-  // ---------- filters (the same stickers, small) ----------
-  var filters = document.getElementById('filters');
-  function drawFilters() {
-    filters.innerHTML = '';
-    VIBES.forEach(function (v) {
-      var b = document.createElement('button'); b.type = 'button'; b.className = 'sticker'; b.dataset.id = v.id;
-      b.style.setProperty('--r', (v.r * .6) + 'deg'); b.setAttribute('aria-pressed', String(filter === v.id)); b.setAttribute('aria-label', v.name);
-      b.innerHTML = stickerSVG(v);
-      b.addEventListener('click', function () { setFilter(filter === v.id ? 'all' : v.id); });
-      filters.appendChild(b);
+  // ---------- channel guide ----------
+  var listing = document.getElementById('listing'), filter = 'all';
+  CH.forEach(function (c) {
+    var li = document.createElement('li'), b = document.createElement('button');
+    b.type = 'button'; b.className = 'ch'; b.dataset.id = c.id; b.style.setProperty('--c', c.c);
+    b.innerHTML = '<span class="num">ch ' + c.num + '</span><span class="nm"></span><span class="what"></span>';
+    b.querySelector('.nm').textContent = c.name; b.querySelector('.what').textContent = c.what;
+    b.addEventListener('click', function () {
+      setFilter(filter === c.id ? 'all' : c.id);
+      if (filter !== 'all') document.getElementById('programs').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' });
     });
-    if (filter !== 'all') {
-      var c = document.createElement('button'); c.type = 'button'; c.className = 'clear'; c.textContent = 'Show everything';
-      c.addEventListener('click', function () { setFilter('all'); }); filters.appendChild(c);
-    }
-  }
+    li.appendChild(b); listing.appendChild(li);
+  });
   function setFilter(id) {
-    filter = id; drawFilters();
-    onPotato.forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.id === id)); });
+    filter = id;
+    [].forEach.call(listing.querySelectorAll('.ch'), function (b) { b.setAttribute('aria-pressed', String(b.dataset.id === id)); });
+    document.getElementById('now-ch').textContent = id === 'all' ? 'all channels' : 'ch ' + ch(id).num + ' ' + ch(id).name;
     render();
   }
 
-  // ---------- tapes ----------
+  // ---------- program cards ----------
   var deck = document.getElementById('deck'), seen = {};
-  function queue() {
-    return MOVIES.filter(function (m) {
-      return !seen[m.id] && stash.indexOf(m.id) < 0 && (filter === 'all' ? m.cats.indexOf('sober') < 0 : m.cats.indexOf(filter) > -1);
-    });
-  }
-  function tapeEl(m, depth) {
+  function queue() { return MOVIES.filter(function (m) { return !seen[m.id] && stash.indexOf(m.id) < 0 && (filter === 'all' ? m.cats.indexOf('sober') < 0 : m.cats.indexOf(filter) > -1); }); }
+  function cardEl(m, depth) {
     var el = document.createElement('article');
-    el.className = 'tape-card' + (depth ? ' behind' : '');
+    el.className = 'card' + (depth ? ' behind' : '');
     el.style.zIndex = String(10 - depth);
-    var rest = 'translate(' + depth * 6 + 'px,' + depth * -14 + 'px) rotate(' + (depth ? m.tilt * 1.4 : m.tilt * .35) + 'deg)';
-    el.style.transform = rest; el.dataset.rest = rest;
-    el.style.setProperty('--ink', m.ink); el.style.setProperty('--paper', m.paper);
-    el.innerHTML =
-      '<span class="flag yes">stashed</span><span class="flag no">pass</span>' +
-      '<div class="vhs"><div class="lbl"><span class="stripe"></span><span class="meta"></span><span class="title"></span><span class="foot"></span></div>' +
-      '<div class="window"><span class="reel"></span><span class="reel"></span></div><div class="score-badge">' + scoreSVG(m.score) + '</div></div>' +
-      '<div class="cap"><p></p><span class="label"></span></div>';
-    el.querySelector('.meta').textContent = m.year + ' · ' + m.length;
-    el.querySelector('.title').textContent = m.title;
-    el.querySelector('.foot').textContent = 'VHS · SP · where to watch: soon';
-    el.querySelector('.cap p').textContent = m.blurb;
-    el.querySelector('.cap .label').textContent = m.cats.map(function (c) { return vibe(c).name; }).join(' · ');
-    el.setAttribute('aria-label', m.title + ', ' + m.year + '. Potato Score ' + m.score + ' percent, ' + tier(m.score)[0] + '. ' + m.blurb);
+    var rest = 'translate(' + depth * 8 + 'px,' + depth * 6 + 'px) rotate(' + (depth ? m.tilt * 1.3 : m.tilt * .3) + 'deg)';
+    el.style.transform = rest; el.dataset.rest = rest; el.style.setProperty('--a', m.pal[0]);
+    el.innerHTML = '<span class="stamp yes">stash</span><span class="stamp no">pass</span>' +
+      '<div class="top"><span></span><span></span></div>' +
+      '<div class="pic"><span class="ray"></span><i style="background:' + m.pal[1] + ';width:180px;height:180px;left:-20px;top:-30px"></i><i style="background:' + m.pal[2] + ';width:150px;height:150px;right:-30px;bottom:20px"></i>' +
+      '<p class="ttl"><span class="mis"></span></p></div>' +
+      '<div class="body"><div class="score"><b></b><span></span></div><p class="blurb"></p></div>';
+    var tops = el.querySelectorAll('.top span');
+    tops[0].textContent = m.slot + ' · ch ' + ch(m.cats[0]).num; tops[1].textContent = m.year + ' · ' + m.length;
+    var t = el.querySelector('.ttl .mis'); t.textContent = m.title; t.setAttribute('data-t', m.title);
+    el.querySelector('.score b').textContent = m.score + '%';
+    el.querySelector('.score span').textContent = 'potato score · ' + tier(m.score);
+    el.querySelector('.blurb').textContent = m.blurb;
+    el.setAttribute('aria-label', m.title + ', ' + m.year + '. Score ' + m.score + ' percent. ' + m.blurb);
     return el;
   }
   function render() {
     deck.innerHTML = '';
     var q = queue();
     if (!q.length) {
-      var d = document.createElement('div'); d.className = 'done-msg';
-      d.innerHTML = '<p class="serif">That\'s every tape.</p><p class="label">Open your stash, pick another sticker, or rewind.</p>';
-      var again = document.createElement('button'); again.type = 'button'; again.className = 'ctrl yes'; again.textContent = 'rewind';
-      again.addEventListener('click', function () { seen = {}; render(); });
-      d.appendChild(again); deck.appendChild(d); return;
+      var e = document.createElement('div'); e.className = 'empty';
+      e.innerHTML = '<h3>that\'s the whole broadcast</h3><p class="mono">check your stash or change the channel</p>';
+      var again = document.createElement('button'); again.type = 'button'; again.className = 'ctrl yes'; again.textContent = 'start over';
+      again.addEventListener('click', function () { seen = {}; render(); }); e.appendChild(again); deck.appendChild(e); return;
     }
-    q.slice(0, 3).reverse().forEach(function (m, i, arr) { deck.appendChild(tapeEl(m, arr.length - 1 - i)); });
+    q.slice(0, 3).reverse().forEach(function (m, k, arr) { deck.appendChild(cardEl(m, arr.length - 1 - k)); });
     bind();
   }
-  function top() { return deck.querySelector('.tape-card:not(.behind)'); }
+  function topCard() { return deck.querySelector('.card:not(.behind)'); }
   function bind() {
-    var el = top(); if (!el) return;
-    var x0 = 0, dx = 0, dy = 0, y0 = 0, down = false, t0 = 0, yes = el.querySelector('.flag.yes'), no = el.querySelector('.flag.no');
-    el.addEventListener('pointerdown', function (e) { down = true; x0 = e.clientX; y0 = e.clientY; t0 = Date.now(); el.setPointerCapture(e.pointerId); el.classList.add('dragging'); });
+    var el = topCard(); if (!el) return;
+    var x0 = 0, y0 = 0, dx = 0, dy = 0, down = false, t1 = 0, yes = el.querySelector('.stamp.yes'), no = el.querySelector('.stamp.no');
+    el.addEventListener('pointerdown', function (e) { down = true; x0 = e.clientX; y0 = e.clientY; t1 = Date.now(); el.setPointerCapture(e.pointerId); el.classList.add('dragging'); });
     el.addEventListener('pointermove', function (e) {
       if (!down) return; dx = e.clientX - x0; dy = e.clientY - y0;
-      el.style.transform = 'translate(' + dx + 'px,' + dy * .25 + 'px) rotate(' + dx / 16 + 'deg)';
+      el.style.transform = 'translate(' + dx + 'px,' + dy * .25 + 'px) rotate(' + dx / 15 + 'deg)';
       yes.style.opacity = Math.max(0, Math.min(1, dx / 100)); no.style.opacity = Math.max(0, Math.min(1, -dx / 100));
     });
     function end() {
       if (!down) return; down = false; el.classList.remove('dragging');
-      var fast = Math.abs(dx) / Math.max(1, Date.now() - t0) > .6;
+      var fast = Math.abs(dx) / Math.max(1, Date.now() - t1) > .6;
       if (Math.abs(dx) > 100 || (fast && Math.abs(dx) > 40)) decide(dx > 0);
       else { el.style.transform = el.dataset.rest; yes.style.opacity = 0; no.style.opacity = 0; }
       dx = dy = 0;
     }
     el.addEventListener('pointerup', end); el.addEventListener('pointercancel', end);
   }
-  var link = document.getElementById('open-stash');
+  var btn = document.getElementById('open-stash');
   function decide(keep) {
-    var el = top(), m = queue()[0]; if (!el || !m) return;
-    el.querySelector(keep ? '.flag.yes' : '.flag.no').style.opacity = 1;
+    var el = topCard(), m = queue()[0]; if (!el || !m) return;
+    el.querySelector(keep ? '.stamp.yes' : '.stamp.no').style.opacity = 1;
     el.style.transition = reduce ? 'none' : 'transform .45s ease, opacity .45s ease';
-    el.style.transform = 'translate(' + (keep ? 1 : -1) * innerWidth + 'px,-40px) rotate(' + (keep ? 24 : -24) + 'deg)';
+    el.style.transform = 'translate(' + (keep ? 1 : -1) * innerWidth + 'px,-40px) rotate(' + (keep ? 26 : -26) + 'deg)';
     el.style.opacity = 0;
-    if (keep) { stash.push(m.id); save(); updateStash(); toast('Stashed ' + m.title + '.'); link.classList.remove('bump'); void link.offsetWidth; link.classList.add('bump'); }
+    if (keep) { stash.push(m.id); save(); updateStash(); toast('stashed: ' + m.title.toLowerCase()); btn.classList.remove('bump'); void btn.offsetWidth; btn.classList.add('bump'); }
     else seen[m.id] = true;
     setTimeout(render, reduce ? 0 : 320);
   }
@@ -421,29 +442,26 @@ p, h1, h2 { margin: 0; font-weight: 400; }
     if (e.key === 'ArrowLeft') { e.preventDefault(); decide(false); }
   });
 
-  // ---------- stash shelf ----------
-  var shelf = document.getElementById('shelf'), veil = document.getElementById('veil'), spines = document.getElementById('spines');
+  // ---------- stash ----------
+  var sheet = document.getElementById('sheet'), veil = document.getElementById('veil'), items = document.getElementById('items'), toastEl = document.getElementById('toast'), tt;
   function updateStash() {
     document.getElementById('stash-count').textContent = stash.length;
-    document.getElementById('shelf-empty').hidden = stash.length > 0;
-    spines.innerHTML = '';
+    document.getElementById('none').hidden = stash.length > 0;
+    items.innerHTML = '';
     stash.slice().reverse().forEach(function (id) {
-      var m = byId[id], li = document.createElement('li'); li.className = 'spine'; li.style.setProperty('--ink', m.ink);
-      li.innerHTML = '<i></i><b></b><small></small>';
-      li.querySelector('b').textContent = m.title; li.querySelector('small').textContent = m.year + ' · ' + m.score + '%';
+      var m = byId[id], li = document.createElement('li');
+      li.innerHTML = '<b></b><small></small>'; li.querySelector('b').textContent = m.title; li.querySelector('small').textContent = m.year + ' · ' + m.score + '%';
       var rm = document.createElement('button'); rm.type = 'button'; rm.textContent = '×'; rm.setAttribute('aria-label', 'Remove ' + m.title);
       rm.addEventListener('click', function () { stash = stash.filter(function (x) { return x !== id; }); save(); updateStash(); render(); });
-      li.appendChild(rm); spines.appendChild(li);
+      li.appendChild(rm); items.appendChild(li);
     });
   }
-  function openStash() { toastEl.hidden = true; shelf.hidden = false; veil.hidden = false; document.getElementById('close-stash').focus(); }
-  function closeStash() { shelf.hidden = true; veil.hidden = true; link.focus(); }
-  link.addEventListener('click', openStash);
+  function openStash() { toastEl.hidden = true; sheet.hidden = false; veil.hidden = false; document.getElementById('close-stash').focus(); }
+  function closeStash() { sheet.hidden = true; veil.hidden = true; btn.focus(); }
+  btn.addEventListener('click', openStash);
   document.getElementById('close-stash').addEventListener('click', closeStash);
   veil.addEventListener('click', closeStash);
-  addEventListener('keydown', function (e) { if (e.key === 'Escape' && !shelf.hidden) closeStash(); });
-
-  var toastEl = document.getElementById('toast'), tt;
+  addEventListener('keydown', function (e) { if (e.key === 'Escape' && !sheet.hidden) closeStash(); });
   function toast(s) { toastEl.textContent = s; toastEl.hidden = false; clearTimeout(tt); tt = setTimeout(function () { toastEl.hidden = true; }, 1600); }
 
   updateStash(); setFilter('all');

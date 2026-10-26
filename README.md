@@ -3,18 +3,17 @@
 What to watch when you're baked. Movie and TV picks rated with the **Potato Score**,
 sorted by vibe, and swiped into **your stash**.
 
-This is the homepage prototype: a real potato that warms, steams and gets loaded with
-vibe stickers as you scroll, then a stack of VHS tapes to swipe into your stash.
+This is the homepage prototype: a late-night 70s broadcast. A giant cartoon eye whose
+pupil dilates as you scroll, a TV-guide list of vibe channels, and printed program cards
+to swipe into your stash.
 
 ## What's here
 
 ```
-public/              The site. Plain HTML, CSS and JavaScript, no build step.
-  index.html         The whole homepage
-  potato.webp        Real potato, cut from the public-domain USDA photo
-  potato-icon.webp   Small version for the tab icon
-  grain.png          Light film-grain overlay
-brand/logo/          Final logo files (PNG)
+public/          The site. Plain HTML, CSS and JavaScript, no build step.
+  index.html     The whole homepage
+  grain.png      Light film-grain overlay
+brand/logo/      Logo files from the earlier brand round (PNG)
 ```
 
 ## Run it locally

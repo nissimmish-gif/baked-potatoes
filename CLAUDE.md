@@ -25,13 +25,13 @@ added to the same Worker (see README).
 
 ## Feel of the site (owner's call)
 
-Objects on a calm night surface, like A24's disc library or the sticker-covered fruit on
-the owner's board: one real thing per screen, lots of space, few words. A real potato
-photo carries die-cut vibe stickers (the categories); movies are VHS tapes with paper
-labels; the stash is a shelf of tape spines. Type: Instrument Serif for the few big
-words, small Arimo labels for the rest. Texture is light (one grain layer), never
-slapped on everything. Tried and rejected: smooth space gradients, heavy halftone and
-typewriter fonts, handwriting fonts, card grids, progress bars.
+A random stoner mix, mostly 1970s, on a dark night base: a late-night 70s TV broadcast.
+Flat cel-animation inks with thin outlines and misregistered layers (the giant eyeball),
+turning sunbursts, acid-blur colour burning through, scanner-style mono annotations,
+Shrikhand display type with a slipped red layer, IBM Plex Mono labels. Categories are a
+TV-guide channel list; movies are printed program cards. Potatoes are off the site for
+now (owner's call). Rejected so far: smooth space gradients, texture everywhere,
+typewriter/handwriting fonts, cute stickers and VHS objects, modern minimal layouts.
 
 ## Copy
 
