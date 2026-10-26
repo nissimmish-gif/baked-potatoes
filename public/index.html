@@ -56,7 +56,7 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
 /* ---------- top line ---------- */
 /* ---------- flash card parts (shared) ---------- */
 .fc-card { background: var(--fc-paper); color: var(--fc-line); padding: 5px; border-radius: 2px; position: relative; box-shadow: 0 14px 30px -12px rgba(0,0,0,.8); }
-.fc-card::after, .back::after { content: ""; position: absolute; inset: 0; pointer-events: none; mix-blend-mode: multiply; opacity: .5;
+.fc-card::after { content: ""; position: absolute; inset: 0; pointer-events: none; mix-blend-mode: multiply; opacity: .5;
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='p'><feTurbulence type='fractalNoise' baseFrequency='.7' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .55  0 0 0 0 .48  0 0 0 0 .36  0 0 0 .45 0'/></filter><rect width='100%' height='100%' filter='url(%23p)'/></svg>"); }
 .fc-frame { border: 3px solid var(--fc-line); border-radius: 3px; }
 .fc-panel { position: relative; overflow: hidden; }
@@ -75,11 +75,6 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
 .poster { position: absolute; inset: 0; perspective: 1400px; touch-action: none; user-select: none; -webkit-user-select: none; }
 .poster.behind { pointer-events: none; }
 .sheet { position: absolute; inset: 0; transform-style: preserve-3d; transition: transform .6s cubic-bezier(.45, .05, .55, .95); will-change: transform; }
-.poster.flipped .sheet { transform: rotateY(180deg); }
-/* swap sides at the halfway point too, so a browser that ignores backface-visibility still shows the right one */
-.sheet > .mount, .sheet > .back { transition: visibility 0s linear .3s; }
-.sheet > .back, .poster.flipped .sheet > .mount { visibility: hidden; }
-.poster.flipped .sheet > .back { visibility: visible; }
 /* no blend modes or filters inside a flipping poster: iOS Safari flattens the 3D and shows both sides */
 .poster *, .poster *::after { mix-blend-mode: normal !important; }
 .poster .face::after { opacity: .3; }
@@ -90,7 +85,6 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='p'><feTurbulence type='fractalNoise' baseFrequency='.6' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .55  0 0 0 0 .5  0 0 0 0 .42  0 0 0 .5 0'/></filter><rect width='100%' height='100%' filter='url(%23p)'/></svg>"),
     linear-gradient(180deg, rgba(255,255,255,0) 48%, rgba(0,0,0,.08) 50%, rgba(255,255,255,0) 52%),
     linear-gradient(90deg, rgba(255,255,255,0) 48%, rgba(0,0,0,.07) 50%, rgba(255,255,255,0) 52%); }
-.back { transform: rotateY(180deg); }
 .tag { position: absolute; top: 18%; z-index: 6; padding: 4px 12px 2px; font-family: var(--f-cond); font-size: 30px; letter-spacing: .04em; text-transform: uppercase; opacity: 0;
   background: var(--gold); color: var(--ink); box-shadow: 3px 3px 0 rgba(0,0,0,.4); }
 .tag.yes { left: 14px; transform: rotate(-9deg); }
@@ -144,24 +138,8 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
 .tears { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; }
 
 /* back of the poster: a flash card */
-.back { background: var(--fc-paper); color: var(--fc-line); padding: 4%; border-radius: 3px; }
-.back .fc-frame { position: absolute; inset: var(--gap); display: flex; flex-direction: column; padding: 4%; gap: calc(var(--W) * .022); }
-.back .trailer { flex: 0 0 auto; aspect-ratio: 16 / 9; background: #111; border-radius: 2px; overflow: hidden; }
-.back .trailer iframe { display: block; width: 100%; height: 100%; border: 0; }
-.back .trailer { position: relative; }
-.back .trailer .big { position: absolute; right: 6px; top: 6px; padding: 4px 8px 5px; background: rgba(20,20,20,.78); color: #fff; font-size: 11px; font-weight: 500; text-decoration: none; border-radius: 3px; text-transform: lowercase; }
-.back .plot { flex: 0 1 auto; min-height: 0; overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: var(--lines, 99); }
-.back dl { flex-shrink: 0; }
-.back .head { display: flex; justify-content: space-between; align-items: flex-end; gap: 10px; }
-.back .fc-label { font-size: calc(var(--W) * .1); }
 .spud { height: 1.6em; width: auto; margin-right: .18em; vertical-align: -.42em; transform: rotate(8deg); filter: drop-shadow(0 0 .5px rgba(27,26,23,.9)) drop-shadow(0 1px 0 rgba(27,26,23,.25)); }
 .pct small, .top .rate b small { font-size: .45em; font-weight: 500; color: #6d6758; margin-left: 1px; letter-spacing: 0; }
-.back .pct { font-family: var(--f-card); font-weight: 600; font-size: calc(var(--W) * .062); line-height: 1; color: var(--ink-red); white-space: nowrap; }
-.back .meta { font-size: calc(var(--W) * .036); font-weight: 500; text-transform: lowercase; color: #5f584b; margin-top: -2px; }
-.back .plot { font-size: calc(var(--W) * .043); line-height: 1.32; }
-.back dl { margin: 0; display: grid; grid-template-columns: auto 1fr; column-gap: 12px; font-size: calc(var(--W) * .035); line-height: 1.3; }
-.back dt { font-weight: 600; text-transform: lowercase; }
-.back dd { margin: 0; }
 
 /* ---------- controls + pill ---------- */
 .pill { position: fixed; z-index: 10; left: 50%; bottom: calc(14px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); white-space: nowrap; }
@@ -185,7 +163,7 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
 
 /* ---------- how-to: side cards, caption, first-visit nudge ---------- */
 .deck { position: relative; width: var(--W); height: calc(var(--W) * var(--AR)); }
-.howto { position: absolute; left: -4px; right: -4px; top: 100%; margin-top: 22px; display: flex; justify-content: space-between; align-items: baseline; }
+.howto { position: absolute; left: -4px; right: -4px; top: 100%; margin-top: 6px; display: flex; justify-content: space-between; align-items: baseline; }
 .howto button { font-family: var(--f-card); font-weight: 500; font-size: 13px; text-transform: lowercase; color: var(--soft); padding: 6px 4px; white-space: nowrap; transition: color .2s ease, transform .2s ease; }
 .howto .pass { transform: translateX(calc(var(--pp, 0) * -6px)); }
 .howto .keep { transform: translateX(calc(var(--pk, 0) * 6px)); }
@@ -216,18 +194,9 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
   .pill .fc-frame { gap: 13px; }
   .howto button { font-size: 12.5px; }
 
-  .back .plot { font-size: max(12px, calc(var(--W) * .043)); }
 }
 
 /* the paper roll when a poster is sent off */
-.roll { position: absolute; inset: 0; z-index: 50; pointer-events: none; }
-.roll .rframe { position: absolute; perspective: 1400px; transform-style: preserve-3d; }
-.roll .strip { position: absolute; left: 0; top: 0; width: 100%; }
-.roll .sf, .roll .sb { position: absolute; left: 0; top: 0; width: 100%; height: 100%; display: block; }
-.roll *, .roll *::after { mix-blend-mode: normal !important; }
-.roll .castclip { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
-.roll .cast { position: absolute; left: 0; right: 0; top: 0; opacity: 0; background: linear-gradient(rgba(0,0,0,.42), rgba(0,0,0,0)); }
-.roll .tag { top: auto; bottom: 9%; z-index: 60; }
 
 /* grid view: every poster in a scrolling grid */
 .views { position: fixed; z-index: 11; right: max(16px, env(safe-area-inset-right, 0px)); top: calc(14px + env(safe-area-inset-top, 0px)); display: flex; padding: 2px; gap: 2px; border-radius: 8px;
@@ -293,9 +262,33 @@ body.gridview .wall, body.gridview .top { display: none; }
 .panel .empty { color: #6d6758; padding: 18px 0; line-height: 1.4; }
 @media (prefers-reduced-motion: reduce) { .panel, .scrim { transition: none; } }
 
+.roll { position: absolute; inset: 0; z-index: 50; pointer-events: none; }
+.roll .tag { top: auto; bottom: 9%; z-index: 60; }
+
+/* details: the poster grows into a big flash card */
+.detail { position: fixed; inset: 0; z-index: 30; display: grid; place-items: center; padding: calc(14px + env(safe-area-inset-top, 0px)) 12px calc(14px + env(safe-area-inset-bottom, 0px)); background: rgba(4, 5, 9, 0); transition: background .3s ease; }
+.detail.on { background: rgba(4, 5, 9, .62); }
+.dcard { position: relative; width: min(560px, 100%); height: min(calc(min(560px, 100vw - 24px) * 1.66), 100%); padding: 9px; transition: transform .34s cubic-bezier(.2, .8, .2, 1); will-change: transform; }
+.dcard .fc-frame { position: relative; height: 100%; border-width: 3px; }
+.dcard .x { position: absolute; z-index: 3; top: 6px; right: 8px; width: 40px; height: 40px; font-size: 32px; line-height: 1; color: var(--fc-line); background: var(--fc-paper); border-radius: 50%; }
+.dbody { height: 100%; overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; padding: 52px 18px 22px; display: flex; flex-direction: column; gap: 12px; opacity: 0; transition: opacity .2s ease .12s; }
+.detail.on .dbody { opacity: 1; }
+.dbody .trailer { flex: 0 0 auto; aspect-ratio: 16 / 9; background: #111; border-radius: 2px; overflow: hidden; }
+.dbody .trailer iframe { display: block; width: 100%; height: 100%; border: 0; }
+.dbody .head { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; }
+.dbody h2 { font-size: clamp(28px, 8vw, 40px); line-height: 1; margin: 0; }
+.dbody .pct { font-family: var(--f-card); font-weight: 600; font-size: 26px; line-height: 1; color: var(--ink-red); white-space: nowrap; }
+.dbody .pct small { font-size: .5em; font-weight: 500; color: #6d6758; }
+.dbody .pct .spud { filter: none; }
+.dbody .meta { font-size: 14px; font-weight: 500; text-transform: lowercase; color: #5f584b; margin-top: -4px; }
+.dbody .plot { font-size: 18px; line-height: 1.45; }
+.dbody dl { margin: 4px 0 0; display: grid; grid-template-columns: auto 1fr; column-gap: 16px; row-gap: 6px; font-size: 15px; line-height: 1.35; padding-top: 12px; border-top: 2px solid var(--fc-line); }
+.dbody dt { font-weight: 600; text-transform: lowercase; }
+.dbody dd { margin: 0; }
+
 /* mini posters */
 
-@media (prefers-reduced-motion: reduce) { .sheet, .sheet > .mount, .sheet > .back { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .sheet, .dcard, .detail, .dbody { transition: none !important; } }
 </style>
 </head>
 <body>
@@ -329,6 +322,10 @@ body.gridview .wall, body.gridview .top { display: none; }
   <button type="button" id="stash-btn" aria-expanded="false">stash <b id="stash-n" aria-live="polite">0</b></button>
 </div></nav>
 <div class="drawer fc-card" id="vibe-drawer" hidden><div class="fc-frame"><h2 class="fc-label">categories</h2><div id="vibe-list"></div><p class="credit" id="tmdb-credit" hidden>Posters, details and trailers from TMDB. This product uses the TMDB API but is not endorsed or certified by TMDB.</p></div></div>
+<div class="detail" id="detail" hidden role="dialog" aria-modal="true" aria-label="Details"><div class="dcard fc-card"><div class="fc-frame">
+  <button type="button" class="x" id="dclose" aria-label="Close">×</button>
+  <div class="dbody" id="dbody"></div>
+</div></div></div>
 <div class="scrim" id="scrim" hidden></div>
 <aside class="panel fc-card" id="stash-panel" aria-label="Your stash" hidden tabindex="-1"><div class="fc-frame">
   <header class="ph"><h2 class="fc-label">your stash <span id="stash-count"></span></h2><button type="button" class="x" id="stash-close" aria-label="Close your stash">×</button></header>
@@ -506,16 +503,7 @@ body.gridview .wall, body.gridview .top { display: none; }
       '<div class="art"><div class="pic dots">' + genArt(t, 'print') + imgTag(t, 'poster') + '</div></div>' +
       '<p class="billing">' + credits + '</p></div>';
   }
-  function back(t) {
-    var n = t.title.length, lab = n <= 12 ? 1 : n <= 20 ? .82 : .64;
-    return '<div class="face back"><div class="fc-frame">' +
-      '<div class="trailer" hidden></div>' +
-      '<div class="head"><h3 class="fc-label" style="font-size:calc(var(--W) * ' + (.1 * lab).toFixed(3) + ')">' + esc(t.title) + '</h3><span class="pct" aria-label="Score ' + rating(t) + ' out of 10">' + SPUD + rating(t) + '<small>/10</small></span></div>' +
-      '<p class="meta">' + t.year + ' · ' + esc(t.run) + ' · ' + esc(t.genre) + ' · ' + tier(t.score).toLowerCase() + '</p>' +
-      '<p class="plot">' + esc(t.plot) + '</p>' +
-      '<dl><dt>' + (t.kind === 'tv' ? 'made by' : 'directed by') + '</dt><dd>' + esc(t.dir.join(', ')) + '</dd><dt>starring</dt><dd>' + esc(t.cast.join(', ')) + '</dd><dt>category</dt><dd>' + esc(t.vibes.map(vibeName).join(', ').toLowerCase()) + '</dd><dt>watch on</dt><dd>coming soon</dd></dl>' +
-      '</div></div>';
-  }
+
 
   // ---------- stack ----------
   var stack = document.getElementById('stack'), kindF = 'all', vibeF = 'all', seen = {};
@@ -569,7 +557,7 @@ body.gridview .wall, body.gridview .top { display: none; }
       var rot = ((t.i * 37) % 7 - 3) * (depth ? 1 : .35);
       el.dataset.rest = 'translate(' + depth * 6 + 'px,' + depth * -6 + 'px) rotate(' + rot + 'deg)';
       el.style.transform = el.dataset.rest;
-      el.innerHTML = '<div class="sheet"><div class="face mount labeled"><div class="mat">' + front(t) + plabel(t) + '</div></div>' + back(t) + '</div>';
+      el.innerHTML = '<div class="sheet"><div class="face mount labeled"><div class="mat">' + front(t) + plabel(t) + '</div></div></div>';
       el._t = t; stack.appendChild(el);
     });
     bind();
@@ -587,7 +575,6 @@ body.gridview .wall, body.gridview .top { display: none; }
     var el = topEl(); if (!el) return;
     var x0 = 0, y0 = 0, dx = 0, dy = 0, down = false, t0 = 0, moved = false, pr = null;
     el.addEventListener('pointerdown', function (e) {
-      if (e.target.closest('[data-act]') || e.target.closest('.trailer')) return;
       busy = true; stopNudge(); down = true; moved = false; x0 = e.clientX; y0 = e.clientY; t0 = Date.now(); dx = dy = 0; el.setPointerCapture(e.pointerId);
     });
     el.addEventListener('pointermove', function (e) {
@@ -604,18 +591,14 @@ body.gridview .wall, body.gridview .top { display: none; }
     });
     function end() {
       if (!down) return; down = false;
-      if (!moved) { flip(el); return; }
+      if (!moved) { openDetail(el); return; }
       var fast = Math.abs(dx) / Math.max(1, Date.now() - t0) > .6;
       if (Math.abs(dx) > 100 || (fast && Math.abs(dx) > 40)) { decide(dx > 0, pr); pr = null; return; }
       pr.cancel(); pr = null; pull(0, 0);
     }
     el.addEventListener('pointerup', end); el.addEventListener('pointercancel', end);
-    el.addEventListener('click', function (e) { var b = e.target.closest('[data-act]'); if (b) { e.stopPropagation(); decide(b.dataset.act === 'stash'); } });
   }
-  function flip(el) {
-    learned(); var on = el.classList.toggle('flipped'); capText(on);
-    if (on) setTimeout(function () { if (el.classList.contains('flipped')) trailer(el); }, 620); else clearTrailer(el);
-  }
+
   var past = [], undoBtn = document.getElementById('undo');
   function decide(keep, pr) {
     var el = topEl(); if (!el) return; var t = el._t; learned(); stopNudge();
@@ -634,15 +617,6 @@ body.gridview .wall, body.gridview .top { display: none; }
     pin = last.key; undoBtn.hidden = !past.length; render();
   }
 
-  // ---------- the peel: the poster rolls up from the top corner opposite the swipe ----------
-  // Whatever side is showing is painted once into a canvas (snapshot). The sheet is cut into thin
-  // strips running across a diagonal (tilted so the roll starts at the top-left corner when you
-  // swipe right, top-right when you swipe left). Each strip is its own flat element: the code walks
-  // up from the bottom, bends every strip above the roll line by a fixed angle, and places each
-  // one at the end of the last, so the peeled part wraps into a tube. Which side of a strip shows
-  // (poster or the cream back of the paper) is decided here too, not by backface-visibility,
-  // which iOS Safari gets wrong in deep 3D.
-  var TILT = .46, PAPER = '#efe5d0', BACKPAPER = [238, 229, 209];
   function canvasFor(w, h) { var s = Math.min(devicePixelRatio || 1, 1.5), c = document.createElement('canvas'); c.width = Math.round(w * s); c.height = Math.round(h * s); var x = c.getContext('2d'); x.scale(s, s); return [c, x]; }
   // where a node sits inside the poster, from layout (transforms ignored, so a flipped back reads true)
   function offs(n, root) {
@@ -695,83 +669,50 @@ body.gridview .wall, body.gridview .top { display: none; }
     var pr = mat.querySelector('.plabel .pr'); if (pr) paintScore(x, pr, el);
     el._snap = cx[0]; return cx[0];
   }
-  function backSnapshot(el) {
-    // the details side, drawn from the live layout: frame, trailer still, title, score, text
-    var back = el.querySelector('.back'), fr = back.querySelector('.fc-frame'), w = el.offsetWidth, h = el.offsetHeight, cx = canvasFor(w, h), x = cx[1];
-    x.fillStyle = PAPER; x.fillRect(0, 0, w, h); paintFrame(x, fr, el);
-    [].forEach.call(fr.querySelectorAll('.trailer:not([hidden]), h3, .pct, .meta, .plot, dt, dd'), function (n) {
-      if (n.classList.contains('trailer')) {
-        var o = offs(n, el); x.fillStyle = '#111'; x.fillRect(o[0], o[1], n.offsetWidth, n.offsetHeight);
-        var th = el._thumb; if (th && th.complete && th.naturalWidth) { try { x.drawImage(th, 0, th.naturalHeight * .125, th.naturalWidth, th.naturalHeight * .75, o[0], o[1], n.offsetWidth, n.offsetHeight); } catch (e) {} }
-      } else if (n.classList.contains('pct')) paintScore(x, n, el);
-      else paintText(x, n, el);
-    });
-    return cx[0];
-  }
+  // ---------- the peel: the poster rolls up from the top corner opposite the swipe ----------
+  // Drawn flat, on one canvas, every frame: the poster below the fold line, a light cream tube
+  // lying along the line, and its soft shadow. No 3D at all (iOS Safari drew every 3D version
+  // with seams and flicker). The line is tilted so the roll starts at the top-left corner when
+  // you swipe right and the top-right corner when you swipe left.
+  var TILT = .46, PAPER = '#efe5d0';
   function peel(el, dir) {
-    var w = el.offsetWidth, h = el.offsetHeight, rho = -dir * TILT;
-    var Dx = w * Math.abs(Math.cos(rho)) + h * Math.abs(Math.sin(rho)), Dy = w * Math.abs(Math.sin(rho)) + h * Math.abs(Math.cos(rho));
-    var N = Math.max(26, Math.round(Dy / 13)), sh = Dy / N, s = Math.min(devicePixelRatio || 1, 1.5), OV = 1.6;
-    var snap = el.classList.contains('flipped') ? backSnapshot(el) : frontSnapshot(el);
-    clearTrailer(el);
+    var w = el.offsetWidth, h = el.offsetHeight, rho = -dir * TILT, s = Math.min(devicePixelRatio || 1, 2);
+    var Dy = w * Math.abs(Math.sin(rho)) + h * Math.abs(Math.cos(rho)), Dx = w * Math.abs(Math.cos(rho)) + h * Math.abs(Math.sin(rho));
+    var snap = frontSnapshot(el), pad = 40;
     var box = document.createElement('div'); box.className = 'roll';
     var rest = el.dataset.rest; box.style.transform = rest;
-    var frame = document.createElement('div'); frame.className = 'rframe';
-    frame.style.cssText = 'left:' + (w - Dx) / 2 + 'px;top:' + (h - Dy) / 2 + 'px;width:' + Dx + 'px;height:' + Dy + 'px;transform:rotate(' + rho + 'rad)';
-    // draws into a strip in frame coordinates (the back is pre-flipped, since it is seen from behind)
-    function place(x, j, flip) {
-      x.setTransform(s, 0, 0, s, 0, 0);
-      if (flip) { x.translate(0, sh + OV); x.scale(1, -1); }
-      x.translate(0, -j * sh); x.translate(Dx / 2, Dy / 2); x.rotate(-rho); x.translate(-w / 2, -h / 2);
-    }
-    function backPaint(st, level) {
-      var x = st.bx; x.setTransform(1, 0, 0, 1, 0, 0); x.clearRect(0, 0, st.b.width, st.b.height); place(x, st.j, true);
-      var k = level < 0 ? 1 : 1 - level * .22, hl = level < 0 ? -level : 0;
-      x.fillStyle = 'rgb(' + Math.round(BACKPAPER[0] * k + 255 * hl * .3) + ',' + Math.round(BACKPAPER[1] * k + 250 * hl * .3) + ',' + Math.round(BACKPAPER[2] * k + 240 * hl * .3) + ')';
-      x.fillRect(0, 0, w, h);
-    }
-    var strips = [];
-    for (var j = 0; j < N; j++) {
-      var st = { j: j, lv: null, side: 1 }, d = document.createElement('div'); d.className = 'strip';
-      d.style.height = (sh + OV) + 'px'; d.style.transformOrigin = '50% ' + sh + 'px';
-      var f = document.createElement('canvas'); f.className = 'sf'; f.width = Math.ceil(Dx * s); f.height = Math.ceil((sh + OV) * s);
-      var fx = f.getContext('2d'); place(fx, j, false); fx.drawImage(snap, 0, 0, w, h);
-      var b = document.createElement('canvas'); b.className = 'sb'; b.width = f.width; b.height = f.height; b.style.visibility = 'hidden';
-      d.appendChild(f); d.appendChild(b); frame.appendChild(d);
-      st.el = d; st.f = f; st.b = b; st.bx = b.getContext('2d'); strips[j] = st;
-    }
-    box.appendChild(frame);
-    // the roll's shadow on the flat paper below it, clipped to the poster
-    var cc = document.createElement('div'); cc.className = 'castclip';
-    var cf = document.createElement('div'); cf.className = 'rframe'; cf.style.cssText = frame.style.cssText;
-    var cast = document.createElement('i'); cast.className = 'cast'; cf.appendChild(cast); cc.appendChild(cf); box.appendChild(cc);
+    var cv = document.createElement('canvas'); cv.width = Math.round((w + pad * 2) * s); cv.height = Math.round((h + pad * 2) * s);
+    cv.style.cssText = 'position:absolute;left:' + -pad + 'px;top:' + -pad + 'px;width:' + (w + pad * 2) + 'px;height:' + (h + pad * 2) + 'px';
+    var x = cv.getContext('2d'); box.appendChild(cv);
     var yes = document.createElement('span'), no = document.createElement('span');
     yes.className = 'tag yes'; yes.textContent = 'stash it'; no.className = 'tag no'; no.textContent = 'pass';
     box.appendChild(yes); box.appendChild(no);
     deck.appendChild(box); el.style.opacity = '0'; peeling++;
     var cur = { p: 0, x: 0, y: 0, d: 0 }, raf = 0;
-    function set(p, x, y, dd) {
-      cur = { p: p, x: x, y: y, d: dd };
-      var line = p * Dy * .96, r = Math.max(14, w * .065) + line * .02, th = sh / r, cum = 0, hy = Dy, hz = 0;
-      for (var j = N - 1; j >= 0; j--) {
-        var st = strips[j], hinge = (j + 1) * sh, f = j === N - 1 ? 0 : Math.max(0, Math.min(1, (line - hinge) / sh + 1));
-        cum += th * f;
-        // this strip hangs from the hinge at (hy, hz) with its bottom edge there, turned by cum
-        var tr = cum ? 'translate3d(0,' + (hy - sh).toFixed(2) + 'px,' + hz.toFixed(2) + 'px) rotateX(' + (-cum).toFixed(4) + 'rad)' : 'translate3d(0,' + (hy - sh).toFixed(2) + 'px,0)';
-        if (st.tr !== tr) { st.el.style.transform = tr; st.tr = tr; }
-        // paper that has rolled past half a turn is inside the curl: hide it, so the roll reads
-        // as one simple cream curl instead of layers
-        var co = Math.cos(cum), si = Math.sin(cum), side = cum > Math.PI * 1.02 ? 0 : co >= 0 ? 1 : -1;
-        if (st.side !== side) { st.side = side; st.f.style.visibility = side > 0 ? '' : 'hidden'; st.b.style.visibility = side < 0 ? '' : 'hidden'; }
-        if (side < 0) {
-          // the back of the paper darkens as it turns edge-on and brightens where it faces you
-          var lv = co < -.985 ? -Math.pow(-co, 10) : Math.min(1, .8 * (1 - Math.abs(co)) + (si < 0 ? .3 * -si : 0));
-          lv = Math.round(lv * 16) / 16; if (st.lv !== lv) { st.lv = lv; backPaint(st, lv); }
-        }
-        hy -= sh * co; hz += sh * si;
-      }
-      cast.style.top = line + 'px'; cast.style.height = (r * 2.2) + 'px'; cast.style.opacity = p > .01 ? Math.min(1, p * 6) : 0;
-      box.style.transform = rest + ' translate(' + x + 'px,' + y + 'px) rotate(' + (x / 22) + 'deg)';
+    function draw(p) {
+      x.setTransform(s, 0, 0, s, 0, 0); x.clearRect(0, 0, w + pad * 2, h + pad * 2);
+      x.translate(pad + w / 2, pad + h / 2);
+      // in the tilted frame the line runs across x and moves down y; the peeled part is above it
+      var L = -Dy / 2 + p * (Dy + 20), r = Math.min(w * .085, 6 + p * Dy * .07);
+      // the flat poster below the line
+      x.save(); x.rotate(rho); x.beginPath(); x.rect(-Dx, L, Dx * 2, Dy * 2); x.clip(); x.rotate(-rho);
+      x.drawImage(snap, -w / 2, -h / 2, w, h);
+      // the roll's shadow on it
+      if (p > 0) { x.rotate(rho); var g = x.createLinearGradient(0, L, 0, L + r * 2.4); g.addColorStop(0, 'rgba(0,0,0,.32)'); g.addColorStop(1, 'rgba(0,0,0,0)'); x.fillStyle = g; x.fillRect(-Dx, L, Dx * 2, r * 2.4); }
+      x.restore();
+      if (p <= 0) return;
+      // the tube: as long as the poster is wide along the line, shaded like a cream cylinder
+      x.save(); x.beginPath(); x.rect(-w / 2, -h / 2, w, h); x.rotate(rho); x.clip();
+      var c = x.createLinearGradient(0, L - r, 0, L + r);
+      c.addColorStop(0, '#d6c9ad'); c.addColorStop(.18, '#ece2cb'); c.addColorStop(.42, '#fbf7ec'); c.addColorStop(.7, '#ebe1c9'); c.addColorStop(1, '#cdbf9f');
+      x.fillStyle = c; x.fillRect(-Dx, L - r, Dx * 2, r * 2);
+      x.fillStyle = 'rgba(27,26,23,.18)'; x.fillRect(-Dx, L + r - .8, Dx * 2, .8);
+      x.restore();
+    }
+    function set(p, tx, ty, dd) {
+      cur = { p: p, x: tx, y: ty, d: dd };
+      draw(p);
+      box.style.transform = rest + ' translate(' + tx + 'px,' + ty + 'px) rotate(' + (tx / 22) + 'deg)';
       var k = Math.min(1, Math.abs(dd) / 100);
       yes.style.opacity = dd > 0 ? k : 0; no.style.opacity = dd < 0 ? k : 0;
     }
@@ -790,7 +731,7 @@ body.gridview .wall, body.gridview .top { display: none; }
     function remove() { if (gone) return; gone = true; cancelAnimationFrame(raf); box.remove(); peeling = Math.max(0, peeling - 1); }
     return {
       dir: dir, set: set, remove: remove,
-      cancel: function () { tween({ p: 0, x: 0, y: 0, d: 0 }, 320, function () { remove(); el.style.opacity = ''; if (el.classList.contains('flipped')) trailer(el); }); },
+      cancel: function () { tween({ p: 0, x: 0, y: 0, d: 0 }, 320, function () { remove(); el.style.opacity = ''; }); },
       leave: function (keep) { var dd = keep ? 1 : -1; tween({ p: 1, x: dd * innerWidth * .95, y: -40, d: dd * 100, fade: true }, 620, remove); },
       demo: function (steps, done) {
         var i = 0;
@@ -799,26 +740,58 @@ body.gridview .wall, body.gridview .top { display: none; }
     };
   }
 
-  // ---------- trailers on the back, once TMDB is connected ----------
-  var TRAILER = {};
-  function trailer(el) {
-    var t = el._t, a = ART[t.key], slot = el.querySelector('.trailer'); if (!slot || !a || !a.id) return;
-    function show(key) { if (!key || !el.classList.contains('flipped')) return; if (!el._thumb) { el._thumb = new Image(); el._thumb.crossOrigin = 'anonymous'; el._thumb.src = 'https://i.ytimg.com/vi/' + encodeURIComponent(key) + '/hqdefault.jpg'; } slot.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + encodeURIComponent(key) + '?playsinline=1&rel=0&fs=1" title="' + esc(t.title) + ' trailer" allow="encrypted-media; picture-in-picture; fullscreen" allowfullscreen loading="lazy"></iframe><a class="big" href="https://www.youtube.com/watch?v=' + encodeURIComponent(key) + '" target="_blank" rel="noopener">full screen ↗</a>'; slot.hidden = false; }
+  // ---------- details: tapping a poster grows it into a big readable card ----------
+  var TRAILER = {}, detail = document.getElementById('detail'), dcard = detail.querySelector('.dcard'), dbody = document.getElementById('dbody'), openFrom = null;
+  function openDetail(el) {
+    var t = el._t; learned(); openFrom = el;
+    dbody.innerHTML =
+      '<div class="trailer" hidden></div>' +
+      '<div class="head"><h2 class="fc-label">' + esc(t.title) + '</h2><span class="pct" aria-label="Score ' + rating(t) + ' out of 10">' + SPUD + rating(t) + '<small>/10</small></span></div>' +
+      '<p class="meta">' + t.year + ' · ' + esc(t.run) + ' · ' + esc(t.genre) + ' · ' + tier(t.score).toLowerCase() + '</p>' +
+      '<p class="plot">' + esc(t.plot) + '</p>' +
+      '<dl><dt>' + (t.kind === 'tv' ? 'made by' : 'directed by') + '</dt><dd>' + esc(t.dir.join(', ')) + '</dd><dt>starring</dt><dd>' + esc(t.cast.join(', ')) + '</dd><dt>category</dt><dd>' + esc(t.vibes.map(vibeName).join(', ').toLowerCase()) + '</dd><dt>watch on</dt><dd>coming soon</dd></dl>';
+    detail.hidden = false; dbody.scrollTop = 0;
+    // grow from the poster's own rectangle into the big card
+    var a = el.getBoundingClientRect(), b = dcard.getBoundingClientRect();
+    if (!reduce) {
+      dcard.style.transition = 'none'; dcard.style.transformOrigin = '0 0';
+      dcard.style.transform = 'translate(' + (a.left - b.left) + 'px,' + (a.top - b.top) + 'px) scale(' + a.width / b.width + ',' + a.height / b.height + ')';
+      detail.classList.remove('on'); void dcard.offsetWidth;
+      dcard.style.transition = ''; dcard.style.transform = '';
+    }
+    detail.classList.add('on'); el.style.opacity = '0';
+    document.getElementById('dclose').focus({ preventScroll: true });
+    trailer(t);
+  }
+  function closeDetail() {
+    if (detail.hidden) return;
+    var el = openFrom; openFrom = null; dbody.querySelector('.trailer').innerHTML = '';
+    if (reduce || !el || !el.isConnected) { detail.classList.remove('on'); detail.hidden = true; if (el) el.style.opacity = ''; return; }
+    var a = el.getBoundingClientRect(), b = dcard.getBoundingClientRect();
+    dcard.style.transform = 'translate(' + (a.left - b.left) + 'px,' + (a.top - b.top) + 'px) scale(' + a.width / b.width + ',' + a.height / b.height + ')';
+    detail.classList.remove('on');
+    setTimeout(function () { detail.hidden = true; dcard.style.transform = ''; el.style.opacity = ''; }, 340);
+  }
+  document.getElementById('dclose').addEventListener('click', closeDetail);
+  detail.addEventListener('click', function (e) { if (e.target === detail) closeDetail(); });
+  addEventListener('keydown', function (e) { if (e.key === 'Escape') closeDetail(); });
+  function trailer(t) {
+    var a = ART[t.key], slot = dbody.querySelector('.trailer'); if (!a || !a.id) return;
+    function show(key) { if (!key || detail.hidden || openFrom === null || openFrom._t !== t) return; slot.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + encodeURIComponent(key) + '?playsinline=1&rel=0&fs=1" title="' + esc(t.title) + ' trailer" allow="encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>'; slot.hidden = false; }
     if (TRAILER[t.key] !== undefined) return show(TRAILER[t.key]);
     fetch('/api/trailer?kind=' + t.kind + '&id=' + a.id).then(function (r) { return r.ok ? r.json() : {}; })
       .then(function (j) { TRAILER[t.key] = j.key || ''; show(TRAILER[t.key]); }).catch(function () {});
   }
-  function clearTrailer(el) { var slot = el.querySelector('.trailer'); if (slot) { slot.innerHTML = ''; slot.hidden = true; } }
 
   // ---------- how-to: side cards, caption, and a nudge until the first peel or flip ----------
   var deck = document.getElementById('deck'), cap = document.getElementById('cap-text'), busy = false, HKEY = 'baked-potatoes-learned', knows = false;
   try { knows = localStorage.getItem(HKEY) === '1'; } catch (e) {}
   function learned() { busy = true; if (!knows) { knows = true; try { localStorage.setItem(HKEY, '1'); } catch (e) {} } }
   function pull(k, p) { deck.style.setProperty('--pk', k); deck.style.setProperty('--pp', p); deck.classList.toggle('lean-k', k > .4); deck.classList.toggle('lean-p', p > .4); }
-  function capText(back) { cap.textContent = back ? 'tap to flip back' : 'tap for more'; }
+  function capText() { cap.textContent = 'tap for more'; }
   document.getElementById('side-pass').addEventListener('click', function () { decide(false); });
   document.getElementById('side-keep').addEventListener('click', function () { decide(true); });
-  document.getElementById('caption').addEventListener('click', function () { var el = topEl(); if (el) flip(el); });
+  document.getElementById('caption').addEventListener('click', function () { var el = topEl(); if (el) openDetail(el); });
   var demoing = null;
   function stopNudge() { if (demoing) { var d = demoing; demoing = null; d.remove(); var el = topEl(); if (el) el.style.opacity = ''; } }
   function nudge() {
@@ -836,7 +809,7 @@ body.gridview .wall, body.gridview .top { display: none; }
   stack.addEventListener('keydown', function (e) {
     if (e.key === 'ArrowRight') { e.preventDefault(); decide(true); }
     if (e.key === 'ArrowLeft') { e.preventDefault(); decide(false); }
-    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); var el = topEl(); if (el) flip(el); }
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); var el = topEl(); if (el) openDetail(el); }
   });
 
   // ---------- pill + drawers ----------

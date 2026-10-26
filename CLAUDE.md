@@ -29,17 +29,17 @@ carries a very light, even paper texture, not specks (a generated tile, `GRAIN`,
 modes; also painted into
 the peel snapshot). Drag a poster to peel it: it rolls up from the top corner opposite the swipe (top-left
 when you swipe right, top-right when you swipe left) like paper coming off a wall, and
-follows your finger the whole way (`peel()`: strips across a tilted axis; strips above the
-roll line wrap into a tube). Whatever side is showing is painted once into a canvas
-(`frontSnapshot()`, prepared at idle; `backSnapshot()` draws the details side from the
-live layout, with the trailer's YouTube still, never the live player) and each strip is a
-canvas slice. The roll is one light cream curl: paper past half a turn is hidden, never
-drawn as layers (owner: "light, simple and cream"). A glass back button top right, beside the
-view toggle (`undo()`) brings back the last poster passed or stashed. Strips are flat siblings placed by code, and code decides which side of each
-strip shows: no nested 3D, no backface-visibility (iOS Safari gets both wrong). The twinkle pauses while a poster is peeled. Let go far enough right to stash, left to
+follows your finger the whole way. `peel()` draws it flat on one canvas each frame: the
+poster below the fold line (from `frontSnapshot()`, prepared at idle), a light cream tube
+along the line and its soft shadow. No 3D at all: every 3D version (strips, backface
+tricks) glitched on iOS Safari. The twinkle pauses while a poster is peeled. A glass back
+button top right, beside the view toggle (`undo()`), brings back the last poster passed or
+stashed. Let go far enough right to stash, left to
 pass, and it rolls the rest of the way off; let go early and it lays back flat. The next
-poster is live underneath while the roll plays. Tap
-to flip it. Fronts are real TMDB posters once `TMDB_TOKEN` is set; until then, original
+poster is live underneath while the roll plays. Tapping a poster no longer flips it
+(owner: the back was too small to read): it grows from its own rectangle into a big
+flash-card details view (`openDetail()`): trailer, title, score, plot, credits, with an ×
+top right; Esc or a tap outside also closes it. Fronts are real TMDB posters once `TMDB_TOKEN` is set; until then, original
 placeholder posters in three print styles (torn-paper photo, 80s one-sheet, halftone
 screen print). Inspired by real posters, never copies of them. Exception: the three
 posters in `public/posters/` (Ferris Bueller's Day Off, The Truman Show, Fight Club) are
@@ -48,11 +48,11 @@ the owner's own reference images, used as stand-ins until TMDB is on; delete the
 There is no header bar (owner: it took too much space). Each poster card carries its own
 flash-card label under the picture, inside the black frame: title (two lines at most),
 year · runtime · genre, and the potato score. The card is 1:1.66 so the poster keeps its
-2:3 shape above the label. The back has no buttons; the plot and credits use the room.
+2:3 shape above the label. 
 
 Every poster sits in a cream mount with a black frame line, with one even gap (`--gap`,
 2.8% of the card width) from the card edge to the line and from the line to the poster;
-the back uses the same frame. How to use it is said quietly:
+How to use it is said quietly:
 one line of small text under the poster ("← pass · tap for more · stash →", each a
 button), and on a first visit the top poster peels a little to the right, then to the
 left, to show the gesture, until someone peels or flips. Owner wants these low key, not flash cards. The
@@ -68,12 +68,10 @@ the nav and not taking its own row) switches to a
 scrolling grid of every poster left (tap one to open it on top of the stack); the choice
 is remembered.
 
-The back of each poster, the header, the nav and the drawers are **vintage flash cards**:
+The details view, the nav and the drawers are **vintage flash cards**:
 cream paper, a heavy black rounded frame and a lowercase grotesque label (Inter Tight). No
-drawings (owner removed them, 2026-10-26). The top of each poster back is the **trailer
-slot**: once TMDB is connected, flipping a poster loads its YouTube trailer there
-(`/api/trailer`, youtube-nocookie embed, removed again on flip back), with a "full screen"
-button that opens it on YouTube (iPhone can't full-screen an embed inside the 3D card).
+drawings (owner removed them, 2026-10-26). The top of the details view is the trailer
+(`/api/trailer`, youtube-nocookie embed, removed again on close).
 The wordmark sits top left on every page: "baked potatoes", Arimo Bold, lowercase, on one
 line, cream, sized to fill the space up to the buttons on the right (owner's call, 2026-10-26; the name is back on).
 Rejected so far: space gradients, texture everywhere, typewriter/handwriting fonts,
