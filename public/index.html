@@ -48,6 +48,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 p, h1, h2, h3 { margin: 0; font-weight: 400; }
 
 /* ---------- night scene ---------- */
+#twinkle { position: fixed; inset: 0; width: 100%; height: 100%; display: block; pointer-events: none; }
 #scene { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
 .grain { position: fixed; inset: 0; pointer-events: none; z-index: 1; opacity: .35; mix-blend-mode: overlay;
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='.6'/></svg>"); }
@@ -72,7 +73,7 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
 .top .fc-label { font-size: 22px; margin: 0; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; line-height: 1.02; }
 .top p { margin-top: 3px; font-size: 11.5px; font-weight: 500; text-transform: lowercase; color: #5f584b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .top .rate { text-align: right; }
-.top .rate b { display: block; font-family: var(--f-card); font-weight: 600; font-size: 30px; line-height: 1; color: var(--ink-red); letter-spacing: -.02em; }
+.top .rate b { display: block; font-family: var(--f-card); font-weight: 600; font-size: 28px; line-height: 1; color: var(--ink-red); letter-spacing: -.02em; white-space: nowrap; }
 .top .rate small { display: block; margin-top: 2px; font-size: 10.5px; font-weight: 500; text-transform: lowercase; white-space: nowrap; }
 
 /* ---------- the stack ---------- */
@@ -80,8 +81,16 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
 .stack { position: relative; width: var(--W); height: calc(var(--W) * 1.5); }
 .poster { position: absolute; inset: 0; perspective: 1400px; touch-action: none; user-select: none; -webkit-user-select: none; }
 .poster.behind { pointer-events: none; }
-.sheet { position: absolute; inset: 0; transform-style: preserve-3d; transition: transform .7s cubic-bezier(.3, 1.2, .4, 1); will-change: transform; }
+.sheet { position: absolute; inset: 0; transform-style: preserve-3d; transition: transform .6s cubic-bezier(.45, .05, .55, .95); will-change: transform; }
 .poster.flipped .sheet { transform: rotateY(180deg); }
+/* swap sides at the halfway point too, so a browser that ignores backface-visibility still shows the right one */
+.sheet > .mount, .sheet > .back { transition: visibility 0s linear .3s; }
+.sheet > .back, .poster.flipped .sheet > .mount { visibility: hidden; }
+.poster.flipped .sheet > .back { visibility: visible; }
+/* no blend modes or filters inside a flipping poster: iOS Safari flattens the 3D and shows both sides */
+.poster *, .poster *::after { mix-blend-mode: normal !important; }
+.poster .face::after { opacity: .3; }
+.poster .spud { filter: none; }
 .face { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; overflow: hidden; border-radius: 3px;
   box-shadow: 0 2px 0 rgba(255,255,255,.08) inset, 0 30px 60px -20px rgba(0,0,0,.75), 0 0 0 1px rgba(0,0,0,.25); }
 .face::after { content: ""; position: absolute; inset: 0; pointer-events: none; mix-blend-mode: multiply; opacity: .55;
@@ -139,7 +148,7 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
 .pic { position: absolute; inset: 0; }
 .pic img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity .6s ease; }
 .pic img.ok { opacity: 1; }
-.duo img { filter: grayscale(1) contrast(1.15) brightness(1.05); mix-blend-mode: multiply; }
+.duo img { filter: grayscale(1) contrast(1.15) brightness(1.05); opacity: .9; }
 .dots { -webkit-mask: radial-gradient(circle, #000 42%, transparent 46%) 0 0 / 5px 5px; mask: radial-gradient(circle, #000 42%, transparent 46%) 0 0 / 5px 5px; }
 .gen { position: absolute; inset: 0; }
 .gen i { position: absolute; border-radius: 50%; }
@@ -151,6 +160,9 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
 .back .fc-panel { flex: 0 0 auto; height: calc(var(--W) * .4); }
 .back .head { display: flex; justify-content: space-between; align-items: flex-end; gap: 10px; }
 .back .fc-label { font-size: calc(var(--W) * .1); }
+.spud { height: .9em; width: auto; margin-right: .14em; vertical-align: -.06em; transform: rotate(8deg); filter: drop-shadow(0 0 .5px rgba(27,26,23,.9)) drop-shadow(0 1px 0 rgba(27,26,23,.25)); }
+.top .rate b small { display: inline; }
+.pct small, .top .rate b small { font-size: .45em; font-weight: 500; color: #6d6758; margin-left: 1px; letter-spacing: 0; }
 .back .pct { font-family: var(--f-card); font-weight: 600; font-size: calc(var(--W) * .075); line-height: 1; color: var(--ink-red); white-space: nowrap; }
 .back .meta { font-size: calc(var(--W) * .036); font-weight: 500; text-transform: lowercase; color: #5f584b; margin-top: -2px; }
 .back .plot { font-size: calc(var(--W) * .043); line-height: 1.32; }
@@ -204,7 +216,7 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
   .top .fc-panel { height: 46px; }
   .top .fc-label { font-size: 17px; }
   .top p { font-size: 10.5px; }
-  .top .rate b { font-size: 24px; }
+  .top .rate b { font-size: 22px; }
   .top .rate small { font-size: 9.5px; }
   .wall { padding-top: calc(96px + env(safe-area-inset-top, 0px)); padding-bottom: calc(118px + env(safe-area-inset-bottom, 0px)); }
   .pill { bottom: calc(22px + env(safe-area-inset-bottom, 0px)); }
@@ -217,11 +229,12 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
   .back .fc-panel { height: calc(var(--W) * .33); }
 }
 
-@media (prefers-reduced-motion: reduce) { .sheet { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .sheet, .sheet > .mount, .sheet > .back { transition: none; } }
 </style>
 </head>
 <body>
 <canvas id="scene" aria-hidden="true"></canvas>
+<canvas id="twinkle" aria-hidden="true"></canvas>
 <div class="grain" aria-hidden="true"></div>
 
 <header class="top fc-card" aria-live="polite"><div class="fc-frame"><div class="fc-panel" id="top-art"></div><div class="ti"><h1 class="fc-label" id="top-title">tonight</h1><p id="top-meta"></p></div><div class="rate"><b id="top-score"></b><small id="top-tier"></small></div></div></header>
@@ -274,8 +287,30 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
       cx.strokeStyle = 'rgba(255,250,235,.55)'; cx.lineWidth = .8; cx.beginPath(); cx.moveTo(gx - gl, gy); cx.lineTo(gx + gl, gy); cx.moveTo(gx, gy - gl); cx.lineTo(gx, gy + gl); cx.stroke();
       var gg = cx.createRadialGradient(gx, gy, 0, gx, gy, 4); gg.addColorStop(0, '#fffdf4'); gg.addColorStop(1, 'rgba(255,253,244,0)'); cx.fillStyle = gg; cx.beginPath(); cx.arc(gx, gy, 4, 0, 6.283); cx.fill(); }
   }
-  paint();
-  var lastW = innerWidth; addEventListener('resize', function () { if (innerWidth !== lastW || Math.abs(innerHeight - H) > 120) { lastW = innerWidth; paint(); } sizes(); });
+  // twinkling: a separate layer of stars that slowly brighten and fade, each on its own beat
+  var tw = document.getElementById('twinkle'), tx = tw.getContext('2d'), stars = [];
+  function seedStars() {
+    var dpr = Math.min(devicePixelRatio || 1, 2), w = innerWidth, h = innerHeight, r = rng(23);
+    tw.width = Math.round(w * dpr); tw.height = Math.round(h * dpr); tx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    stars = [];
+    for (var i = 0; i < Math.max(40, w * h / 5000); i++) stars.push({ x: r() * w, y: r() * h, s: .7 + r() * r() * 1.8, ph: r() * 6.283, sp: .6 + r() * 1.6, glint: r() < .08, blue: r() < .3 });
+  }
+  function drawStars(time) {
+    tx.clearRect(0, 0, innerWidth, innerHeight);
+    for (var i = 0; i < stars.length; i++) {
+      var st = stars[i], a = reduce ? .6 : Math.pow(.5 + .5 * Math.sin(time / 1000 * st.sp + st.ph), 3);
+      if (a < .03) continue;
+      var col = st.blue ? '200,214,255' : '255,250,236', rad = st.s * 2.4, g = tx.createRadialGradient(st.x, st.y, 0, st.x, st.y, rad);
+      g.addColorStop(0, 'rgba(' + col + ',' + a + ')'); g.addColorStop(.35, 'rgba(' + col + ',' + a * .45 + ')'); g.addColorStop(1, 'rgba(' + col + ',0)');
+      tx.fillStyle = g; tx.beginPath(); tx.arc(st.x, st.y, rad, 0, 6.283); tx.fill();
+      if (st.glint && a > .5) { var gl = 4 + st.s * 4 * a; tx.strokeStyle = 'rgba(255,250,236,' + (a - .5) * 1.2 + ')'; tx.lineWidth = .7; tx.beginPath(); tx.moveTo(st.x - gl, st.y); tx.lineTo(st.x + gl, st.y); tx.moveTo(st.x, st.y - gl); tx.lineTo(st.x, st.y + gl); tx.stroke(); }
+    }
+  }
+  var lastT = 0;
+  function loop(time) { if (time - lastT > 40) { lastT = time; drawStars(time); } requestAnimationFrame(loop); }
+  paint(); seedStars();
+  if (reduce) drawStars(0); else requestAnimationFrame(loop);
+  var lastW = innerWidth; addEventListener('resize', function () { if (innerWidth !== lastW || Math.abs(innerHeight - H) > 120) { lastW = innerWidth; paint(); seedStars(); if (reduce) drawStars(0); } sizes(); });
 
   // ---------- data (credits from memory; scores are placeholders) ----------
   // kind, title, year, dir, cast, runtime, genre, vibes, score, tagline, plot, style, colours [a, b, c]
@@ -307,6 +342,8 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
   ].map(function (r, i) { return { i: i, kind: r[0], title: r[1], year: r[2], dir: r[3], cast: r[4], run: r[5], genre: r[6], vibes: r[7], score: r[8], tag: r[9], plot: r[10], style: r[11], col: r[12], img: r[13] || '', key: r[0] + ':' + r[1] + ':' + r[2] }; });
   var VIBES = [['all', 'Everything'], ['couch', 'Couch-locked'], ['eye', 'Eye candy'], ['plot', 'Plot optional'], ['giggle', 'Giggle fits'], ['brain', '2 a.m. big brain'], ['munch', 'Munchie bait'], ['short', 'Short trips'], ['sober', 'Save for sober']];
   function vibeName(id) { for (var i = 0; i < VIBES.length; i++) if (VIBES[i][0] === id) return VIBES[i][1]; return id; }
+  function rating(t) { return (t.score / 10).toFixed(1); }
+  var SPUD = '<img class="spud" src="img/potato.png" alt="" width="58" height="96">';
   function tier(s) { return s >= 75 ? 'Fully loaded' : s >= 50 ? 'Half baked' : 'Cold'; }
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
 
@@ -397,7 +434,7 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
     var inStash = stash.indexOf(t.key) > -1, n = t.title.length, lab = n <= 12 ? 1 : n <= 20 ? .82 : .64;
     return '<div class="face back"><div class="fc-frame">' +
       '<div class="fc-panel">' + picture(picKind(t), t.i + 1) + '</div>' +
-      '<div class="head"><h3 class="fc-label" style="font-size:calc(var(--W) * ' + (.1 * lab).toFixed(3) + ')">' + esc(t.title) + '</h3><span class="pct" title="Score: ' + tier(t.score) + '">' + t.score + '%</span></div>' +
+      '<div class="head"><h3 class="fc-label" style="font-size:calc(var(--W) * ' + (.1 * lab).toFixed(3) + ')">' + esc(t.title) + '</h3><span class="pct" aria-label="Score ' + rating(t) + ' out of 10">' + SPUD + rating(t) + '<small>/10</small></span></div>' +
       '<p class="meta">' + t.year + ' · ' + esc(t.run) + ' · ' + esc(t.genre) + ' · ' + tier(t.score).toLowerCase() + '</p>' +
       '<p class="plot">' + esc(t.plot) + '</p>' +
       '<dl><dt>' + (t.kind === 'tv' ? 'made by' : 'directed by') + '</dt><dd>' + esc(t.dir.join(', ')) + '</dd><dt>starring</dt><dd>' + esc(t.cast.join(', ')) + '</dd><dt>category</dt><dd>' + esc(t.vibes.map(vibeName).join(', ').toLowerCase()) + '</dd><dt>watch on</dt><dd>coming soon</dd></dl>' +
@@ -435,7 +472,7 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
     document.getElementById('top-art').innerHTML = picture(t ? picKind(t) : 'white', t ? t.i + 101 : 1);
     document.getElementById('top-title').textContent = t ? t.title : 'that\'s all of them';
     document.getElementById('top-meta').textContent = t ? t.year + ' · ' + t.run + ' · ' + t.genre : 'check your stash or pick another category';
-    document.getElementById('top-score').textContent = t ? t.score + '%' : '';
+    document.getElementById('top-score').innerHTML = t ? SPUD + rating(t) + '<small>/10</small>' : '';
     document.getElementById('top-tier').textContent = t ? tier(t.score).toLowerCase() : '';
   }
   function topEl() { return stack.querySelector('.poster:not(.behind)'); }
@@ -462,7 +499,10 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
     function end() {
       if (!down) return; down = false;
       var fast = Math.abs(dx) / Math.max(1, Date.now() - t0) > .6;
-      if (!moved) { flip(el); return; }
+      if (!moved) {
+        el.style.transition = 'transform .3s ease'; el.style.transform = el.dataset.rest; yes.style.opacity = no.style.opacity = 0; pull(0, 0);
+        flip(el); return;
+      }
       if (Math.abs(dx) > 110 || (fast && Math.abs(dx) > 40)) { decide(dx > 0); return; }
       el.style.transition = 'transform .35s ease'; el.style.transform = el.dataset.rest; lift.style.opacity = 0; curl.style.width = curl.style.height = '0'; yes.style.opacity = no.style.opacity = 0; pull(0, 0);
     }
