@@ -32,6 +32,12 @@ the owner's own reference images, used as stand-ins until TMDB is on; delete the
 The header is a flash card for the poster on top of the stack: its picture, title,
 year, runtime, genre and score. It changes as posters are peeled.
 
+Every poster sits in a cream mount with a black frame line. How to use it is said quietly:
+one line of small text under the poster ("← pass · tap for the plot · stash →", each a
+button), and on a first visit the top poster leans right then left once to show the
+gesture, until someone peels or flips. Owner wants these low key, not flash cards. The
+filters are called **categories** (not vibes) on the page.
+
 The back of each poster, the header, the nav and the drawers are **vintage flash cards**:
 cream paper, a heavy black rounded frame, a flat ink picture (red, violet, pink, sage) with
 rough edges and a yellow plate slipped out of register, and a lowercase grotesque label

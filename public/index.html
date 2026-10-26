@@ -76,7 +76,7 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
 .top .rate small { display: block; margin-top: 2px; font-size: 10.5px; font-weight: 500; text-transform: lowercase; white-space: nowrap; }
 
 /* ---------- the stack ---------- */
-.wall { position: fixed; inset: 0; z-index: 3; display: grid; place-items: center; padding: calc(104px + env(safe-area-inset-top, 0px)) 0 calc(84px + env(safe-area-inset-bottom, 0px)); }
+.wall { position: fixed; inset: 0; z-index: 3; display: grid; place-items: center; padding: calc(104px + env(safe-area-inset-top, 0px)) 0 calc(118px + env(safe-area-inset-bottom, 0px)); }
 .stack { position: relative; width: var(--W); height: calc(var(--W) * 1.5); }
 .poster { position: absolute; inset: 0; perspective: 1400px; touch-action: none; user-select: none; -webkit-user-select: none; }
 .poster.behind { pointer-events: none; }
@@ -162,7 +162,6 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
 .back .acts .yes { background: var(--ink-red); color: var(--fc-paper); }
 
 /* ---------- controls + pill ---------- */
-.hint-row { position: fixed; z-index: 4; left: 0; right: 0; bottom: calc(68px + env(safe-area-inset-bottom, 0px)); text-align: center; font-size: 11px; text-transform: lowercase; color: var(--soft); }
 .pill { position: fixed; z-index: 10; left: 50%; bottom: calc(14px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); white-space: nowrap; }
 .pill .fc-frame { display: flex; gap: 18px; align-items: center; padding: 6px 14px 7px; }
 .pill button { font-family: var(--f-card); font-weight: 500; font-size: 17px; text-transform: lowercase; letter-spacing: -.01em; color: #77705f; }
@@ -182,6 +181,22 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
 .done .fc-label { font-size: calc(var(--W) * .1); }
 .done button { margin-top: auto; padding: 8px 0; font-family: var(--f-card); font-weight: 500; font-size: 19px; text-transform: lowercase; border: 3px solid var(--fc-line); border-radius: 3px; }
 
+/* ---------- how-to: side cards, caption, first-visit nudge ---------- */
+.deck { position: relative; width: var(--W); height: calc(var(--W) * 1.5); }
+.howto { position: absolute; left: -4px; right: -4px; top: 100%; margin-top: 14px; display: flex; justify-content: space-between; align-items: baseline; }
+.howto button { font-family: var(--f-card); font-weight: 500; font-size: 13px; text-transform: lowercase; color: var(--soft); padding: 6px 4px; white-space: nowrap; transition: color .2s ease, transform .2s ease; }
+.howto .pass { transform: translateX(calc(var(--pp, 0) * -6px)); }
+.howto .keep { transform: translateX(calc(var(--pk, 0) * 6px)); }
+.deck.lean-p .pass, .deck.lean-k .keep { color: var(--cream); }
+.deck.empty .howto { display: none; }
+.tag { top: 7%; padding: 3px 9px 4px; font-family: var(--f-card); font-weight: 600; font-size: 15px; letter-spacing: -.01em; text-transform: lowercase; background: var(--fc-paper); color: var(--fc-line); border-radius: 2px; box-shadow: 0 6px 16px rgba(0,0,0,.35); }
+.tag.yes { color: var(--ink-red); left: 9%; }
+.tag.no { right: 9%; background: var(--fc-paper); }
+/* every poster sits in a cream mount with a black frame line */
+.mount { background: var(--fc-paper); }
+.mount .mat { position: absolute; inset: 4.5%; border: 3px solid var(--fc-line); border-radius: 3px; background: var(--fc-paper); }
+.mount .mat > .face { inset: 2.2%; border-radius: 1px; box-shadow: 0 0 0 1px rgba(0,0,0,.15); }
+
 /* phones: smaller pieces, more sky between them */
 @media (max-width: 599px) {
   .top { width: min(318px, calc(100vw - 56px)); top: calc(18px + env(safe-area-inset-top, 0px)); }
@@ -191,11 +206,13 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
   .top p { font-size: 10.5px; }
   .top .rate b { font-size: 24px; }
   .top .rate small { font-size: 9.5px; }
-  .wall { padding-top: calc(96px + env(safe-area-inset-top, 0px)); padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
+  .wall { padding-top: calc(96px + env(safe-area-inset-top, 0px)); padding-bottom: calc(118px + env(safe-area-inset-bottom, 0px)); }
   .pill { bottom: calc(22px + env(safe-area-inset-bottom, 0px)); }
   .pill .fc-frame { gap: 15px; padding: 5px 12px 6px; }
   .pill button { font-size: 15px; }
-  .hint-row { bottom: calc(72px + env(safe-area-inset-bottom, 0px)); font-size: 10.5px; }
+  .pill .fc-frame { gap: 13px; }
+  .howto button { font-size: 12.5px; }
+
   .back .plot { font-size: max(12px, calc(var(--W) * .043)); }
   .back .fc-panel { height: calc(var(--W) * .33); }
 }
@@ -210,17 +227,23 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
 <header class="top fc-card" aria-live="polite"><div class="fc-frame"><div class="fc-panel" id="top-art"></div><div class="ti"><h1 class="fc-label" id="top-title">tonight</h1><p id="top-meta"></p></div><div class="rate"><b id="top-score"></b><small id="top-tier"></small></div></div></header>
 
 <main class="wall">
-  <div class="stack" id="stack" aria-label="Poster stack. Drag right to stash, left to pass, tap to flip. Arrow keys work too." tabindex="0"></div>
+  <div class="deck" id="deck">
+    <div class="stack" id="stack" aria-label="Poster stack. Drag right to stash, left to pass, tap to flip. Arrow keys work too." tabindex="0"></div>
+    <div class="howto">
+      <button type="button" class="side pass" id="side-pass">← pass</button>
+      <button type="button" class="caption" id="caption"><span id="cap-text">tap for the plot</span></button>
+      <button type="button" class="side keep" id="side-keep">stash →</button>
+    </div>
+  </div>
 </main>
-<p class="hint-row"><span id="count"></span> · peel right to stash · left to pass · tap to flip</p>
 
 <nav class="pill fc-card" aria-label="Library"><div class="fc-frame">
   <button type="button" data-k="movie" aria-pressed="false">films</button>
   <button type="button" data-k="tv" aria-pressed="false">tv</button>
-  <button type="button" id="vibe-btn" aria-expanded="false">vibes</button>
+  <button type="button" id="vibe-btn" aria-expanded="false">categories</button>
   <button type="button" id="stash-btn" aria-expanded="false">stash <b id="stash-n" aria-live="polite">0</b></button>
 </div></nav>
-<div class="drawer fc-card" id="vibe-drawer" hidden><div class="fc-frame"><h2 class="fc-label">vibes</h2><div id="vibe-list"></div></div></div>
+<div class="drawer fc-card" id="vibe-drawer" hidden><div class="fc-frame"><h2 class="fc-label">categories</h2><div id="vibe-list"></div></div></div>
 <div class="drawer fc-card" id="stash-drawer" hidden><div class="fc-frame"><h2 class="fc-label">your stash</h2><div id="stash-list"></div><p class="empty" id="stash-empty">Nothing yet. Peel one to the right.</p></div></div>
 
 <script>
@@ -377,22 +400,23 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
       '<div class="head"><h3 class="fc-label" style="font-size:calc(var(--W) * ' + (.1 * lab).toFixed(3) + ')">' + esc(t.title) + '</h3><span class="pct" title="Score: ' + tier(t.score) + '">' + t.score + '%</span></div>' +
       '<p class="meta">' + t.year + ' · ' + esc(t.run) + ' · ' + esc(t.genre) + ' · ' + tier(t.score).toLowerCase() + '</p>' +
       '<p class="plot">' + esc(t.plot) + '</p>' +
-      '<dl><dt>' + (t.kind === 'tv' ? 'made by' : 'directed by') + '</dt><dd>' + esc(t.dir.join(', ')) + '</dd><dt>starring</dt><dd>' + esc(t.cast.join(', ')) + '</dd><dt>vibe</dt><dd>' + esc(t.vibes.map(vibeName).join(', ').toLowerCase()) + '</dd><dt>watch on</dt><dd>coming soon</dd></dl>' +
+      '<dl><dt>' + (t.kind === 'tv' ? 'made by' : 'directed by') + '</dt><dd>' + esc(t.dir.join(', ')) + '</dd><dt>starring</dt><dd>' + esc(t.cast.join(', ')) + '</dd><dt>category</dt><dd>' + esc(t.vibes.map(vibeName).join(', ').toLowerCase()) + '</dd><dt>watch on</dt><dd>coming soon</dd></dl>' +
       '<div class="acts"><button type="button" data-act="pass">pass</button><button type="button" class="yes" data-act="stash">' + (inStash ? 'stashed' : 'stash it') + '</button></div></div></div>';
   }
 
   // ---------- stack ----------
   var stack = document.getElementById('stack'), kindF = 'all', vibeF = 'all', seen = {};
-  function sizes() { var w = Math.min(innerWidth * (innerWidth < 600 ? .7 : .84), (innerHeight - 250) / 1.5, 380); document.documentElement.style.setProperty('--W', Math.round(w) + 'px'); }
+  function sizes() { var w = Math.min(innerWidth * (innerWidth < 600 ? .7 : .84), (innerHeight - 270) / 1.5, 380); document.documentElement.style.setProperty('--W', Math.round(w) + 'px'); }
   function queue() { return T.filter(function (t) { return !seen[t.key] && stash.indexOf(t.key) < 0 && (kindF === 'all' || t.kind === kindF) && (vibeF === 'all' ? t.vibes.indexOf('sober') < 0 : t.vibes.indexOf(vibeF) > -1); }); }
   function render() {
     stack.innerHTML = '';
     var q = queue();
-    document.getElementById('count').textContent = q.length + ' left' + (vibeF !== 'all' ? ' · ' + vibeName(vibeF).toLowerCase() : '');
+    vb.textContent = vibeF === 'all' ? 'categories' : vibeName(vibeF).toLowerCase();
     showTop(q[0]);
+    deck.classList.toggle('empty', !q.length); pull(0, 0); capText(false);
     if (!q.length) {
       var d = document.createElement('div'); d.className = 'done fc-card';
-      d.innerHTML = '<div class="fc-frame"><div class="fc-panel">' + picture('white', 1) + '</div><h3 class="fc-label">that\'s all of them</h3><p>Check your stash or pick another vibe.</p></div>';
+      d.innerHTML = '<div class="fc-frame"><div class="fc-panel">' + picture('white', 1) + '</div><h3 class="fc-label">that\'s all of them</h3><p>Check your stash or pick another category.</p></div>';
       var b = document.createElement('button'); b.type = 'button'; b.textContent = 'start over'; b.addEventListener('click', function () { seen = {}; render(); });
       d.querySelector('.fc-frame').appendChild(b); stack.appendChild(d); return;
     }
@@ -402,7 +426,7 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
       var rot = ((t.i * 37) % 7 - 3) * (depth ? 1 : .35);
       el.dataset.rest = 'translate(' + depth * 6 + 'px,' + depth * -6 + 'px) rotate(' + rot + 'deg)';
       el.style.transform = el.dataset.rest;
-      el.innerHTML = '<div class="sheet">' + front(t) + back(t) + '</div><div class="lift"></div><div class="curl"></div><span class="tag yes">Stash</span><span class="tag no">Pass</span>';
+      el.innerHTML = '<div class="sheet"><div class="face mount"><div class="mat">' + front(t) + '</div></div>' + back(t) + '</div><div class="lift"></div><div class="curl"></div><span class="tag yes" aria-hidden="true">stash it</span><span class="tag no" aria-hidden="true">pass</span>';
       el._t = t; stack.appendChild(el);
     });
     bind();
@@ -410,7 +434,7 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
   function showTop(t) {
     document.getElementById('top-art').innerHTML = picture(t ? picKind(t) : 'white', t ? t.i + 101 : 1);
     document.getElementById('top-title').textContent = t ? t.title : 'that\'s all of them';
-    document.getElementById('top-meta').textContent = t ? t.year + ' · ' + t.run + ' · ' + t.genre : 'check your stash or pick another vibe';
+    document.getElementById('top-meta').textContent = t ? t.year + ' · ' + t.run + ' · ' + t.genre : 'check your stash or pick another category';
     document.getElementById('top-score').textContent = t ? t.score + '%' : '';
     document.getElementById('top-tier').textContent = t ? tier(t.score).toLowerCase() : '';
   }
@@ -421,7 +445,7 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
     var x0 = 0, y0 = 0, dx = 0, dy = 0, down = false, t0 = 0, moved = false;
     el.addEventListener('pointerdown', function (e) {
       if (e.target.closest('[data-act]')) return;
-      down = true; moved = false; x0 = e.clientX; y0 = e.clientY; t0 = Date.now(); dx = dy = 0; el.setPointerCapture(e.pointerId); el.style.transition = 'none';
+      busy = true; down = true; moved = false; x0 = e.clientX; y0 = e.clientY; t0 = Date.now(); dx = dy = 0; el.setPointerCapture(e.pointerId); el.style.transition = 'none';
     });
     el.addEventListener('pointermove', function (e) {
       if (!down) return; dx = e.clientX - x0; dy = e.clientY - y0; if (Math.abs(dx) + Math.abs(dy) > 6) moved = true;
@@ -433,20 +457,21 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
       var cs = a * 90; curl.style.width = cs + 'px'; curl.style.height = cs + 'px';
       curl.style.left = s > 0 ? 'auto' : '0'; curl.style.right = s > 0 ? '0' : 'auto'; curl.style.setProperty('--ca', s > 0 ? '315deg' : '45deg');
       yes.style.opacity = s > 0 ? a * 1.4 : 0; no.style.opacity = s < 0 ? a * 1.4 : 0;
+      pull(s > 0 ? a : 0, s < 0 ? a : 0);
     });
     function end() {
       if (!down) return; down = false;
       var fast = Math.abs(dx) / Math.max(1, Date.now() - t0) > .6;
       if (!moved) { flip(el); return; }
       if (Math.abs(dx) > 110 || (fast && Math.abs(dx) > 40)) { decide(dx > 0); return; }
-      el.style.transition = 'transform .35s ease'; el.style.transform = el.dataset.rest; lift.style.opacity = 0; curl.style.width = curl.style.height = '0'; yes.style.opacity = no.style.opacity = 0;
+      el.style.transition = 'transform .35s ease'; el.style.transform = el.dataset.rest; lift.style.opacity = 0; curl.style.width = curl.style.height = '0'; yes.style.opacity = no.style.opacity = 0; pull(0, 0);
     }
     el.addEventListener('pointerup', end); el.addEventListener('pointercancel', end);
     el.addEventListener('click', function (e) { var b = e.target.closest('[data-act]'); if (b) { e.stopPropagation(); decide(b.dataset.act === 'stash'); } });
   }
-  function flip(el) { el.classList.toggle('flipped'); }
+  function flip(el) { learned(); capText(el.classList.toggle('flipped')); }
   function decide(keep) {
-    var el = topEl(); if (!el) return; var t = el._t;
+    var el = topEl(); if (!el) return; var t = el._t; learned();
     el.querySelector(keep ? '.tag.yes' : '.tag.no').style.opacity = 1;
     el.style.transition = reduce ? 'none' : 'transform .5s cubic-bezier(.4,0,.6,1), opacity .5s ease';
     el.style.transformOrigin = (keep ? '0%' : '100%') + ' 100%';
@@ -455,6 +480,34 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
     if (keep) { if (stash.indexOf(t.key) < 0) stash.push(t.key); save(); updateCount(); } else seen[t.key] = true;
     setTimeout(render, reduce ? 0 : 380);
   }
+  // ---------- how-to: side cards, caption, and a nudge until the first peel or flip ----------
+  var deck = document.getElementById('deck'), cap = document.getElementById('cap-text'), busy = false, HKEY = 'baked-potatoes-learned', knows = false;
+  try { knows = localStorage.getItem(HKEY) === '1'; } catch (e) {}
+  function learned() { busy = true; if (!knows) { knows = true; try { localStorage.setItem(HKEY, '1'); } catch (e) {} } }
+  function pull(k, p) { deck.style.setProperty('--pk', k); deck.style.setProperty('--pp', p); deck.classList.toggle('lean-k', k > .4); deck.classList.toggle('lean-p', p > .4); }
+  function capText(back) { cap.textContent = back ? 'tap to flip back' : 'tap for the plot'; }
+  document.getElementById('side-pass').addEventListener('click', function () { decide(false); });
+  document.getElementById('side-keep').addEventListener('click', function () { decide(true); });
+  document.getElementById('caption').addEventListener('click', function () { var el = topEl(); if (el) flip(el); });
+  function nudge() {
+    // shows the gesture once per visit until it's been used: lean right (stash), lean left (pass), settle
+    if (knows || reduce) return;
+    var el = topEl(); if (!el) return;
+    var yes = el.querySelector('.tag.yes'), no = el.querySelector('.tag.no');
+    [[700, 46], [1500, 0], [2100, -46], [2900, 0]].forEach(function (st) {
+      setTimeout(function () {
+        if (busy || el !== topEl()) return;
+        var dx = st[1], a = Math.abs(dx) / 46;
+        el.style.transition = 'transform .6s cubic-bezier(.3,1.3,.5,1)';
+        el.style.transformOrigin = (dx >= 0 ? '0%' : '100%') + ' 100%';
+        el.style.transform = el.dataset.rest + ' translateX(' + dx + 'px) rotate(' + dx / 10 + 'deg)';
+        yes.style.transition = no.style.transition = 'opacity .3s ease';
+        yes.style.opacity = dx > 0 ? 1 : 0; no.style.opacity = dx < 0 ? 1 : 0;
+        pull(dx > 0 ? a : 0, dx < 0 ? a : 0);
+      }, st[0]);
+    });
+  }
+
   stack.addEventListener('keydown', function (e) {
     if (e.key === 'ArrowRight') { e.preventDefault(); decide(true); }
     if (e.key === 'ArrowLeft') { e.preventDefault(); decide(false); }
@@ -496,7 +549,7 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
   fetch('/api/art?q=' + encodeURIComponent(T.map(function (t) { return t.key; }).join(','))).then(function (r) { return r.ok ? r.json() : {}; })
     .then(function (j) { if (j && !j.error) { ART = j; render(); } }).catch(function () {});
 
-  sizes(); updateCount(); render();
+  sizes(); updateCount(); render(); setTimeout(nudge, 400);
 })();
 </script>
 </body>
