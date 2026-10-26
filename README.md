@@ -28,12 +28,25 @@ python3 -m http.server 8000 --directory public
 
 Then open http://localhost:8000.
 
-## Deploy on Cloudflare Pages
+## Deploy on Cloudflare (Workers)
 
-1. In the Cloudflare dashboard, go to **Workers & Pages → Create → Pages → Connect to Git**.
-2. Pick this repository.
-3. Build settings: framework preset **None**, build command **empty**, build output directory **`public`**.
-4. Deploy. Every push to the production branch redeploys the site.
+The site deploys as a Cloudflare Worker that serves `public/` (`wrangler.jsonc`). The
+same Worker will later hold the movie-data API, so it all stays one project.
+
+1. In the Cloudflare dashboard, go to **Workers & Pages → Create application →**
+   import an existing Git repository.
+2. Pick **baked-potatoes**. If it isn't listed, GitHub only lets Cloudflare see some of
+   your repos: choose the option to manage access (or on GitHub: **Settings →
+   Applications → Cloudflare Workers and Pages → Configure**) and add `baked-potatoes`.
+3. Settings:
+   - **Worker name:** `baked-potatoes` (must match `name` in `wrangler.jsonc`)
+   - **Production branch:** `main`
+   - **Build command:** leave empty
+   - **Deploy command:** `npx wrangler deploy` (the default)
+4. **Deploy.** You get an address like `https://baked-potatoes.<your-name>.workers.dev`.
+   Every push to `main` redeploys it.
+
+To deploy from a terminal instead: `npm install`, then `npx wrangler deploy`.
 
 ## Prototype limits
 

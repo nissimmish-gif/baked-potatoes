@@ -1,8 +1,9 @@
 # Working in this repo
 
 Baked Potatoes: a site for what to watch when you're baked. `public/` is the site
-(static, no build step); it deploys to Cloudflare Pages with `public` as the output
-directory. Real movie data will come through a Cloudflare Worker (see README).
+(static, no build step). It deploys as a Cloudflare Worker serving `public/` as static
+assets (`wrangler.jsonc`); every push to `main` redeploys. Real movie data will be
+added to the same Worker (see README).
 
 ## Brand decisions (settled with the owner, keep them)
 
