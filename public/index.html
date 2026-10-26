@@ -71,7 +71,7 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
   font-family: "Arimo", Arial, sans-serif; font-weight: 700; font-size: clamp(20px, calc(11.6vw - 16px), 32px); line-height: 1; display: flex; align-items: center; gap: .22em; letter-spacing: -.02em; text-transform: lowercase; color: var(--cream); text-align: left; }
 
 /* ---------- the stack ---------- */
-.wall { position: fixed; inset: 0; z-index: 3; display: grid; place-items: center; padding: calc(112px + env(safe-area-inset-top, 0px)) 0 calc(134px + env(safe-area-inset-bottom, 0px)); }
+.wall { position: fixed; inset: 0; z-index: 3; display: grid; place-items: center; padding: calc(132px + env(safe-area-inset-top, 0px)) 0 calc(134px + env(safe-area-inset-bottom, 0px)); }
 .stack { position: relative; width: var(--W); height: calc(var(--W) * var(--AR)); }
 .poster { position: absolute; inset: 0; perspective: 1400px; touch-action: none; user-select: none; -webkit-user-select: none; }
 .poster.behind { pointer-events: none; }
@@ -188,7 +188,7 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
 
 /* phones: smaller pieces, more sky between them */
 @media (max-width: 599px) {
-  .wall { padding-top: calc(112px + env(safe-area-inset-top, 0px)); padding-bottom: calc(134px + env(safe-area-inset-bottom, 0px)); }
+  .wall { padding-top: calc(132px + env(safe-area-inset-top, 0px)); padding-bottom: calc(134px + env(safe-area-inset-bottom, 0px)); }
   .pill { bottom: calc(22px + env(safe-area-inset-bottom, 0px)); }
   .pill .fc-frame { gap: 15px; padding: 5px 12px 6px; }
   .pill button { font-size: 15px; }
@@ -216,11 +216,13 @@ body.gridview .grid { padding-top: calc(72px + env(safe-area-inset-top, 0px)); }
 /* in the grid it sits above the tiles, lined up with them */
 .grid .catwrap { position: relative; left: -2px; bottom: auto; max-width: 1100px; margin: 0 auto 10px; }
 /* lined up with the wordmark at the page's left edge (the deck is centred, --W wide) */
-.catwrap { position: absolute; left: calc(max(16px, env(safe-area-inset-left, 0px)) - (100vw - var(--W)) / 2 - 2px); bottom: 100%; margin-bottom: 22px; z-index: 40; }
-.cat { display: inline-flex; align-items: center; gap: 6px; padding: 6px 2px; font-family: var(--f-card); font-weight: 600; font-size: 17px; letter-spacing: -.015em; text-transform: lowercase; color: var(--cream); white-space: nowrap; }
-.cat svg { width: 13px; height: 13px; margin-top: 2px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: transform .2s ease; }
+.catwrap { position: absolute; left: calc(max(16px, env(safe-area-inset-left, 0px)) - (100vw - var(--W)) / 2 - 2px); bottom: 100%; margin-bottom: 32px; z-index: 40; }
+.cat { display: grid; grid-template-columns: auto auto; justify-content: start; align-items: center; column-gap: 7px; padding: 4px 2px; text-align: left; white-space: nowrap; color: var(--ink-yellow); }
+.cat .kick { grid-column: 1 / -1; font-family: var(--f-card); font-weight: 500; font-size: 11px; letter-spacing: .08em; text-transform: lowercase; color: var(--soft); margin-bottom: 1px; }
+.cat #cat-name { font-family: "Arimo", Arial, sans-serif; font-weight: 700; font-size: 24px; line-height: 1.05; letter-spacing: -.02em; text-transform: lowercase; text-shadow: 0 0 18px rgba(240, 198, 74, .28); }
+.cat svg { width: 16px; height: 16px; margin-top: 3px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; transition: transform .2s ease; }
 .cat[aria-expanded="true"] svg { transform: rotate(180deg); }
-@media (hover: hover) { .cat:hover { color: #fff; } }
+@media (hover: hover) { .cat:hover { color: #ffd968; } }
 .catmenu { position: absolute; left: 0; top: 100%; margin-top: 4px; width: 240px; padding: 4px; transform: rotate(-.6deg); }
 .catmenu .fc-frame { padding: 4px 12px; }
 .catmenu button { display: block; width: 100%; text-align: left; padding: 9px 0; font-family: var(--f-card); font-weight: 500; font-size: 17px; letter-spacing: -.01em; text-transform: lowercase; color: var(--fc-line); }
@@ -321,7 +323,7 @@ body.gridview .wall, body.gridview .top { display: none; }
 <main class="wall">
   <div class="deck" id="deck">
     <div class="catwrap">
-      <button type="button" class="cat" id="cat" aria-haspopup="menu" aria-expanded="false"><span id="cat-name">highest rated</span><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5"/></svg></button>
+      <button type="button" class="cat" id="cat" aria-haspopup="menu" aria-expanded="false"><small class="kick">now showing</small><span id="cat-name">highest rated</span><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5"/></svg></button>
       <div class="catmenu fc-card" id="catmenu" role="menu" hidden><div class="fc-frame" id="catmenu-list"></div></div>
     </div>
     <div class="stack" id="stack" aria-label="Poster stack. Drag right to stash, left to pass, tap to flip. Arrow keys work too." tabindex="0"></div>
@@ -554,7 +556,7 @@ body.gridview .wall, body.gridview .top { display: none; }
 
   // ---------- stack ----------
   var stack = document.getElementById('stack'), kindF = 'all', vibeF = 'all', seen = {};
-  function sizes() { var w = Math.min(innerWidth * (innerWidth < 600 ? .7 : .84), (innerHeight - 262) / 1.66, 380); document.documentElement.style.setProperty('--W', Math.round(w) + 'px'); }
+  function sizes() { var w = Math.min(innerWidth * (innerWidth < 600 ? .7 : .84), (innerHeight - 282) / 1.66, 380); document.documentElement.style.setProperty('--W', Math.round(w) + 'px'); }
   var view = 'one', pin = null, grid = document.getElementById('grid'), tiles = document.getElementById('tiles');
   try { view = localStorage.getItem('baked-potatoes-view') === 'grid' ? 'grid' : 'one'; } catch (e) {}
   function placeCat() {

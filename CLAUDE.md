@@ -61,8 +61,9 @@ filters are called **categories** (not vibes) on the page. The categories (owner
 2026-10-26): **highest rated** (default; score 5.0 and up), **new** (2015 on, newest
 first), **comedy**, **trippy as balls**, **scary AF**, **what did I just watch?** (the last
 three are hand-picked title lists in `CATS`). Ordered by score unless said otherwise. The
-current category sits above the poster, lined up with the wordmark at the page's left edge, as plain text with a small arrow, no
-button shape; tapping it opens a small flash-card menu right there. The bottom nav keeps a
+current category sits above the poster, lined up with the wordmark at the page's left edge, as a small heading, no button shape: a
+tiny "now showing" line in soft cream, then the category in Arimo Bold ~24px in brass
+yellow (`--ink-yellow`) with a small arrow (owner: it got lost in the background); tapping it opens a small flash-card menu right there. The bottom nav keeps a
 categories entry too. The stash is a panel that slides
 in from the right (full height, flash-card style, dimmed page behind; close with ×, a tap
 outside, a swipe right or Esc). Rows: the real mini poster (`miniPoster()`, the image
