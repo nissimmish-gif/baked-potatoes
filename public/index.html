@@ -258,12 +258,35 @@ body.gridview .wall, body.gridview .top { display: none; }
 .grid .none { text-align: center; color: var(--soft); padding: 40px 0; }
 @media (hover: hover) { .tile:hover .poster-mini { transform: translateY(-3px); transition: transform .2s ease; } }
 
-/* mini posters in the stash */
-.drawer .r.st { grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 12px; }
-.thumb { position: relative; display: block; width: 40px; height: 60px; --W: 40px; transform: rotate(-2deg); box-shadow: 0 3px 8px rgba(0,0,0,.25); pointer-events: none; }
-.thumb .face { box-shadow: none; }
-.thumb .mount .mat { border-width: 1px; }
-.thumb *, .thumb *::after { mix-blend-mode: normal !important; }
+/* the stash: a panel that slides in from the right */
+.scrim { position: fixed; inset: 0; z-index: 20; background: rgba(4, 5, 9, .55); opacity: 0; transition: opacity .3s ease; }
+.scrim.on { opacity: 1; }
+.panel { position: fixed; z-index: 21; top: 0; right: 0; bottom: 0; width: min(420px, 90vw); padding: 7px; border-radius: 0; transform: translateX(104%); transition: transform .38s cubic-bezier(.2, .8, .2, 1); box-shadow: -20px 0 50px rgba(0,0,0,.5); }
+.panel.on { transform: none; }
+.panel .fc-frame { height: 100%; display: flex; flex-direction: column; padding: calc(10px + env(safe-area-inset-top, 0px)) 16px calc(10px + env(safe-area-inset-bottom, 0px)); }
+.panel .ph { display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px; border-bottom: 3px solid var(--fc-line); }
+.panel h2 { font-size: 32px; margin: 0; }
+.panel h2 span { font-size: .55em; color: var(--ink-red); vertical-align: .35em; }
+.panel .x { width: 36px; height: 36px; font-size: 30px; line-height: 1; color: var(--fc-line); }
+.plist { flex: 1; overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; margin: 0 -4px; padding: 0 4px; }
+.prow { display: grid; grid-template-columns: 64px minmax(0, 1fr) auto; gap: 14px; align-items: center; padding: 12px 0; border-bottom: 2px solid var(--fc-line); }
+.prow .open { display: contents; text-align: left; color: inherit; }
+.mini { position: relative; display: block; width: 64px; height: 96px; overflow: hidden; background: var(--a, #333); border: 2px solid var(--fc-line); border-radius: 2px; box-shadow: 0 6px 14px -6px rgba(0,0,0,.5); transform: rotate(-1.5deg); }
+.mini img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.mini::after { content: ""; position: absolute; inset: 0; background: var(--grain) 0 0 / 160px 160px repeat; }
+.mini b { position: absolute; inset: 0; display: grid; place-items: center; padding: 4px; text-align: center; font-family: var(--f-cond); font-weight: 400; font-size: 11px; line-height: 1; text-transform: uppercase; color: var(--paper); }
+.prow .tx { min-width: 0; }
+.prow .nm { font-family: var(--f-card); font-weight: 500; font-size: 18px; line-height: 1.15; letter-spacing: -.015em; text-transform: lowercase; }
+.prow .mt { margin-top: 3px; font-size: 12px; font-weight: 500; text-transform: lowercase; color: #6d6758; }
+.prow .sc { margin-top: 6px; font-family: var(--f-card); font-weight: 600; font-size: 15px; color: var(--ink-red); }
+.prow .sc small { font-size: .7em; font-weight: 500; color: #6d6758; }
+.prow .sc .spud { filter: none; }
+.prow .rm { align-self: start; margin-top: 2px; padding: 4px 0 4px 6px; font-size: 12px; text-transform: lowercase; color: #6d6758; }
+@media (hover: hover) { .prow .rm:hover, .prow .open:hover .nm { color: var(--ink-red); } }
+.panel .empty { color: #6d6758; padding: 18px 0; line-height: 1.4; }
+@media (prefers-reduced-motion: reduce) { .panel, .scrim { transition: none; } }
+
+/* mini posters */
 
 @media (prefers-reduced-motion: reduce) { .sheet, .sheet > .mount, .sheet > .back { transition: none; } }
 </style>
@@ -298,7 +321,12 @@ body.gridview .wall, body.gridview .top { display: none; }
   <button type="button" id="stash-btn" aria-expanded="false">stash <b id="stash-n" aria-live="polite">0</b></button>
 </div></nav>
 <div class="drawer fc-card" id="vibe-drawer" hidden><div class="fc-frame"><h2 class="fc-label">categories</h2><div id="vibe-list"></div><p class="credit" id="tmdb-credit" hidden>Posters, details and trailers from TMDB. This product uses the TMDB API but is not endorsed or certified by TMDB.</p></div></div>
-<div class="drawer fc-card" id="stash-drawer" hidden><div class="fc-frame"><h2 class="fc-label">your stash</h2><div id="stash-list"></div><p class="empty" id="stash-empty">Nothing yet. Peel one to the right.</p></div></div>
+<div class="scrim" id="scrim" hidden></div>
+<aside class="panel fc-card" id="stash-panel" aria-label="Your stash" hidden tabindex="-1"><div class="fc-frame">
+  <header class="ph"><h2 class="fc-label">your stash <span id="stash-count"></span></h2><button type="button" class="x" id="stash-close" aria-label="Close your stash">×</button></header>
+  <div class="plist" id="stash-list"></div>
+  <p class="empty" id="stash-empty">Nothing stashed yet. Peel a poster to the right and it lands here.</p>
+</div></aside>
 
 <script>
 (function () {
@@ -509,7 +537,7 @@ body.gridview .wall, body.gridview .top { display: none; }
       tiles.appendChild(b);
     });
   }
-  function queue() { var q = T.filter(function (t) { return !seen[t.key] && stash.indexOf(t.key) < 0 && (kindF === 'all' || t.kind === kindF) && (vibeF === 'all' ? t.vibes.indexOf('sober') < 0 : t.vibes.indexOf(vibeF) > -1); });
+  function queue() { var q = T.filter(function (t) { return t.key === pin || !seen[t.key] && stash.indexOf(t.key) < 0 && (kindF === 'all' || t.kind === kindF) && (vibeF === 'all' ? t.vibes.indexOf('sober') < 0 : t.vibes.indexOf(vibeF) > -1); });
     if (pin) { var i = q.findIndex(function (t) { return t.key === pin; }); if (i > 0) q.unshift(q.splice(i, 1)[0]); }
     return q; }
   function render() {
@@ -583,6 +611,7 @@ body.gridview .wall, body.gridview .top { display: none; }
   function decide(keep, pr) {
     var el = topEl(); if (!el) return; var t = el._t; learned(); stopNudge();
     past.push({ key: t.key, kept: keep }); undoBtn.hidden = false;
+    if (pin === t.key) pin = null;
     if (keep) { if (stash.indexOf(t.key) < 0) stash.push(t.key); save(); updateCount(); } else seen[t.key] = true;
     pull(0, 0);
     if (reduce) { if (pr) pr.remove(); render(); return; }
@@ -802,13 +831,32 @@ body.gridview .wall, body.gridview .top { display: none; }
   });
 
   // ---------- pill + drawers ----------
-  var vd = document.getElementById('vibe-drawer'), sd = document.getElementById('stash-drawer'), vb = document.getElementById('vibe-btn'), sb = document.getElementById('stash-btn');
-  function closeAll() { vd.hidden = sd.hidden = true; vb.setAttribute('aria-expanded', 'false'); sb.setAttribute('aria-expanded', 'false'); }
+  var vd = document.getElementById('vibe-drawer'), sd = document.getElementById('stash-panel'), scrim = document.getElementById('scrim'), vb = document.getElementById('vibe-btn'), sb = document.getElementById('stash-btn');
+  function closeAll() { vd.hidden = true; vb.setAttribute('aria-expanded', 'false'); closeStash(); }
+  var stashTimer = 0;
+  function openStash() {
+    clearTimeout(stashTimer); drawStash(); sd.hidden = scrim.hidden = false; sb.setAttribute('aria-expanded', 'true');
+    sd.style.transform = ''; void sd.offsetWidth; sd.classList.add('on'); scrim.classList.add('on'); sd.focus({ preventScroll: true });
+  }
+  function closeStash() {
+    if (sd.hidden) return; sb.setAttribute('aria-expanded', 'false'); sd.classList.remove('on'); scrim.classList.remove('on'); sd.style.transform = '';
+    stashTimer = setTimeout(function () { sd.hidden = scrim.hidden = true; }, reduce ? 0 : 380);
+  }
+  scrim.addEventListener('click', closeStash);
+  document.getElementById('stash-close').addEventListener('click', closeStash);
+  // swipe the panel back out to the right
+  (function () {
+    var x0 = null, y0 = 0, dx = 0;
+    sd.addEventListener('pointerdown', function (e) { if (e.pointerType === 'mouse') return; x0 = e.clientX; y0 = e.clientY; dx = 0; });
+    sd.addEventListener('pointermove', function (e) { if (x0 === null) return; dx = e.clientX - x0; if (Math.abs(e.clientY - y0) > Math.abs(dx)) { x0 = null; sd.style.transform = ''; return; } if (dx > 0) { sd.style.transition = 'none'; sd.style.transform = 'translateX(' + dx + 'px)'; } });
+    function up() { if (x0 === null) return; x0 = null; sd.style.transition = ''; if (dx > 70) closeStash(); else sd.style.transform = ''; }
+    sd.addEventListener('pointerup', up); sd.addEventListener('pointercancel', up);
+  })();
   [].forEach.call(document.querySelectorAll('.pill [data-k]'), function (b) {
     b.addEventListener('click', function () { kindF = kindF === b.dataset.k ? 'all' : b.dataset.k; [].forEach.call(document.querySelectorAll('.pill [data-k]'), function (x) { x.setAttribute('aria-pressed', String(kindF === x.dataset.k)); }); closeAll(); render(); });
   });
   vb.addEventListener('click', function () { var o = vd.hidden; closeAll(); if (o) { drawVibes(); vd.hidden = false; vb.setAttribute('aria-expanded', 'true'); } });
-  sb.addEventListener('click', function () { var o = sd.hidden; closeAll(); if (o) { drawStash(); sd.hidden = false; sb.setAttribute('aria-expanded', 'true'); } });
+  sb.addEventListener('click', function () { var o = sd.hidden || !sd.classList.contains('on'); closeAll(); if (o) openStash(); });
   function drawVibes() {
     var box = document.getElementById('vibe-list'); box.innerHTML = '';
     VIBES.forEach(function (v) {
@@ -818,18 +866,28 @@ body.gridview .wall, body.gridview .top { display: none; }
       b.addEventListener('click', function () { vibeF = v[0]; closeAll(); render(); }); box.appendChild(b);
     });
   }
+  function miniPoster(t) {
+    var src = t.img || (ART[t.key] && ART[t.key].poster ? IMG + 'w185' + ART[t.key].poster : '');
+    return '<span class="mini" style="--a:' + t.col[0] + '" aria-hidden="true">' + (src ? '<img src="' + src + '" alt="" loading="lazy" decoding="async">' : '<b>' + esc(t.title) + '</b>') + '</span>';
+  }
   function drawStash() {
     var box = document.getElementById('stash-list'); box.innerHTML = '';
     document.getElementById('stash-empty').hidden = stash.length > 0;
+    document.getElementById('stash-count').textContent = stash.length || '';
     stash.slice().reverse().forEach(function (k) {
-      var t = T.filter(function (x) { return x.key === k; })[0], r = document.createElement('div'); r.className = 'r st';
-      r.innerHTML = '<span class="thumb" aria-hidden="true"><span class="face mount"><span class="mat">' + small(front(t), 'w154') + '</span></span></span><span class="k"></span><button type="button"><small>Remove</small></button>'; r.querySelector('.k').textContent = t.title + ' · ' + t.year;
-      r.querySelector('button').addEventListener('click', function () { stash = stash.filter(function (x) { return x !== k; }); save(); updateCount(); drawStash(); render(); });
+      var t = T.filter(function (x) { return x.key === k; })[0]; if (!t) return;
+      var r = document.createElement('div'); r.className = 'prow';
+      r.innerHTML = '<button type="button" class="open">' + miniPoster(t) + '<span class="tx"><span class="nm"></span><span class="mt" style="display:block">' + t.year + ' · ' + esc(t.run) + ' · ' + esc(t.genre) + '</span><span class="sc" style="display:block">' + SPUD + rating(t) + '<small>/10</small></span></span></button><button type="button" class="rm">remove</button>';
+      r.querySelector('.nm').textContent = t.title;
+      r.querySelector('.open').setAttribute('aria-label', 'Open ' + t.title);
+      // open it on top of the stack, to flip for the trailer and details
+      r.querySelector('.open').addEventListener('click', function () { pin = k; if (view === 'grid') setView('one'); else render(); closeStash(); });
+      r.querySelector('.rm').addEventListener('click', function () { stash = stash.filter(function (x) { return x !== k; }); save(); updateCount(); drawStash(); render(); });
       box.appendChild(r);
     });
   }
   function updateCount() { document.getElementById('stash-n').textContent = stash.length; }
-  document.addEventListener('pointerdown', function (e) { if (!e.target.closest('.pill') && !e.target.closest('.drawer')) closeAll(); });
+  document.addEventListener('pointerdown', function (e) { if (!e.target.closest('.pill') && !e.target.closest('.drawer') && !e.target.closest('.panel') && !e.target.closest('.scrim')) { vd.hidden = true; vb.setAttribute('aria-expanded', 'false'); } });
   addEventListener('keydown', function (e) { if (e.key === 'Escape') closeAll(); });
 
   // ---------- real stills and posters from TMDB, via the Worker, once the key is set ----------

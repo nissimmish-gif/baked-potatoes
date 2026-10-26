@@ -56,8 +56,11 @@ the back uses the same frame. How to use it is said quietly:
 one line of small text under the poster ("← pass · tap for more · stash →", each a
 button), and on a first visit the top poster peels a little to the right, then to the
 left, to show the gesture, until someone peels or flips. Owner wants these low key, not flash cards. The
-filters are called **categories** (not vibes) on the page. The stash list shows a mini
-poster beside each title. A small one/grid toggle (frosted glass, top-right corner level with the wordmark, not in
+filters are called **categories** (not vibes) on the page. The stash is a panel that slides
+in from the right (full height, flash-card style, dimmed page behind; close with ×, a tap
+outside, a swipe right or Esc). Rows: the real mini poster (`miniPoster()`, the image
+only, not a shrunk card), title, year · runtime · genre, score, remove. Tapping a row puts
+that poster on top of the stack. A small one/grid toggle (frosted glass, top-right corner level with the wordmark, not in
 the nav and not taking its own row) switches to a
 scrolling grid of every poster left (tap one to open it on top of the stack); the choice
 is remembered.
