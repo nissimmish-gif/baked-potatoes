@@ -8,7 +8,7 @@
 <meta name="description" content="What to watch when you're baked.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo+Black&family=Oswald:wght@400;600&family=Rubik:wght@800&family=Inter+Tight:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Arimo:wght@700&family=Archivo+Black&family=Oswald:wght@400;600&family=Rubik:wght@800&family=Inter+Tight:wght@400;500;600&display=swap">
 <style>
 /* Layout: a grainy black starfield fills the screen. A stack of movie posters sits on it:
    drag one to peel it off (right stashes, left passes), tap it to flip. The back of each
@@ -64,7 +64,9 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
 .fc-label { font-family: var(--f-card); font-weight: 500; text-transform: lowercase; letter-spacing: -.015em; line-height: 1; }
 
 /* ---------- header card ---------- */
-.top { position: fixed; z-index: 5; top: calc(12px + env(safe-area-inset-top, 0px)); left: 50%; transform: translateX(-50%) rotate(-1deg); width: min(360px, calc(100vw - 32px)); }
+.wordmark { position: fixed; z-index: 6; top: calc(10px + env(safe-area-inset-top, 0px)); left: 50%; transform: translateX(-50%); margin: 0;
+  font-family: "Arimo", Arial, sans-serif; font-weight: 700; font-size: 16px; line-height: .9; letter-spacing: -.02em; text-transform: lowercase; color: var(--cream); text-align: left; }
+.top { position: fixed; z-index: 5; top: calc(52px + env(safe-area-inset-top, 0px)); left: 50%; transform: translateX(-50%) rotate(-1deg); width: min(360px, calc(100vw - 32px)); }
 .top .fc-frame { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 12px; padding: 7px 12px 7px 13px; }
 .top .ti { min-width: 0; }
 .top .fc-label { font-size: 22px; margin: 0; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; line-height: 1.02; }
@@ -74,7 +76,7 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
 .top .rate small { display: block; margin-top: 2px; font-size: 10.5px; font-weight: 500; text-transform: lowercase; white-space: nowrap; }
 
 /* ---------- the stack ---------- */
-.wall { position: fixed; inset: 0; z-index: 3; display: grid; place-items: center; padding: calc(104px + env(safe-area-inset-top, 0px)) 0 calc(118px + env(safe-area-inset-bottom, 0px)); }
+.wall { position: fixed; inset: 0; z-index: 3; display: grid; place-items: center; padding: calc(144px + env(safe-area-inset-top, 0px)) 0 calc(118px + env(safe-area-inset-bottom, 0px)); }
 .stack { position: relative; width: var(--W); height: calc(var(--W) * 1.5); }
 .poster { position: absolute; inset: 0; perspective: 1400px; touch-action: none; user-select: none; -webkit-user-select: none; }
 .poster.behind { pointer-events: none; }
@@ -210,13 +212,13 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
 
 /* phones: smaller pieces, more sky between them */
 @media (max-width: 599px) {
-  .top { width: min(318px, calc(100vw - 56px)); top: calc(18px + env(safe-area-inset-top, 0px)); }
+  .top { width: min(318px, calc(100vw - 56px)); top: calc(52px + env(safe-area-inset-top, 0px)); }
   .top .fc-frame { gap: 9px; padding: 6px 10px 6px 11px; }
   .top .fc-label { font-size: 17px; }
   .top p { font-size: 10.5px; }
   .top .rate b { font-size: 18px; }
   .top .rate small { font-size: 9.5px; }
-  .wall { padding-top: calc(96px + env(safe-area-inset-top, 0px)); padding-bottom: calc(118px + env(safe-area-inset-bottom, 0px)); }
+  .wall { padding-top: calc(132px + env(safe-area-inset-top, 0px)); padding-bottom: calc(118px + env(safe-area-inset-bottom, 0px)); }
   .pill { bottom: calc(22px + env(safe-area-inset-bottom, 0px)); }
   .pill .fc-frame { gap: 15px; padding: 5px 12px 6px; }
   .pill button { font-size: 15px; }
@@ -236,13 +238,16 @@ div.sf { overflow: hidden; }
 .roll .pc { position: absolute; }
 .roll .pc .face { box-shadow: none; border-radius: 0; }
 .roll .face::after { display: none; }
+/* fine film grain over every poster image (no blend modes: they break the 3D flip on iOS) */
+.mat > .face::after { content: ""; position: absolute; inset: 0; z-index: 3; pointer-events: none; background: var(--grain) 0 0 / 160px 160px repeat; opacity: 1; mix-blend-mode: normal !important; }
+.roll .mat > .face::after { display: block; }
 .roll *, .roll *::after { mix-blend-mode: normal !important; }
 .roll .castclip { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
 .roll .cast { position: absolute; left: 0; right: 0; top: 0; opacity: 0; background: linear-gradient(rgba(0,0,0,.42), rgba(0,0,0,0)); }
 .roll .tag { top: auto; bottom: 9%; z-index: 60; }
 
 /* grid view: every poster in a scrolling grid */
-.views { position: fixed; z-index: 11; right: max(16px, env(safe-area-inset-right, 0px)); top: calc(108px + env(safe-area-inset-top, 0px)); display: flex; padding: 3px; gap: 2px; border-radius: 10px;
+.views { position: fixed; z-index: 11; right: max(16px, env(safe-area-inset-right, 0px)); top: calc(146px + env(safe-area-inset-top, 0px)); display: flex; padding: 3px; gap: 2px; border-radius: 10px;
   background: rgba(255, 255, 255, .1); border: 1px solid rgba(255, 255, 255, .22); box-shadow: 0 8px 24px rgba(0, 0, 0, .35), inset 0 1px 0 rgba(255, 255, 255, .18);
   -webkit-backdrop-filter: blur(14px) saturate(1.4); backdrop-filter: blur(14px) saturate(1.4); }
 .views button { display: grid; place-items: center; width: 32px; height: 28px; border-radius: 7px; color: rgba(239, 228, 204, .7); transition: background .2s ease, color .2s ease; }
@@ -251,8 +256,8 @@ div.sf { overflow: hidden; }
 @media (hover: hover) { .views button:hover { color: var(--cream); } }
 body.gridview .views { top: calc(16px + env(safe-area-inset-top, 0px)); }
 body.gridview .grid { padding-top: calc(64px + env(safe-area-inset-top, 0px)); }
-@media (max-width: 599px) { body:not(.gridview) .views { top: calc(100px + env(safe-area-inset-top, 0px)); } }
-@media (max-width: 599px) and (max-height: 720px) { .wall { padding-top: calc(144px + env(safe-area-inset-top, 0px)); } }
+@media (max-width: 599px) { body:not(.gridview) .views { top: calc(134px + env(safe-area-inset-top, 0px)); } }
+@media (max-width: 599px) and (max-height: 720px) { .wall { padding-top: calc(178px + env(safe-area-inset-top, 0px)); } }
 body.gridview .wall, body.gridview .top { display: none; }
 .grid { position: fixed; inset: 0; z-index: 4; overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch;
   padding: calc(18px + env(safe-area-inset-top, 0px)) 16px calc(96px + env(safe-area-inset-bottom, 0px)); }
@@ -282,7 +287,8 @@ body.gridview .wall, body.gridview .top { display: none; }
 <canvas id="scene" aria-hidden="true"></canvas>
 <canvas id="twinkle" aria-hidden="true"></canvas>
 
-<header class="top fc-card" aria-live="polite"><div class="fc-frame"><div class="ti"><h1 class="fc-label" id="top-title">tonight</h1><p id="top-meta"></p></div><div class="rate"><b id="top-score"></b><small id="top-tier"></small></div></div></header>
+<h1 class="wordmark">baked<br>potatoes</h1>
+<header class="top fc-card" aria-live="polite"><div class="fc-frame"><div class="ti"><h2 class="fc-label" id="top-title">tonight</h2><p id="top-meta"></p></div><div class="rate"><b id="top-score"></b><small id="top-tier"></small></div></div></header>
 
 <div class="views" role="group" aria-label="View">
     <button type="button" id="view-one" aria-pressed="true" aria-label="One at a time"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="4" y="2" width="8" height="12" rx="1"/></svg></button>
@@ -312,6 +318,18 @@ body.gridview .wall, body.gridview .top { display: none; }
 <script>
 (function () {
   'use strict';
+  // film grain for the posters: a small tile of fine dark and light specks, made once
+  var GRAIN = (function () {
+    var c = document.createElement('canvas'); c.width = c.height = 160; var x = c.getContext('2d'), im = x.createImageData(160, 160), d = im.data, s = 7;
+    for (var i = 0; i < d.length; i += 4) {
+      s = (s * 16807) % 2147483647; var v = s / 2147483647, a = Math.pow(Math.abs(v - .5) * 2, 2.8) * (v < .5 ? 34 : 22);
+      if (v < .5) { d[i] = 20; d[i + 1] = 16; d[i + 2] = 10; } else { d[i] = 255; d[i + 1] = 248; d[i + 2] = 232; }
+      d[i + 3] = a;
+    }
+    x.putImageData(im, 0, 0);
+    try { document.documentElement.style.setProperty('--grain', 'url(' + c.toDataURL('image/png') + ')'); } catch (e) {}
+    return c;
+  })();
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   // ---------- night sky: grainy black with a dense field of stars ----------
@@ -477,7 +495,7 @@ body.gridview .wall, body.gridview .top { display: none; }
 
   // ---------- stack ----------
   var stack = document.getElementById('stack'), kindF = 'all', vibeF = 'all', seen = {};
-  function sizes() { var w = Math.min(innerWidth * (innerWidth < 600 ? .7 : .84), (innerHeight - 270) / 1.5, 380); document.documentElement.style.setProperty('--W', Math.round(w) + 'px'); }
+  function sizes() { var w = Math.min(innerWidth * (innerWidth < 600 ? .7 : .84), (innerHeight - 306) / 1.5, 380); document.documentElement.style.setProperty('--W', Math.round(w) + 'px'); }
   var view = 'one', pin = null, grid = document.getElementById('grid'), tiles = document.getElementById('tiles');
   try { view = localStorage.getItem('baked-potatoes-view') === 'grid' ? 'grid' : 'one'; } catch (e) {}
   function setView(v) {
@@ -602,6 +620,7 @@ body.gridview .wall, body.gridview .top { display: none; }
     var ix = mx + 3 + (mw - 6) * .022, iy = my + 3 + (mh - 6) * .022, iw = (mw - 6) * .956, ih = (mh - 6) * .956;
     var r = Math.max(iw / img.naturalWidth, ih / img.naturalHeight), sw = iw / r, sh = ih / r;
     try { x.drawImage(img, (img.naturalWidth - sw) / 2, (img.naturalHeight - sh) / 2, sw, sh, ix, iy, iw, ih); } catch (e) { return null; }
+    x.fillStyle = x.createPattern(GRAIN, 'repeat'); x.fillRect(ix, iy, iw, ih);
     el._snap = c; return c;
   }
   function peel(el, dir) {
@@ -617,7 +636,7 @@ body.gridview .wall, body.gridview .top { display: none; }
     // draws the poster's outline (or the poster) into a strip, in frame coordinates
     function place(x, j, flip) {
       x.setTransform(s, 0, 0, s, 0, 0);
-      if (flip) { x.translate(0, sh + .7); x.scale(1, -1); }
+      if (flip) { x.translate(0, sh + 1.6); x.scale(1, -1); }
       x.translate(0, -j * sh); x.translate(Dx / 2, Dy / 2); x.rotate(-rho); x.translate(-w / 2, -h / 2);
     }
     function backPaint(st, level) {
@@ -629,9 +648,9 @@ body.gridview .wall, body.gridview .top { display: none; }
     var parent = frame, strips = [];
     for (var j = N - 1; j >= 0; j--) {
       var st = { j: j, lv: null }, d = document.createElement('div'); d.className = 'strip';
-      d.style.height = (sh + .7) + 'px'; d.style.top = (j === N - 1 ? j * sh : -sh) + 'px'; d.style.transformOrigin = '50% ' + sh + 'px';
+      d.style.height = (sh + 1.6) + 'px'; d.style.top = (j === N - 1 ? j * sh : -sh) + 'px'; d.style.transformOrigin = '50% ' + sh + 'px';
       if (snap) {
-        var f = document.createElement('canvas'); f.className = 'sf'; f.width = Math.ceil(Dx * s); f.height = Math.ceil((sh + .7) * s);
+        var f = document.createElement('canvas'); f.className = 'sf'; f.width = Math.ceil(Dx * s); f.height = Math.ceil((sh + 1.6) * s);
         var fx = f.getContext('2d'); place(fx, j, false); fx.drawImage(snap, 0, 0, w, h); d.appendChild(f);
       } else {
         var fw = document.createElement('div'); fw.className = 'sf';
@@ -639,7 +658,7 @@ body.gridview .wall, body.gridview .top { display: none; }
         pc.style.cssText = 'width:' + w + 'px;height:' + h + 'px;left:' + (Dx - w) / 2 + 'px;top:' + ((Dy - h) / 2 - j * sh) + 'px;transform:rotate(' + (-rho) + 'rad)';
         var c = face.cloneNode(true); c.style.cssText = 'transform:none;visibility:visible;inset:0'; pc.appendChild(c); fw.appendChild(pc); d.appendChild(fw);
       }
-      var b = document.createElement('canvas'); b.className = 'sb'; b.width = Math.ceil(Dx * s); b.height = Math.ceil((sh + .7) * s);
+      var b = document.createElement('canvas'); b.className = 'sb'; b.width = Math.ceil(Dx * s); b.height = Math.ceil((sh + 1.6) * s);
       st.b = b; st.bx = b.getContext('2d'); d.appendChild(b);
       parent.appendChild(d); parent = d; st.el = d; strips[j] = st;
     }

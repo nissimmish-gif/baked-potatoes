@@ -24,7 +24,9 @@ added to the same Worker (see README).
 ## Feel of the site (owner's call, 2026-10-26)
 
 A wall of movie posters on a grainy black starfield (dense speckled stars, a few bright
-glints, paper-grain noise), with a layer of stars that slowly twinkle. Drag a poster to peel it: it rolls up from the top corner opposite the swipe (top-left
+glints, paper-grain noise), with a layer of stars that slowly twinkle. Every poster image
+carries a subtle film grain (a generated tile, `GRAIN`, no blend modes; also painted into
+the peel snapshot). Drag a poster to peel it: it rolls up from the top corner opposite the swipe (top-left
 when you swipe right, top-right when you swipe left) like paper coming off a wall, and
 follows your finger the whole way (`peel()`: strips across a tilted axis, hinged from the
 bottom up; strips above the roll line wrap into a tube). For speed the poster is painted
@@ -55,7 +57,9 @@ cream paper, a heavy black rounded frame and a lowercase grotesque label (Inter 
 drawings (owner removed them, 2026-10-26). The top of each poster back is the **trailer
 slot**: once TMDB is connected, flipping a poster loads its YouTube trailer there
 (`/api/trailer`, youtube-nocookie embed, removed again on flip back), with a "full screen"
-button that opens it on YouTube (iPhone can't full-screen an embed inside the 3D card). The name is on hold, so the page carries no brand name.
+button that opens it on YouTube (iPhone can't full-screen an embed inside the 3D card).
+The wordmark sits at the top centre of every page: "baked potatoes", Arimo Bold,
+lowercase, stacked, cream (owner's call, 2026-10-26; the name is back on).
 Rejected so far: space gradients, texture everywhere, typewriter/handwriting fonts,
 stickers/VHS, the 70s eyeball broadcast, the A24 disc library.
 
