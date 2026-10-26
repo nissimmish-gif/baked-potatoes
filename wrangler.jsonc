@@ -1,12 +1,14 @@
 {
   // Cloudflare Worker config. The dashboard's Worker name must match "name".
-  // For now the Worker only serves the static site in public/.
-  // The movie-data API (TMDB) will be added here as "main" later.
+  // worker/index.js answers /api/* (TMDB artwork); everything else is the static site in public/.
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "baked-potatoes",
+  "main": "worker/index.js",
   "compatibility_date": "2026-09-01",
   "assets": {
-    "directory": "./public"
+    "directory": "./public",
+    "binding": "ASSETS",
+    "run_worker_first": ["/api/*"]
   },
   "workers_dev": true,
   "preview_urls": true

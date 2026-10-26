@@ -23,15 +23,16 @@ added to the same Worker (see README).
 - **No pot leaves, rasta colours or 420 jokes.** The brand is about the feeling, and
   leaf-free branding is easier to advertise.
 
-## Feel of the site (owner's call)
+## Feel of the site (owner's call, 2026-10-26)
 
-A random stoner mix, mostly 1970s, on a dark night base: a late-night 70s TV broadcast.
-Flat cel-animation inks with thin outlines and misregistered layers (the giant eyeball),
-turning sunbursts, acid-blur colour burning through, scanner-style mono annotations,
-Shrikhand display type with a slipped red layer, IBM Plex Mono labels. Categories are a
-TV-guide channel list; movies are printed program cards. Potatoes are off the site for
-now (owner's call). Rejected so far: smooth space gradients, texture everywhere,
-typewriter/handwriting fonts, cute stickers and VHS objects, modern minimal layouts.
+Modelled on the A24 disc library (a24.raviklaassens.com): a quiet light-grey page, a
+credits table with hairline rules, one big tilted disc in the middle with neighbours
+peeking in, a pencil scribble on drag, a floating pill nav, "Spooling" on open, and a
+film page with a wavy-edged image rising over scattered huge serif words. Bodoni Moda +
+Inter Tight. The owner still likes their first Pinterest board as mood. The name is on
+hold ("forget the name"), so the page carries no brand name for now. Rejected before
+this: space gradients, texture everywhere, typewriter/handwriting fonts, stickers/VHS,
+the 70s eyeball broadcast.
 
 ## Copy
 

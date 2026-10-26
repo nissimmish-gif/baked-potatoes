@@ -3,18 +3,22 @@
 What to watch when you're baked. Movie and TV picks rated with the **Potato Score**,
 sorted by vibe, and swiped into **your stash**.
 
-This is the homepage prototype: a late-night 70s broadcast. A giant cartoon eye whose
-pupil dilates as you scroll, a TV-guide list of vibe channels, and printed program cards
-to swipe into your stash.
+This is the homepage prototype, modelled on the A24 disc library: films as discs you drag
+through, a credits table, and a film page that rises in with a wavy image.
 
 ## What's here
 
 ```
-public/          The site. Plain HTML, CSS and JavaScript, no build step.
-  index.html     The whole homepage
-  grain.png      Light film-grain overlay
-brand/logo/      Logo files from the earlier brand round (PNG)
+public/index.html   The whole site. Plain HTML, CSS and JavaScript, no build step.
+worker/index.js     Serves public/, plus /api/art: posters and stills from the TMDB API
+brand/logo/         Logo files from the earlier brand round (PNG)
 ```
+
+### Turning on real artwork
+
+Add a **Secret** named `TMDB_TOKEN` to the Worker (Cloudflare dashboard → baked-potatoes →
+Settings → Variables and Secrets) with your TMDB "API Read Access Token". Until then the
+discs show printed labels; with it, posters and stills appear without a code change.
 
 ## Run it locally
 
@@ -55,9 +59,9 @@ To deploy from a terminal instead: `npm install`, then `npx wrangler deploy`.
 - **The stash is stored in the browser** (`localStorage`), so it doesn't sync between
   devices yet.
 
-## Next: real movie data
+## Real movie data
 
-The plan is a small **Cloudflare Worker** next to the Pages site:
+The Worker (`worker/index.js`) already proxies TMDB for artwork:
 
 - It calls the [TMDB API](https://developer.themoviedb.org/) for titles, posters and
   "where to watch" (TMDB's watch-provider data comes from JustWatch and must credit
