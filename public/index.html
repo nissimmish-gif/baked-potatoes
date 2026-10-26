@@ -70,7 +70,7 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
   font-family: "Arimo", Arial, sans-serif; font-weight: 700; font-size: clamp(22px, calc(13.6vw - 20px), 34px); line-height: 1; letter-spacing: -.02em; text-transform: lowercase; color: var(--cream); text-align: left; }
 
 /* ---------- the stack ---------- */
-.wall { position: fixed; inset: 0; z-index: 3; display: grid; place-items: center; padding: calc(76px + env(safe-area-inset-top, 0px)) 0 calc(134px + env(safe-area-inset-bottom, 0px)); }
+.wall { position: fixed; inset: 0; z-index: 3; display: grid; place-items: center; padding: calc(112px + env(safe-area-inset-top, 0px)) 0 calc(134px + env(safe-area-inset-bottom, 0px)); }
 .stack { position: relative; width: var(--W); height: calc(var(--W) * var(--AR)); }
 .poster { position: absolute; inset: 0; perspective: 1400px; touch-action: none; user-select: none; -webkit-user-select: none; }
 .poster.behind { pointer-events: none; }
@@ -209,7 +209,7 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
 
 /* phones: smaller pieces, more sky between them */
 @media (max-width: 599px) {
-  .wall { padding-top: calc(76px + env(safe-area-inset-top, 0px)); padding-bottom: calc(134px + env(safe-area-inset-bottom, 0px)); }
+  .wall { padding-top: calc(112px + env(safe-area-inset-top, 0px)); padding-bottom: calc(134px + env(safe-area-inset-bottom, 0px)); }
   .pill { bottom: calc(22px + env(safe-area-inset-bottom, 0px)); }
   .pill .fc-frame { gap: 15px; padding: 5px 12px 6px; }
   .pill button { font-size: 15px; }
@@ -243,6 +243,13 @@ body.gridview .grid { padding-top: calc(72px + env(safe-area-inset-top, 0px)); }
   -webkit-backdrop-filter: blur(14px) saturate(1.4); backdrop-filter: blur(14px) saturate(1.4); }
 .undo svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
 @media (hover: hover) { .undo:hover { background: rgba(255, 255, 255, .18); } }
+.cat { position: absolute; left: 0; bottom: 100%; margin-bottom: 28px; display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px 6px 11px; border-radius: 999px; z-index: 12;
+  font-family: var(--f-card); font-weight: 500; font-size: 15px; letter-spacing: -.01em; text-transform: lowercase; color: var(--cream); white-space: nowrap;
+  background: rgba(255, 255, 255, .1); border: 1px solid rgba(255, 255, 255, .22); -webkit-backdrop-filter: blur(14px) saturate(1.4); backdrop-filter: blur(14px) saturate(1.4); }
+.cat svg { width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; transition: transform .2s ease; }
+.cat[aria-expanded="true"] svg { transform: rotate(180deg); }
+@media (hover: hover) { .cat:hover { background: rgba(255, 255, 255, .18); } }
+.deck.empty .cat { display: inline-flex; }
 body.gridview .wall, body.gridview .top { display: none; }
 .grid { position: fixed; inset: 0; z-index: 4; overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch;
   padding: calc(18px + env(safe-area-inset-top, 0px)) 16px calc(96px + env(safe-area-inset-bottom, 0px)); }
@@ -305,6 +312,7 @@ body.gridview .wall, body.gridview .top { display: none; }
 <section class="grid" id="grid" hidden aria-label="All posters"><div class="tiles" id="tiles"></div></section>
 <main class="wall">
   <div class="deck" id="deck">
+    <button type="button" class="cat" id="cat" aria-haspopup="true" aria-label="Change category"><span id="cat-name">highest rated</span><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5"/></svg></button>
     <div class="stack" id="stack" aria-label="Poster stack. Drag right to stash, left to pass, tap to flip. Arrow keys work too." tabindex="0"></div>
     <div class="howto">
       <button type="button" class="side pass" id="side-pass">← pass</button>
@@ -431,7 +439,7 @@ body.gridview .wall, body.gridview .top { display: none; }
     ['movie', 'Uncut Gems', 2019, ['Josh Safdie', 'Benny Safdie'], ['Adam Sandler', 'Julia Fox', 'LaKeith Stanfield'], '135 min', 'Crime, Thriller', ['sober'], 28, 'This is how I win.', 'A jeweller with a gambling problem makes every wrong choice at full volume for two hours. A great film. Not tonight.', 'torn', ['#6b2fa3', '#e2402b', '#edc755']],
     ['movie', 'Midsommar', 2019, ['Ari Aster'], ['Florence Pugh', 'Jack Reynor', 'Will Poulter'], '148 min', 'Horror, Drama', ['sober'], 22, 'Let the festivities begin.', 'A grieving woman joins her boyfriend on a trip to a Swedish midsummer festival that goes very, very wrong. Save it for a clear head.', 'sheet', ['#9cbf6a', '#e2402b', '#edc755']]
   ].map(function (r, i) { return { i: i, kind: r[0], title: r[1], year: r[2], dir: r[3], cast: r[4], run: r[5], genre: r[6], vibes: r[7], score: r[8], tag: r[9], plot: r[10], style: r[11], col: r[12], img: r[13] || '', key: r[0] + ':' + r[1] + ':' + r[2] }; });
-  var VIBES = [['all', 'Everything'], ['couch', 'Couch-locked'], ['eye', 'Eye candy'], ['plot', 'Plot optional'], ['giggle', 'Giggle fits'], ['brain', '2 a.m. big brain'], ['munch', 'Munchie bait'], ['short', 'Short trips'], ['sober', 'Save for sober']];
+  var VIBES = [['all', 'Highest rated'], ['couch', 'Couch-locked'], ['eye', 'Eye candy'], ['plot', 'Plot optional'], ['giggle', 'Giggle fits'], ['brain', '2 a.m. big brain'], ['munch', 'Munchie bait'], ['short', 'Short trips'], ['sober', 'Save for sober']];
   function vibeName(id) { for (var i = 0; i < VIBES.length; i++) if (VIBES[i][0] === id) return VIBES[i][1]; return id; }
   function rating(t) { return (t.score / 10).toFixed(1); }
   var SPUD = '<img class="spud" src="img/potato.png" alt="" width="58" height="96">';
@@ -511,7 +519,7 @@ body.gridview .wall, body.gridview .top { display: none; }
 
   // ---------- stack ----------
   var stack = document.getElementById('stack'), kindF = 'all', vibeF = 'all', seen = {};
-  function sizes() { var w = Math.min(innerWidth * (innerWidth < 600 ? .7 : .84), (innerHeight - 226) / 1.66, 380); document.documentElement.style.setProperty('--W', Math.round(w) + 'px'); }
+  function sizes() { var w = Math.min(innerWidth * (innerWidth < 600 ? .7 : .84), (innerHeight - 262) / 1.66, 380); document.documentElement.style.setProperty('--W', Math.round(w) + 'px'); }
   var view = 'one', pin = null, grid = document.getElementById('grid'), tiles = document.getElementById('tiles');
   try { view = localStorage.getItem('baked-potatoes-view') === 'grid' ? 'grid' : 'one'; } catch (e) {}
   function setView(v) {
@@ -537,7 +545,7 @@ body.gridview .wall, body.gridview .top { display: none; }
       tiles.appendChild(b);
     });
   }
-  function queue() { var q = T.filter(function (t) { return t.key === pin || !seen[t.key] && stash.indexOf(t.key) < 0 && (kindF === 'all' || t.kind === kindF) && (vibeF === 'all' ? t.vibes.indexOf('sober') < 0 : t.vibes.indexOf(vibeF) > -1); });
+  function queue() { var q = T.filter(function (t) { return t.key === pin || !seen[t.key] && stash.indexOf(t.key) < 0 && (kindF === 'all' || t.kind === kindF) && (vibeF === 'all' ? t.vibes.indexOf('sober') < 0 : t.vibes.indexOf(vibeF) > -1); }).sort(function (a, b) { return b.score - a.score || a.i - b.i; });
     if (pin) { var i = q.findIndex(function (t) { return t.key === pin; }); if (i > 0) q.unshift(q.splice(i, 1)[0]); }
     return q; }
   function render() {
@@ -545,6 +553,7 @@ body.gridview .wall, body.gridview .top { display: none; }
     stack.innerHTML = '';
     var q = queue();
     vb.textContent = vibeF === 'all' ? 'categories' : vibeName(vibeF).toLowerCase();
+    document.getElementById('cat-name').textContent = vibeName(vibeF).toLowerCase();
     showTop(q[0]);
     if (view === 'grid') drawGrid(q);
     deck.classList.toggle('empty', !q.length); pull(0, 0); capText(false);
@@ -832,7 +841,7 @@ body.gridview .wall, body.gridview .top { display: none; }
 
   // ---------- pill + drawers ----------
   var vd = document.getElementById('vibe-drawer'), sd = document.getElementById('stash-panel'), scrim = document.getElementById('scrim'), vb = document.getElementById('vibe-btn'), sb = document.getElementById('stash-btn');
-  function closeAll() { vd.hidden = true; vb.setAttribute('aria-expanded', 'false'); closeStash(); }
+  function closeAll() { vd.hidden = true; vb.setAttribute('aria-expanded', 'false'); document.getElementById('cat').setAttribute('aria-expanded', 'false'); closeStash(); }
   var stashTimer = 0;
   function openStash() {
     clearTimeout(stashTimer); drawStash(); sd.hidden = scrim.hidden = false; sb.setAttribute('aria-expanded', 'true');
@@ -855,7 +864,9 @@ body.gridview .wall, body.gridview .top { display: none; }
   [].forEach.call(document.querySelectorAll('.pill [data-k]'), function (b) {
     b.addEventListener('click', function () { kindF = kindF === b.dataset.k ? 'all' : b.dataset.k; [].forEach.call(document.querySelectorAll('.pill [data-k]'), function (x) { x.setAttribute('aria-pressed', String(kindF === x.dataset.k)); }); closeAll(); render(); });
   });
-  vb.addEventListener('click', function () { var o = vd.hidden; closeAll(); if (o) { drawVibes(); vd.hidden = false; vb.setAttribute('aria-expanded', 'true'); } });
+  function toggleCats() { var o = vd.hidden; closeAll(); if (o) { drawVibes(); vd.hidden = false; vb.setAttribute('aria-expanded', 'true'); } document.getElementById('cat').setAttribute('aria-expanded', String(o)); }
+  vb.addEventListener('click', toggleCats);
+  document.getElementById('cat').addEventListener('click', toggleCats);
   sb.addEventListener('click', function () { var o = sd.hidden || !sd.classList.contains('on'); closeAll(); if (o) openStash(); });
   function drawVibes() {
     var box = document.getElementById('vibe-list'); box.innerHTML = '';
@@ -887,7 +898,7 @@ body.gridview .wall, body.gridview .top { display: none; }
     });
   }
   function updateCount() { document.getElementById('stash-n').textContent = stash.length; }
-  document.addEventListener('pointerdown', function (e) { if (!e.target.closest('.pill') && !e.target.closest('.drawer') && !e.target.closest('.panel') && !e.target.closest('.scrim')) { vd.hidden = true; vb.setAttribute('aria-expanded', 'false'); } });
+  document.addEventListener('pointerdown', function (e) { if (!e.target.closest('.pill') && !e.target.closest('.cat') && !e.target.closest('.drawer') && !e.target.closest('.panel') && !e.target.closest('.scrim')) { vd.hidden = true; vb.setAttribute('aria-expanded', 'false'); document.getElementById('cat').setAttribute('aria-expanded', 'false'); } });
   addEventListener('keydown', function (e) { if (e.key === 'Escape') closeAll(); });
 
   // ---------- real stills and posters from TMDB, via the Worker, once the key is set ----------
