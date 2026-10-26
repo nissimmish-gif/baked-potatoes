@@ -57,10 +57,13 @@ How to use it is said quietly:
 one line of small text under the poster ("← pass · tap for more · stash →", each a
 button), and on a first visit the top poster peels a little to the right, then to the
 left, to show the gesture, until someone peels or taps. Owner wants these low key, not flash cards. The
-filters are called **categories** (not vibes) on the page. The default category is
-**highest rated** (everything except "save for sober"), and every category is ordered by
-score, best first. The current category sits over the poster's top left as a small glass
-label with a chevron; tapping it opens the categories list (also in the bottom nav). The stash is a panel that slides
+filters are called **categories** (not vibes) on the page. The categories (owner's list,
+2026-10-26): **highest rated** (default; score 5.0 and up), **new** (2015 on, newest
+first), **comedy**, **trippy as balls**, **scary AF**, **what did I just watch?** (the last
+three are hand-picked title lists in `CATS`). Ordered by score unless said otherwise. The
+current category sits over the poster's top left as plain text with a small arrow, no
+button shape; tapping it opens a small flash-card menu right there. The bottom nav keeps a
+categories entry too. The stash is a panel that slides
 in from the right (full height, flash-card style, dimmed page behind; close with ×, a tap
 outside, a swipe right or Esc). Rows: the real mini poster (`miniPoster()`, the image
 only, not a shrunk card), title, year · runtime · genre, score, remove. Tapping a row puts

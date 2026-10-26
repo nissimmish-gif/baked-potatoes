@@ -212,12 +212,17 @@ body.gridview .grid { padding-top: calc(72px + env(safe-area-inset-top, 0px)); }
   -webkit-backdrop-filter: blur(14px) saturate(1.4); backdrop-filter: blur(14px) saturate(1.4); }
 .undo svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
 @media (hover: hover) { .undo:hover { background: rgba(255, 255, 255, .18); } }
-.cat { position: absolute; left: 0; bottom: 100%; margin-bottom: 28px; display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px 6px 11px; border-radius: 999px; z-index: 12;
-  font-family: var(--f-card); font-weight: 500; font-size: 15px; letter-spacing: -.01em; text-transform: lowercase; color: var(--cream); white-space: nowrap;
-  background: rgba(255, 255, 255, .1); border: 1px solid rgba(255, 255, 255, .22); -webkit-backdrop-filter: blur(14px) saturate(1.4); backdrop-filter: blur(14px) saturate(1.4); }
-.cat svg { width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; transition: transform .2s ease; }
+.catwrap { position: absolute; left: -2px; bottom: 100%; margin-bottom: 22px; z-index: 40; }
+.cat { display: inline-flex; align-items: center; gap: 6px; padding: 6px 2px; font-family: var(--f-card); font-weight: 600; font-size: 17px; letter-spacing: -.015em; text-transform: lowercase; color: var(--cream); white-space: nowrap; }
+.cat svg { width: 13px; height: 13px; margin-top: 2px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: transform .2s ease; }
 .cat[aria-expanded="true"] svg { transform: rotate(180deg); }
-@media (hover: hover) { .cat:hover { background: rgba(255, 255, 255, .18); } }
+@media (hover: hover) { .cat:hover { color: #fff; } }
+.catmenu { position: absolute; left: 0; top: 100%; margin-top: 4px; width: 240px; padding: 4px; transform: rotate(-.6deg); }
+.catmenu .fc-frame { padding: 4px 12px; }
+.catmenu button { display: block; width: 100%; text-align: left; padding: 9px 0; font-family: var(--f-card); font-weight: 500; font-size: 17px; letter-spacing: -.01em; text-transform: lowercase; color: var(--fc-line); }
+.catmenu button + button { border-top: 2px solid var(--fc-line); }
+.catmenu button[aria-checked="true"] { color: var(--ink-red); }
+@media (hover: hover) { .catmenu button:hover { color: var(--ink-red); } }
 .deck.empty .cat { display: inline-flex; }
 body.gridview .wall, body.gridview .top { display: none; }
 .grid { position: fixed; inset: 0; z-index: 4; overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch;
@@ -311,7 +316,10 @@ body.gridview .wall, body.gridview .top { display: none; }
 <section class="grid" id="grid" hidden aria-label="All posters"><div class="tiles" id="tiles"></div></section>
 <main class="wall">
   <div class="deck" id="deck">
-    <button type="button" class="cat" id="cat" aria-haspopup="true" aria-label="Change category"><span id="cat-name">highest rated</span><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5"/></svg></button>
+    <div class="catwrap">
+      <button type="button" class="cat" id="cat" aria-haspopup="menu" aria-expanded="false"><span id="cat-name">highest rated</span><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5"/></svg></button>
+      <div class="catmenu fc-card" id="catmenu" role="menu" hidden><div class="fc-frame" id="catmenu-list"></div></div>
+    </div>
     <div class="stack" id="stack" aria-label="Poster stack. Drag right to stash, left to pass, tap to flip. Arrow keys work too." tabindex="0"></div>
     <div class="howto">
       <button type="button" class="side pass" id="side-pass">← pass</button>
@@ -442,8 +450,23 @@ body.gridview .wall, body.gridview .top { display: none; }
     ['movie', 'Uncut Gems', 2019, ['Josh Safdie', 'Benny Safdie'], ['Adam Sandler', 'Julia Fox', 'LaKeith Stanfield'], '135 min', 'Crime, Thriller', ['sober'], 28, 'This is how I win.', 'A jeweller with a gambling problem makes every wrong choice at full volume for two hours. A great film. Not tonight.', 'torn', ['#6b2fa3', '#e2402b', '#edc755']],
     ['movie', 'Midsommar', 2019, ['Ari Aster'], ['Florence Pugh', 'Jack Reynor', 'Will Poulter'], '148 min', 'Horror, Drama', ['sober'], 22, 'Let the festivities begin.', 'A grieving woman joins her boyfriend on a trip to a Swedish midsummer festival that goes very, very wrong. Save it for a clear head.', 'sheet', ['#9cbf6a', '#e2402b', '#edc755']]
   ].map(function (r, i) { return { i: i, kind: r[0], title: r[1], year: r[2], dir: r[3], cast: r[4], run: r[5], genre: r[6], vibes: r[7], score: r[8], tag: r[9], plot: r[10], style: r[11], col: r[12], img: r[13] || '', key: r[0] + ':' + r[1] + ':' + r[2] }; });
-  var VIBES = [['all', 'Highest rated'], ['couch', 'Couch-locked'], ['eye', 'Eye candy'], ['plot', 'Plot optional'], ['giggle', 'Giggle fits'], ['brain', '2 a.m. big brain'], ['munch', 'Munchie bait'], ['short', 'Short trips'], ['sober', 'Save for sober']];
-  function vibeName(id) { for (var i = 0; i < VIBES.length; i++) if (VIBES[i][0] === id) return VIBES[i][1]; return id; }
+  // categories: [id, name, which titles, order]. Highest rated leaves out the low scorers;
+  // the hand-picked ones go by title.
+  var TRIPPY = ['Fantastic Planet', 'Koyaanisqatsi', 'Spirited Away', 'Everything Everywhere All at Once', 'Into the Spider-Verse', 'Adventure Time', 'Planet Earth II'];
+  var SCARY = ['Midsommar', 'Uncut Gems', 'Fight Club'];
+  var HUH = ['Fantastic Planet', 'Koyaanisqatsi', 'Everything Everywhere All at Once', 'Nathan for You', 'How To with John Wilson', 'The Truman Show', 'Fight Club', 'Hot Rod', 'Adventure Time'];
+  function byScore(a, b) { return b.score - a.score || a.i - b.i; }
+  var CATS = [
+    ['all', 'Highest rated', function (t) { return t.score >= 50; }, byScore],
+    ['new', 'New', function (t) { return t.year >= 2015; }, function (a, b) { return b.year - a.year || byScore(a, b); }],
+    ['comedy', 'Comedy', function (t) { return /comedy/i.test(t.genre); }, byScore],
+    ['trippy', 'Trippy as balls', function (t) { return TRIPPY.indexOf(t.title) > -1; }, byScore],
+    ['scary', 'Scary AF', function (t) { return SCARY.indexOf(t.title) > -1; }, byScore],
+    ['huh', 'What did I just watch?', function (t) { return HUH.indexOf(t.title) > -1; }, byScore]
+  ];
+  function catOf(id) { for (var i = 0; i < CATS.length; i++) if (CATS[i][0] === id) return CATS[i]; return CATS[0]; }
+  function vibeName(id) { return catOf(id)[1]; }
+  function catsFor(t) { return CATS.slice(2).filter(function (c) { return c[2](t); }).map(function (c) { return c[1]; }); }
   function rating(t) { return (t.score / 10).toFixed(1); }
   var SPUD = '<img class="spud" src="img/potato.png" alt="" width="58" height="96">';
   function tier(s) { return s >= 75 ? 'Fully loaded' : s >= 50 ? 'Half baked' : 'Cold'; }
@@ -539,7 +562,7 @@ body.gridview .wall, body.gridview .top { display: none; }
       tiles.appendChild(b);
     });
   }
-  function queue() { var q = T.filter(function (t) { return t.key === pin || !seen[t.key] && stash.indexOf(t.key) < 0 && (kindF === 'all' || t.kind === kindF) && (vibeF === 'all' ? t.vibes.indexOf('sober') < 0 : t.vibes.indexOf(vibeF) > -1); }).sort(function (a, b) { return b.score - a.score || a.i - b.i; });
+  function queue() { var q = T.filter(function (t) { return t.key === pin || !seen[t.key] && stash.indexOf(t.key) < 0 && (kindF === 'all' || t.kind === kindF) && catOf(vibeF)[2](t); }).sort(catOf(vibeF)[3]);
     if (pin) { var i = q.findIndex(function (t) { return t.key === pin; }); if (i > 0) q.unshift(q.splice(i, 1)[0]); }
     return q; }
   function render() {
@@ -547,7 +570,7 @@ body.gridview .wall, body.gridview .top { display: none; }
     stack.innerHTML = '';
     var q = queue();
     vb.textContent = vibeF === 'all' ? 'categories' : vibeName(vibeF).toLowerCase();
-    document.getElementById('cat-name').textContent = vibeName(vibeF).toLowerCase();
+    document.getElementById('cat-name').textContent = vibeName(vibeF).toLowerCase(); drawCatMenu();
     showTop(q[0]);
     if (view === 'grid') drawGrid(q);
     deck.classList.toggle('empty', !q.length); pull(0, 0); capText(false);
@@ -755,7 +778,7 @@ body.gridview .wall, body.gridview .top { display: none; }
       '<div class="head"><h2 class="fc-label">' + esc(t.title) + '</h2><span class="pct" aria-label="Score ' + rating(t) + ' out of 10">' + SPUD + rating(t) + '<small>/10</small></span></div>' +
       '<p class="meta">' + t.year + ' · ' + esc(t.run) + ' · ' + esc(t.genre) + ' · ' + tier(t.score).toLowerCase() + '</p>' +
       '<p class="plot">' + esc(t.plot) + '</p>' +
-      '<dl><dt>' + (t.kind === 'tv' ? 'made by' : 'directed by') + '</dt><dd>' + esc(t.dir.join(', ')) + '</dd><dt>starring</dt><dd>' + esc(t.cast.join(', ')) + '</dd><dt>category</dt><dd>' + esc(t.vibes.map(vibeName).join(', ').toLowerCase()) + '</dd><dt>watch on</dt><dd>coming soon</dd></dl>' +
+      '<dl><dt>' + (t.kind === 'tv' ? 'made by' : 'directed by') + '</dt><dd>' + esc(t.dir.join(', ')) + '</dd><dt>starring</dt><dd>' + esc(t.cast.join(', ')) + '</dd><dt>category</dt><dd>' + esc((catsFor(t).join(', ') || 'highest rated').toLowerCase()) + '</dd><dt>watch on</dt><dd>coming soon</dd></dl>' +
       '<div class="dacts"><button type="button" data-d="pass">pass</button><button type="button" class="yes" data-d="stash">' + (stash.indexOf(t.key) > -1 ? 'keep in stash' : 'stash it') + '</button></div>';
     detail.hidden = false; dbody.scrollTop = 0;
     // grow from the poster's own rectangle into the big card
@@ -829,7 +852,7 @@ body.gridview .wall, body.gridview .top { display: none; }
 
   // ---------- pill + drawers ----------
   var vd = document.getElementById('vibe-drawer'), sd = document.getElementById('stash-panel'), scrim = document.getElementById('scrim'), vb = document.getElementById('vibe-btn'), sb = document.getElementById('stash-btn');
-  function closeAll() { vd.hidden = true; vb.setAttribute('aria-expanded', 'false'); document.getElementById('cat').setAttribute('aria-expanded', 'false'); closeStash(); }
+  function closeAll() { vd.hidden = true; vb.setAttribute('aria-expanded', 'false'); closeCatMenu(); closeStash(); }
   var stashTimer = 0;
   function openStash() {
     clearTimeout(stashTimer); drawStash(); sd.hidden = scrim.hidden = false; sb.setAttribute('aria-expanded', 'true');
@@ -852,14 +875,23 @@ body.gridview .wall, body.gridview .top { display: none; }
   [].forEach.call(document.querySelectorAll('.pill [data-k]'), function (b) {
     b.addEventListener('click', function () { kindF = kindF === b.dataset.k ? 'all' : b.dataset.k; [].forEach.call(document.querySelectorAll('.pill [data-k]'), function (x) { x.setAttribute('aria-pressed', String(kindF === x.dataset.k)); }); closeAll(); render(); });
   });
-  function toggleCats() { var o = vd.hidden; closeAll(); if (o) { drawVibes(); vd.hidden = false; vb.setAttribute('aria-expanded', 'true'); } document.getElementById('cat').setAttribute('aria-expanded', String(o)); }
+  function toggleCats() { var o = vd.hidden; closeAll(); if (o) { drawVibes(); vd.hidden = false; vb.setAttribute('aria-expanded', 'true'); } }
   vb.addEventListener('click', toggleCats);
-  document.getElementById('cat').addEventListener('click', toggleCats);
+  var catBtn = document.getElementById('cat'), catMenu = document.getElementById('catmenu');
+  function closeCatMenu() { catMenu.hidden = true; catBtn.setAttribute('aria-expanded', 'false'); }
+  function drawCatMenu() {
+    var box = document.getElementById('catmenu-list'); box.innerHTML = '';
+    CATS.forEach(function (c) {
+      var b = document.createElement('button'); b.type = 'button'; b.setAttribute('role', 'menuitemradio'); b.setAttribute('aria-checked', String(vibeF === c[0])); b.textContent = c[1].toLowerCase();
+      b.addEventListener('click', function () { vibeF = c[0]; closeCatMenu(); render(); }); box.appendChild(b);
+    });
+  }
+  catBtn.addEventListener('click', function () { var o = catMenu.hidden; closeAll(); if (o) { drawCatMenu(); catMenu.hidden = false; catBtn.setAttribute('aria-expanded', 'true'); } });
   sb.addEventListener('click', function () { var o = sd.hidden || !sd.classList.contains('on'); closeAll(); if (o) openStash(); });
   function drawVibes() {
     var box = document.getElementById('vibe-list'); box.innerHTML = '';
-    VIBES.forEach(function (v) {
-      var n = T.filter(function (t) { return v[0] === 'all' ? t.vibes.indexOf('sober') < 0 : t.vibes.indexOf(v[0]) > -1; }).length;
+    CATS.forEach(function (v) {
+      var n = T.filter(v[2]).length;
       var b = document.createElement('button'); b.type = 'button'; b.className = 'r'; b.setAttribute('aria-pressed', String(vibeF === v[0]));
       b.innerHTML = '<span class="k"></span><small>' + n + ' posters</small>'; b.querySelector('.k').textContent = v[1];
       b.addEventListener('click', function () { vibeF = v[0]; closeAll(); render(); }); box.appendChild(b);
@@ -886,7 +918,7 @@ body.gridview .wall, body.gridview .top { display: none; }
     });
   }
   function updateCount() { document.getElementById('stash-n').textContent = stash.length; }
-  document.addEventListener('pointerdown', function (e) { if (!e.target.closest('.pill') && !e.target.closest('.cat') && !e.target.closest('.drawer') && !e.target.closest('.panel') && !e.target.closest('.scrim')) { vd.hidden = true; vb.setAttribute('aria-expanded', 'false'); document.getElementById('cat').setAttribute('aria-expanded', 'false'); } });
+  document.addEventListener('pointerdown', function (e) { if (!e.target.closest('.pill') && !e.target.closest('.cat') && !e.target.closest('.drawer') && !e.target.closest('.panel') && !e.target.closest('.scrim')) { vd.hidden = true; vb.setAttribute('aria-expanded', 'false'); } if (!e.target.closest('.catwrap')) closeCatMenu(); });
   addEventListener('keydown', function (e) { if (e.key === 'Escape') closeAll(); });
 
   // ---------- real stills and posters from TMDB, via the Worker, once the key is set ----------
