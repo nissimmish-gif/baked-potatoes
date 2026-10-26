@@ -24,7 +24,8 @@ added to the same Worker (see README).
 ## Feel of the site (owner's call, 2026-10-26)
 
 A wall of movie posters on a grainy black starfield (dense speckled stars, a few bright
-glints, paper-grain noise), with a layer of stars that slowly twinkle. Drag a poster to peel it off: right stashes, left passes. Tap
+glints, paper-grain noise), with a layer of stars that slowly twinkle. Drag a poster to peel it off: right stashes, left passes; as it leaves it rolls up like
+paper into a tube (`roll()`: a chain of hinged strips) while the next poster is already live. Tap
 to flip it. Fronts are real TMDB posters once `TMDB_TOKEN` is set; until then, original
 placeholder posters in three print styles (torn-paper photo, 80s one-sheet, halftone
 screen print). Inspired by real posters, never copies of them. Exception: the three
@@ -38,7 +39,8 @@ Every poster sits in a cream mount with a black frame line. How to use it is sai
 one line of small text under the poster ("← pass · tap for the plot · stash →", each a
 button), and on a first visit the top poster leans right then left once to show the
 gesture, until someone peels or flips. Owner wants these low key, not flash cards. The
-filters are called **categories** (not vibes) on the page.
+filters are called **categories** (not vibes) on the page. The stash list shows a mini
+poster beside each title.
 
 The back of each poster, the header, the nav and the drawers are **vintage flash cards**:
 cream paper, a heavy black rounded frame, a flat ink picture (red, violet, pink, sage) with

@@ -229,6 +229,23 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
   .back .fc-panel { height: calc(var(--W) * .33); }
 }
 
+/* the paper roll when a poster is sent off */
+.roll { position: absolute; inset: 0; z-index: 50; perspective: 1400px; transform-style: preserve-3d; pointer-events: none; }
+.roll .strip { position: absolute; top: 0; height: 100%; transform-style: preserve-3d; }
+.roll .sf, .roll .sb, .roll .shade { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.roll .sf { overflow: hidden; }
+.roll .sb { background: linear-gradient(90deg, #e6dbc2, #f1e8d4 50%, #e2d6bb); transform: rotateY(180deg); }
+.roll .shade { background: #1b1a17; opacity: 0; }
+.roll *, .roll *::after { mix-blend-mode: normal !important; }
+.roll .face { box-shadow: none; border-radius: 0; }
+
+/* mini posters in the stash */
+.drawer .r.st { grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 12px; }
+.thumb { position: relative; display: block; width: 40px; height: 60px; --W: 40px; transform: rotate(-2deg); box-shadow: 0 3px 8px rgba(0,0,0,.25); pointer-events: none; }
+.thumb .face { box-shadow: none; }
+.thumb .mount .mat { border-width: 1px; }
+.thumb *, .thumb *::after { mix-blend-mode: normal !important; }
+
 @media (prefers-reduced-motion: reduce) { .sheet, .sheet > .mount, .sheet > .back { transition: none; } }
 </style>
 </head>
@@ -512,13 +529,10 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
   function flip(el) { learned(); capText(el.classList.toggle('flipped')); }
   function decide(keep) {
     var el = topEl(); if (!el) return; var t = el._t; learned();
-    el.querySelector(keep ? '.tag.yes' : '.tag.no').style.opacity = 1;
-    el.style.transition = reduce ? 'none' : 'transform .5s cubic-bezier(.4,0,.6,1), opacity .5s ease';
-    el.style.transformOrigin = (keep ? '0%' : '100%') + ' 100%';
-    el.style.transform = 'translate(' + (keep ? 1 : -1) * innerWidth * .9 + 'px,-80px) rotate(' + (keep ? 38 : -38) + 'deg) rotateY(' + (keep ? -30 : 30) + 'deg)';
-    el.style.opacity = 0;
     if (keep) { if (stash.indexOf(t.key) < 0) stash.push(t.key); save(); updateCount(); } else seen[t.key] = true;
-    setTimeout(render, reduce ? 0 : 380);
+    pull(0, 0);
+    if (reduce) { render(); return; }
+    roll(el, keep); render();
   }
   // ---------- how-to: side cards, caption, and a nudge until the first peel or flip ----------
   var deck = document.getElementById('deck'), cap = document.getElementById('cap-text'), busy = false, HKEY = 'baked-potatoes-learned', knows = false;
@@ -548,6 +562,42 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
     });
   }
 
+  // the poster rolls up like paper as it leaves: a chain of thin strips, each hinged to the
+  // next and turned a little further, so the free edge curls into a tube (stash rolls up from
+  // the left and goes right; pass mirrors it)
+  function roll(el, keep) {
+    var face = el.classList.contains('flipped') ? el.querySelector('.back') : el.querySelector('.mount');
+    var w = el.offsetWidth, h = el.offsetHeight, N = 12, sw = w / N, dir = keep ? 1 : -1;
+    var box = document.createElement('div'); box.className = 'roll';
+    var start = el.style.transform || el.dataset.rest; box.style.transformOrigin = el.style.transformOrigin || '50% 50%';
+    box.style.transform = start;
+    var parent = box, strips = [];
+    for (var k = 0; k < N; k++) {
+      var i = keep ? N - 1 - k : k, s = document.createElement('div');
+      s.className = 'strip'; s.style.width = (sw + .8) + 'px';
+      s.style.left = (k ? (keep ? -sw : sw) : i * sw) + 'px';
+      s.style.transformOrigin = keep ? (sw + 'px 50%') : '0 50%';
+      var f = document.createElement('div'); f.className = 'sf';
+      var c = face.cloneNode(true); c.style.cssText = 'transform:none;visibility:visible;inset:auto;top:0;left:' + (-i * sw) + 'px;width:' + w + 'px;height:' + h + 'px';
+      f.appendChild(c);
+      var b = document.createElement('div'); b.className = 'sb';
+      var sh = document.createElement('i'); sh.className = 'shade';
+      s.appendChild(f); s.appendChild(b); s.appendChild(sh); parent.appendChild(s); parent = s; strips.push([s, sh]);
+    }
+    deck.appendChild(box); el.style.visibility = 'hidden';
+    var t0 = performance.now(), D = 900;
+      (function step(now) {
+      var p = Math.min(1, (now - t0) / D), q = Math.min(1, p / .62), th = (1 - Math.pow(1 - q, 2.2)) * 41, mv = Math.max(0, (p - .5) / .5); mv = mv * mv;
+      for (var k = 1; k < N; k++) {
+        strips[k][0].style.transform = 'rotateY(' + (dir * th) + 'deg)';
+        var a = k * th * Math.PI / 180; strips[k][1].style.opacity = (.5 - .5 * Math.cos(a)) * .35 + (Math.sin(a) > 0 ? Math.sin(a) * .08 : 0);
+      }
+      box.style.transform = start + ' translate(' + (dir * mv * innerWidth * .9) + 'px,' + (-mv * 70) + 'px) rotate(' + (dir * mv * 14) + 'deg)';
+      box.style.opacity = p > .86 ? 1 - (p - .86) / .14 : 1;
+      if (p < 1) requestAnimationFrame(step); else box.remove();
+    })(t0);
+  }
+
   stack.addEventListener('keydown', function (e) {
     if (e.key === 'ArrowRight') { e.preventDefault(); decide(true); }
     if (e.key === 'ArrowLeft') { e.preventDefault(); decide(false); }
@@ -575,8 +625,8 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
     var box = document.getElementById('stash-list'); box.innerHTML = '';
     document.getElementById('stash-empty').hidden = stash.length > 0;
     stash.slice().reverse().forEach(function (k) {
-      var t = T.filter(function (x) { return x.key === k; })[0], r = document.createElement('div'); r.className = 'r';
-      r.innerHTML = '<span class="k"></span><button type="button"><small>Remove</small></button>'; r.querySelector('.k').textContent = t.title + ' · ' + t.year;
+      var t = T.filter(function (x) { return x.key === k; })[0], r = document.createElement('div'); r.className = 'r st';
+      r.innerHTML = '<span class="thumb" aria-hidden="true"><span class="face mount"><span class="mat">' + front(t) + '</span></span></span><span class="k"></span><button type="button"><small>Remove</small></button>'; r.querySelector('.k').textContent = t.title + ' · ' + t.year;
       r.querySelector('button').addEventListener('click', function () { stash = stash.filter(function (x) { return x !== k; }); save(); updateCount(); drawStash(); render(); });
       box.appendChild(r);
     });
