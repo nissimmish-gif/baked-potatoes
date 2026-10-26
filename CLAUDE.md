@@ -25,11 +25,13 @@ added to the same Worker (see README).
 
 ## Feel of the site (owner's call)
 
-Loose, atmospheric and image-led, not a tidy template. No eyebrow-heading-paragraph
-sections, card grids or progress bars. Few words: small, scattered, often handwritten
-(Special Elite typewriter; VT323 for the CRT counter), with rough ink edges and a slipped red layer.
-Texture over smoothness: printed/stippled sky, halftone clouds, halftone smoke and glows, film grain, dust, faint scan lines. On the site the potato is the soft airbrushed
-version (`potato-dreamy.webp`); the crisp print potato is for the logo only.
+Objects on a calm night surface, like A24's disc library or the sticker-covered fruit on
+the owner's board: one real thing per screen, lots of space, few words. A real potato
+photo carries die-cut vibe stickers (the categories); movies are VHS tapes with paper
+labels; the stash is a shelf of tape spines. Type: Instrument Serif for the few big
+words, small Arimo labels for the rest. Texture is light (one grain layer), never
+slapped on everything. Tried and rejected: smooth space gradients, heavy halftone and
+typewriter fonts, handwriting fonts, card grids, progress bars.
 
 ## Copy
 
