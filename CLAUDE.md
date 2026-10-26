@@ -23,6 +23,13 @@ added to the same Worker (see README).
 - **No pot leaves, rasta colours or 420 jokes.** The brand is about the feeling, and
   leaf-free branding is easier to advertise.
 
+## Feel of the site (owner's call)
+
+Loose, atmospheric and image-led, not a tidy template. No eyebrow-heading-paragraph
+sections, card grids or progress bars. Few words: small, scattered, often handwritten
+(Nanum Pen Script) and slightly rotated. On the site the potato is the soft airbrushed
+version (`potato-dreamy.webp`); the crisp print potato is for the logo only.
+
 ## Copy
 
 Plain, deadpan, kind. Specific beats clever. Errors say what happened and what to do.

@@ -3,17 +3,17 @@
 What to watch when you're baked. Movie and TV picks rated with the **Potato Score**,
 sorted by vibe, and swiped into **your stash**.
 
-This is the first prototype of the homepage: a night-sky page where a potato bakes
-as you scroll, a set of vibe categories, and a swipe deck of movie cards.
+This is the homepage prototype: a drifting night sky, a glowing potato that bakes and
+smokes as you scroll, vibes as floating orbs, and a messy pile of swipeable movie cards.
 
 ## What's here
 
 ```
-public/          The site. Plain HTML, CSS and JavaScript, no build step.
-  index.html     The whole homepage
-  potato.webp    The logo potato (used for the scroll bake)
-  potato-small.webp
-  grain.png      Print-grain overlay tile
+public/                 The site. Plain HTML, CSS and JavaScript, no build step.
+  index.html            The whole homepage
+  potato-dreamy.webp    Airbrushed version of the logo potato (the scroll bake)
+  potato-dreamy-small.webp
+  grain.png             Moving film-grain overlay tile
 brand/logo/      Final logo files (PNG): main logo on night and cream,
                  app icons, transparent potato and wordmark
 ```
