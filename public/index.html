@@ -270,7 +270,13 @@ body.gridview .wall, body.gridview .top { display: none; }
 .detail.on { background: rgba(4, 5, 9, .62); }
 .dcard { position: relative; width: min(560px, 100%); height: min(calc(min(560px, 100vw - 24px) * 1.66), 100%); padding: 9px; transition: transform .34s cubic-bezier(.2, .8, .2, 1); will-change: transform; }
 .dcard .fc-frame { position: relative; height: 100%; border-width: 3px; }
-.dcard .x { position: absolute; z-index: 3; top: 6px; right: 8px; width: 40px; height: 40px; font-size: 32px; line-height: 1; color: var(--fc-line); background: var(--fc-paper); border-radius: 50%; }
+.dcard .x { position: absolute; z-index: 3; top: 8px; right: 8px; display: grid; place-items: center; width: 40px; height: 40px; color: var(--fc-line); }
+.dcard .x svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 3; stroke-linecap: square; }
+@media (hover: hover) { .dcard .x:hover { color: var(--ink-red); } }
+.dacts { display: flex; gap: 10px; margin-top: 8px; padding-top: 4px; }
+.dacts button { flex: 1; padding: 10px 0 11px; font-family: var(--f-card); font-weight: 500; font-size: 20px; text-transform: lowercase; letter-spacing: -.01em; border: 3px solid var(--fc-line); border-radius: 3px; color: var(--fc-line); }
+.dacts .yes { background: var(--ink-red); color: var(--fc-paper); }
+@media (hover: hover) { .dacts button:hover { color: var(--ink-red); } .dacts .yes:hover { color: var(--fc-paper); background: #c9381f; } }
 .dbody { height: 100%; overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; padding: 52px 18px 22px; display: flex; flex-direction: column; gap: 12px; opacity: 0; transition: opacity .2s ease .12s; }
 .detail.on .dbody { opacity: 1; }
 .dbody .trailer { flex: 0 0 auto; aspect-ratio: 16 / 9; background: #111; border-radius: 2px; overflow: hidden; }
@@ -323,7 +329,7 @@ body.gridview .wall, body.gridview .top { display: none; }
 </div></nav>
 <div class="drawer fc-card" id="vibe-drawer" hidden><div class="fc-frame"><h2 class="fc-label">categories</h2><div id="vibe-list"></div><p class="credit" id="tmdb-credit" hidden>Posters, details and trailers from TMDB. This product uses the TMDB API but is not endorsed or certified by TMDB.</p></div></div>
 <div class="detail" id="detail" hidden role="dialog" aria-modal="true" aria-label="Details"><div class="dcard fc-card"><div class="fc-frame">
-  <button type="button" class="x" id="dclose" aria-label="Close">×</button>
+  <button type="button" class="x" id="dclose" aria-label="Close"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 4 16 16M16 4 4 16"/></svg></button>
   <div class="dbody" id="dbody"></div>
 </div></div></div>
 <div class="scrim" id="scrim" hidden></div>
@@ -749,7 +755,8 @@ body.gridview .wall, body.gridview .top { display: none; }
       '<div class="head"><h2 class="fc-label">' + esc(t.title) + '</h2><span class="pct" aria-label="Score ' + rating(t) + ' out of 10">' + SPUD + rating(t) + '<small>/10</small></span></div>' +
       '<p class="meta">' + t.year + ' · ' + esc(t.run) + ' · ' + esc(t.genre) + ' · ' + tier(t.score).toLowerCase() + '</p>' +
       '<p class="plot">' + esc(t.plot) + '</p>' +
-      '<dl><dt>' + (t.kind === 'tv' ? 'made by' : 'directed by') + '</dt><dd>' + esc(t.dir.join(', ')) + '</dd><dt>starring</dt><dd>' + esc(t.cast.join(', ')) + '</dd><dt>category</dt><dd>' + esc(t.vibes.map(vibeName).join(', ').toLowerCase()) + '</dd><dt>watch on</dt><dd>coming soon</dd></dl>';
+      '<dl><dt>' + (t.kind === 'tv' ? 'made by' : 'directed by') + '</dt><dd>' + esc(t.dir.join(', ')) + '</dd><dt>starring</dt><dd>' + esc(t.cast.join(', ')) + '</dd><dt>category</dt><dd>' + esc(t.vibes.map(vibeName).join(', ').toLowerCase()) + '</dd><dt>watch on</dt><dd>coming soon</dd></dl>' +
+      '<div class="dacts"><button type="button" data-d="pass">pass</button><button type="button" class="yes" data-d="stash">' + (stash.indexOf(t.key) > -1 ? 'keep in stash' : 'stash it') + '</button></div>';
     detail.hidden = false; dbody.scrollTop = 0;
     // grow from the poster's own rectangle into the big card
     var a = el.getBoundingClientRect(), b = dcard.getBoundingClientRect();
@@ -773,6 +780,14 @@ body.gridview .wall, body.gridview .top { display: none; }
     setTimeout(function () { detail.hidden = true; dcard.style.transform = ''; el.style.opacity = ''; }, 340);
   }
   document.getElementById('dclose').addEventListener('click', closeDetail);
+  // pass or stash from the card: it closes on the spot and the poster rolls away as if swiped
+  dbody.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-d]'); if (!b) return;
+    var el = openFrom; openFrom = null; dbody.querySelector('.trailer').innerHTML = '';
+    detail.classList.remove('on'); detail.hidden = true; dcard.style.transform = '';
+    if (el) el.style.opacity = '';
+    if (el === topEl()) decide(b.dataset.d === 'stash');
+  });
   detail.addEventListener('click', function (e) { if (e.target === detail) closeDetail(); });
   addEventListener('keydown', function (e) { if (e.key === 'Escape') closeDetail(); });
   function trailer(t) {

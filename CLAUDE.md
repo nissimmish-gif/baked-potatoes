@@ -38,8 +38,9 @@ stashed. Let go far enough right to stash, left to
 pass, and it rolls the rest of the way off; let go early and it lays back flat. The next
 poster is live underneath while the roll plays. Tapping a poster no longer flips it
 (owner: the back was too small to read): it grows from its own rectangle into a big
-flash-card details view (`openDetail()`): trailer, title, score, plot, credits, with an ×
-top right; Esc or a tap outside also closes it. Fronts are real TMDB posters once `TMDB_TOKEN` is set; until then, original
+flash-card details view (`openDetail()`): trailer, title, score, plot, credits, then pass
+/ stash it buttons at the bottom (they close the card and roll the poster away), with a
+plain heavy black × top right (no circle); Esc or a tap outside also closes it. Fronts are real TMDB posters once `TMDB_TOKEN` is set; until then, original
 placeholder posters in three print styles (torn-paper photo, 80s one-sheet, halftone
 screen print). Inspired by real posters, never copies of them. Exception: the three
 posters in `public/posters/` (Ferris Bueller's Day Off, The Truman Show, Fight Club) are
