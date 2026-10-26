@@ -62,9 +62,9 @@ filters are called **categories** (not vibes) on the page. The categories (owner
 2026-10-26): **highest rated** (default; score 5.0 and up), **new** (2015 on, newest
 first), **comedy**, **trippy as balls**, **scary AF**, **what did I just watch?** (the last
 three are hand-picked title lists in `CATS`). Ordered by score unless said otherwise. The
-current category sits above the poster, lined up with the wordmark at the page's left edge, as a small heading, no button shape: a
-tiny "now showing" line in soft cream, then the category in Arimo Bold ~24px in cream with
-a small arrow (owner: it got lost in the background; yellow was tried and dropped); tapping it opens a small flash-card menu right there. The bottom nav keeps a
+current category sits above the poster, lined up with the wordmark at the page's left edge, as a small heading, no button shape: the
+category in Arimo Bold ~24px in cream with a small arrow ("now showing" was tried and
+dropped) (owner: it got lost in the background; yellow was tried and dropped); tapping it opens a small flash-card menu right there. The bottom nav keeps a
 categories entry too. The stash is a panel that slides
 in from the right (full height, flash-card style, dimmed page behind; close with ×, a tap
 outside, a swipe right or Esc). Rows: the real mini poster (`miniPoster()`, the image
@@ -80,7 +80,8 @@ cream paper, a heavy black rounded frame and a lowercase grotesque label (Inter 
 drawings (owner removed them, 2026-10-26). The top of the details view is the trailer
 (`/api/trailer`, youtube-nocookie embed, removed again on close).
 The wordmark sits top left on every page: the potato icon, then "baked potatoes", Arimo
-Bold, lowercase, on one line, cream, sized to fill the space up to the buttons on the right (owner's call, 2026-10-26; the name is back on).
+Bold, lowercase, on one line, cream, with the tagline "what to watch when you're baked"
+under it in small soft cream, lined up with the word (owner: make the purpose clear), sized to fill the space up to the buttons on the right (owner's call, 2026-10-26; the name is back on).
 Rejected so far: space gradients, texture everywhere, typewriter/handwriting fonts,
 stickers/VHS, the 70s eyeball broadcast, the A24 disc library.
 
