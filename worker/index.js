@@ -1,5 +1,5 @@
 // Serves the static site from public/, plus one API route:
-//   GET /api/art?q=<kind>:<title>:<year>,...   -> { "<kind>:<title>:<year>": { poster, backdrop, id } }
+//   GET /api/art?q=<kind>:<title>:<year>|...   -> { "<kind>:<title>:<year>": { poster, backdrop, id } }
 //   GET /api/trailer?kind=movie|tv&id=<tmdb id> -> { key } (a YouTube video id, or null)
 // Posters and stills come from the TMDB API using the TMDB_TOKEN secret
 // (Worker → Settings → Variables and Secrets). Without the secret the route
@@ -24,7 +24,8 @@ async function art(url, env, ctx) {
   const hit = await cache.match(cacheKey);
   if (hit) return hit;
 
-  const keys = (url.searchParams.get('q') || '').split(',').filter(Boolean).slice(0, 40);
+  // keys are joined with | because titles can contain commas ("Dude, Where's My Car?")
+  const keys = (url.searchParams.get('q') || '').split('|').filter(Boolean).slice(0, 80);
   const out = {};
   await Promise.all(keys.map(async (key) => {
     // titles can contain colons ("Mad Max: Fury Road"), so kind is the first part and year the last

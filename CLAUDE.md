@@ -69,8 +69,9 @@ outside, a swipe right or Esc). Rows: the real mini poster (`miniPoster()`, the 
 only, not a shrunk card), title, year · runtime · genre, score, remove. Tapping a row puts
 that poster on top of the stack. A small one/grid toggle (frosted glass, top-right corner level with the wordmark, not in
 the nav and not taking its own row) switches to a
-scrolling grid of every poster left (tap one to open it on top of the stack); the choice
-is remembered.
+scrolling grid of every poster left; tapping a tile opens the big details card right there
+(pass / stash from it update the grid). The category text moves above the tiles in grid
+view. The choice of view is remembered.
 
 The details view, the nav and the drawers are **vintage flash cards**:
 cream paper, a heavy black rounded frame and a lowercase grotesque label (Inter Tight). No

@@ -213,6 +213,8 @@ body.gridview .grid { padding-top: calc(72px + env(safe-area-inset-top, 0px)); }
   -webkit-backdrop-filter: blur(14px) saturate(1.4); backdrop-filter: blur(14px) saturate(1.4); }
 .undo svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
 @media (hover: hover) { .undo:hover { background: rgba(255, 255, 255, .18); } }
+/* in the grid it sits above the tiles, lined up with them */
+.grid .catwrap { position: relative; left: -2px; bottom: auto; max-width: 1100px; margin: 0 auto 10px; }
 /* lined up with the wordmark at the page's left edge (the deck is centred, --W wide) */
 .catwrap { position: absolute; left: calc(max(16px, env(safe-area-inset-left, 0px)) - (100vw - var(--W)) / 2 - 2px); bottom: 100%; margin-bottom: 22px; z-index: 40; }
 .cat { display: inline-flex; align-items: center; gap: 6px; padding: 6px 2px; font-family: var(--f-card); font-weight: 600; font-size: 17px; letter-spacing: -.015em; text-transform: lowercase; color: var(--cream); white-space: nowrap; }
@@ -449,14 +451,28 @@ body.gridview .wall, body.gridview .top { display: none; }
     ['tv', 'Nathan for You', 2013, ['Nathan Fielder', 'Michael Koman'], ['Nathan Fielder'], '4 seasons', 'Comedy', ['giggle', 'short'], 90, 'Business advice.', 'A consultant with a business degree gives small businesses terrible ideas and follows through on them with a completely straight face.', 'sheet', ['#f2efe8', '#e2402b', '#1f3f8a']],
     ['movie', 'The Mitchells vs. the Machines', 2021, ['Mike Rianda'], ['Abbi Jacobson', 'Danny McBride', 'Maya Rudolph'], '114 min', 'Animation, Comedy', ['eye', 'couch'], 86, 'Family. Road trip. Robots.', 'An awkward family is on a road trip when the robot apocalypse starts, and they turn out to be humanity\'s best chance. Loud, colourful and sweet.', 'torn', ['#ff6f91', '#1f3f8a', '#edc755']],
     ['movie', 'Dazed and Confused', 1993, ['Richard Linklater'], ['Jason London', 'Wiley Wiggins', 'Matthew McConaughey'], '102 min', 'Comedy', ['couch'], 89, 'The last day of school, 1976.', 'Texas teenagers drift through the last day of school and the night that follows. Nothing much happens, beautifully.', 'print', ['#e8b04a', '#2f6b3a', '#e2402b']],
+    ['tv', 'The Chair Company', 2025, ['Tim Robinson', 'Zach Kanin'], ['Tim Robinson', 'Lake Bell', 'Sophia Lillis'], '8 episodes', 'Comedy, Mystery', ['giggle'], 90, 'It was the chair.', 'A chair collapses under a man in the middle of a work presentation, and he cannot let it go. He starts digging into the company that made it and finds something much bigger and much stupider. From the I Think You Should Leave guy.', 'sheet', ['#c9a227', '#1b1a17', '#e2402b']],
+    ['tv', 'I Think You Should Leave with Tim Robinson', 2019, ['Tim Robinson', 'Zach Kanin'], ['Tim Robinson'], '3 seasons', 'Sketch comedy', ['giggle', 'short'], 92, 'You sure about that?', 'Short sketches about people who refuse to admit they were wrong, escalating until everyone is screaming. Fifteen-minute episodes, so you can fit one in between snacks.', 'print', ['#e2402b', '#edc755', '#1b1a17']],
+    ['tv', 'Rick and Morty', 2013, ['Justin Roiland', 'Dan Harmon'], ['Chris Parnell', 'Spencer Grammer', 'Sarah Chalke'], '22-min episodes', 'Animation, Sci-fi, Comedy', ['giggle', 'brain'], 91, 'Wubba lubba dub dub.', 'A drunk genius scientist drags his nervous grandson across the multiverse on adventures that go wrong in the most creative ways possible. Each episode is a fresh dimension of nonsense.', 'print', ['#7fc241', '#1f3f8a', '#edc755']],
+    ['movie', 'Up in Smoke', 1978, ['Lou Adler'], ['Cheech Marin', 'Tommy Chong', 'Stacy Keach'], '86 min', 'Comedy', ['giggle'], 84, 'Don\'t go straight to see this movie.', 'Cheech and Chong meet on the side of the road and spend the rest of the movie looking for weed, accidentally driving a van made of it across the border. Where the whole genre started.', 'torn', ['#4f7a52', '#e2402b', '#edc755']],
+    ['movie', 'Friday', 1995, ['F. Gary Gray'], ['Ice Cube', 'Chris Tucker', 'Nia Long'], '91 min', 'Comedy', ['giggle', 'couch'], 89, 'A lot can go down between Thursday and Saturday.', 'Craig just got fired, it is his day off, and his neighbour Smokey owes a dealer two hundred dollars by ten tonight. They sit on the porch and the whole neighbourhood comes to them.', 'sheet', ['#e8b04a', '#1f3f8a', '#e2402b']],
+    ['movie', 'Half Baked', 1998, ['Tamra Davis'], ['Dave Chappelle', 'Jim Breuer', 'Harland Williams'], '82 min', 'Comedy', ['giggle'], 80, 'Get baked.', 'When their roommate lands in jail for killing a police horse with junk food, three friends start selling weed out of a lab to raise his bail. Chappelle plays four characters.', 'print', ['#3aa0c9', '#e2402b', '#edc755']],
+    ['movie', 'Dude, Where\'s My Car?', 2000, ['Danny Leiner'], ['Ashton Kutcher', 'Seann William Scott', 'Jennifer Garner'], '83 min', 'Comedy', ['giggle', 'short'], 72, 'Dude.', 'Two friends wake up with no memory of last night, no car, and a fridge full of pudding. Retracing their steps involves aliens, a cult and a tattoo they cannot read. Dumb on purpose.', 'torn', ['#e94f39', '#1a375f', '#edc755']],
+    ['movie', 'Super Troopers', 2001, ['Jay Chandrasekhar'], ['Jay Chandrasekhar', 'Kevin Heffernan', 'Steve Lemme'], '100 min', 'Comedy, Crime', ['giggle'], 79, 'Meow.', 'Five Vermont state troopers spend their shifts pranking drivers until their station is threatened with closure and they have to solve an actual case. Mostly they keep pranking.', 'sheet', ['#2f6b3a', '#edc755', '#e2402b']],
+    ['movie', 'How High', 2001, ['Jesse Dylan'], ['Method Man', 'Redman', 'Obba Babatundé'], '93 min', 'Comedy', ['giggle'], 74, 'Higher learning.', 'Two stoners grow weed in the ashes of a dead friend, whose ghost helps them ace their exams and get into Harvard. It goes about as well as you would expect.', 'print', ['#8b2fa3', '#edc755', '#e2402b']],
+    ['movie', 'Grandma\'s Boy', 2006, ['Nicholaus Goossen'], ['Allen Covert', 'Linda Cardellini', 'Nick Swardson'], '94 min', 'Comedy', ['giggle', 'couch'], 76, 'Living with Grandma.', 'A 35-year-old video game tester gets evicted and moves in with his grandma and her two roommates. Very low stakes, very quotable, a cult classic for a reason.', 'torn', ['#d86a2a', '#1a375f', '#edc755']],
+    ['movie', 'This Is the End', 2013, ['Seth Rogen', 'Evan Goldberg'], ['Seth Rogen', 'Jay Baruchel', 'James Franco'], '107 min', 'Comedy', ['giggle'], 82, 'Nothing ruins a party like the end of the world.', 'A group of actors playing exaggerated versions of themselves are stuck in James Franco\'s house when the apocalypse starts. They argue about snacks while the world ends outside.', 'sheet', ['#e2402b', '#1b1a17', '#edc755']],
+    ['movie', 'Fear and Loathing in Las Vegas', 1998, ['Terry Gilliam'], ['Johnny Depp', 'Benicio del Toro', 'Tobey Maguire'], '118 min', 'Comedy, Drama', ['brain', 'eye'], 77, 'Buy the ticket, take the ride.', 'A journalist and his lawyer drive to Las Vegas with a trunk full of every drug there is, supposedly to cover a motorcycle race. The camera is as out of it as they are.', 'print', ['#d8263c', '#edc755', '#1f3f8a']],
+    ['movie', 'Inherent Vice', 2014, ['Paul Thomas Anderson'], ['Joaquin Phoenix', 'Josh Brolin', 'Katherine Waterston'], '148 min', 'Crime, Comedy, Mystery', ['brain'], 75, 'Not everyone got the memo.', 'A permanently stoned private eye in 1970 Los Angeles looks into his ex-girlfriend\'s disappearance and stumbles through a conspiracy nobody can explain. Do not try to follow the plot.', 'torn', ['#e8b04a', '#2f6b3a', '#e2402b']],
+    ['movie', 'Smiley Face', 2007, ['Gregg Araki'], ['Anna Faris', 'John Krasinski', 'Danny Masterson'], '85 min', 'Comedy', ['giggle', 'short'], 71, 'One very long day.', 'An actress eats her roommate\'s entire batch of weed cupcakes and then has a full day of errands she cannot quite manage. Anna Faris carries it.', 'sheet', ['#ff6f91', '#1f3f8a', '#edc755']],
     ['movie', 'Uncut Gems', 2019, ['Josh Safdie', 'Benny Safdie'], ['Adam Sandler', 'Julia Fox', 'LaKeith Stanfield'], '135 min', 'Crime, Thriller', ['sober'], 28, 'This is how I win.', 'A jeweller with a gambling problem makes every wrong choice at full volume for two hours. A great film. Not tonight.', 'torn', ['#6b2fa3', '#e2402b', '#edc755']],
     ['movie', 'Midsommar', 2019, ['Ari Aster'], ['Florence Pugh', 'Jack Reynor', 'Will Poulter'], '148 min', 'Horror, Drama', ['sober'], 22, 'Let the festivities begin.', 'A grieving woman joins her boyfriend on a trip to a Swedish midsummer festival that goes very, very wrong. Save it for a clear head.', 'sheet', ['#9cbf6a', '#e2402b', '#edc755']]
   ].map(function (r, i) { return { i: i, kind: r[0], title: r[1], year: r[2], dir: r[3], cast: r[4], run: r[5], genre: r[6], vibes: r[7], score: r[8], tag: r[9], plot: r[10], style: r[11], col: r[12], img: r[13] || '', key: r[0] + ':' + r[1] + ':' + r[2] }; });
   // categories: [id, name, which titles, order]. Highest rated leaves out the low scorers;
   // the hand-picked ones go by title.
-  var TRIPPY = ['Fantastic Planet', 'Koyaanisqatsi', 'Spirited Away', 'Everything Everywhere All at Once', 'Into the Spider-Verse', 'Adventure Time', 'Planet Earth II'];
+  var TRIPPY = ['Rick and Morty', 'Fear and Loathing in Las Vegas', 'Fantastic Planet', 'Koyaanisqatsi', 'Spirited Away', 'Everything Everywhere All at Once', 'Into the Spider-Verse', 'Adventure Time', 'Planet Earth II'];
   var SCARY = ['Midsommar', 'Uncut Gems', 'Fight Club'];
-  var HUH = ['Fantastic Planet', 'Koyaanisqatsi', 'Everything Everywhere All at Once', 'Nathan for You', 'How To with John Wilson', 'The Truman Show', 'Fight Club', 'Hot Rod', 'Adventure Time'];
+  var HUH = ['The Chair Company', 'I Think You Should Leave with Tim Robinson', 'Rick and Morty', 'Inherent Vice', 'Fear and Loathing in Las Vegas', 'Fantastic Planet', 'Koyaanisqatsi', 'Everything Everywhere All at Once', 'Nathan for You', 'How To with John Wilson', 'The Truman Show', 'Fight Club', 'Hot Rod', 'Adventure Time'];
   function byScore(a, b) { return b.score - a.score || a.i - b.i; }
   var CATS = [
     ['all', 'Highest rated', function (t) { return t.score >= 50; }, byScore],
@@ -541,12 +557,16 @@ body.gridview .wall, body.gridview .top { display: none; }
   function sizes() { var w = Math.min(innerWidth * (innerWidth < 600 ? .7 : .84), (innerHeight - 262) / 1.66, 380); document.documentElement.style.setProperty('--W', Math.round(w) + 'px'); }
   var view = 'one', pin = null, grid = document.getElementById('grid'), tiles = document.getElementById('tiles');
   try { view = localStorage.getItem('baked-potatoes-view') === 'grid' ? 'grid' : 'one'; } catch (e) {}
+  function placeCat() {
+    var cw = document.querySelector('.catwrap');
+    if (view === 'grid') grid.insertBefore(cw, tiles); else deck.insertBefore(cw, deck.firstChild);
+  }
   function setView(v) {
     view = v; document.body.classList.toggle('gridview', v === 'grid'); grid.hidden = v !== 'grid';
     document.getElementById('view-one').setAttribute('aria-pressed', String(v === 'one'));
     document.getElementById('view-grid').setAttribute('aria-pressed', String(v === 'grid'));
     try { localStorage.setItem('baked-potatoes-view', v); } catch (e) {}
-    render();
+    placeCat(); render();
   }
   // smaller TMDB sizes and lazy loading for the grid and stash thumbnails
   function small(html, size) { return html.replace(/\/t\/p\/w780\//g, '/t/p/' + size + '/').replace(/<img /g, '<img loading="lazy" decoding="async" '); }
@@ -560,7 +580,8 @@ body.gridview .wall, body.gridview .top { display: none; }
       b.innerHTML = '<span class="poster-mini" aria-hidden="true"><span class="face mount"><span class="mat">' + small(front(t), 'w342') + '</span></span></span><span class="info"><span class="nm"></span><span class="sc">' + SPUD + rating(t) + '</span></span>';
       b.querySelector('.nm').textContent = t.title;
       b.setAttribute('aria-label', t.title + ', ' + rating(t) + ' out of 10. Open it.');
-      b.addEventListener('click', function () { pin = t.key; setView('one'); });
+      var mini = b.querySelector('.poster-mini'); mini._t = t;
+      b.addEventListener('click', function () { openDetail(mini); });
       tiles.appendChild(b);
     });
   }
@@ -641,6 +662,12 @@ body.gridview .wall, body.gridview .top { display: none; }
     (pr || peel(el, keep ? 1 : -1)).leave(keep); render();
   }
 
+  // the same as decide, for a poster that isn't on top (the grid): no roll, the grid redraws
+  function decideQuietly(t, keep) {
+    learned(); past.push({ key: t.key, kept: keep }); undoBtn.hidden = false; if (pin === t.key) pin = null;
+    if (keep) { if (stash.indexOf(t.key) < 0) stash.push(t.key); save(); updateCount(); } else seen[t.key] = true;
+    render();
+  }
   // brings back the last poster you passed or stashed, on top of the stack
   function undo() {
     var last = past.pop(); if (!last) return;
@@ -812,6 +839,7 @@ body.gridview .wall, body.gridview .top { display: none; }
     detail.classList.remove('on'); detail.hidden = true; dcard.style.transform = '';
     if (el) el.style.opacity = '';
     if (el === topEl()) decide(b.dataset.d === 'stash');
+    else if (el && el._t) decideQuietly(el._t, b.dataset.d === 'stash');
   });
   detail.addEventListener('click', function (e) { if (e.target === detail) closeDetail(); });
   addEventListener('keydown', function (e) { if (e.key === 'Escape') closeDetail(); });
@@ -924,7 +952,7 @@ body.gridview .wall, body.gridview .top { display: none; }
   addEventListener('keydown', function (e) { if (e.key === 'Escape') closeAll(); });
 
   // ---------- real stills and posters from TMDB, via the Worker, once the key is set ----------
-  fetch('/api/art?q=' + encodeURIComponent(T.map(function (t) { return t.key; }).join(','))).then(function (r) { return r.ok ? r.json() : {}; })
+  fetch('/api/art?q=' + encodeURIComponent(T.map(function (t) { return t.key; }).join('|'))).then(function (r) { return r.ok ? r.json() : {}; })
     .then(function (j) { if (j && !j.error) { ART = j; document.getElementById('tmdb-credit').hidden = false; render(); } }).catch(function () {});
 
   document.getElementById('view-one').addEventListener('click', function () { if (view !== 'one') setView('one'); });
@@ -932,6 +960,7 @@ body.gridview .wall, body.gridview .top { display: none; }
   document.body.classList.toggle('gridview', view === 'grid'); grid.hidden = view !== 'grid';
   document.getElementById('view-one').setAttribute('aria-pressed', String(view === 'one')); document.getElementById('view-grid').setAttribute('aria-pressed', String(view === 'grid'));
   undoBtn.addEventListener('click', undo);
+  placeCat();
   sizes(); updateCount(); render(); setTimeout(nudge, 900);
 })();
 </script>
