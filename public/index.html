@@ -183,6 +183,7 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
 .drawer .r .k { font-family: var(--f-card); font-weight: 500; font-size: 17px; text-transform: lowercase; letter-spacing: -.01em; }
 .drawer .r[aria-pressed="true"] .k { color: var(--ink-red); }
 .drawer .r small { font-size: 12px; text-transform: lowercase; color: #6d6758; }
+.drawer .credit { margin: 10px 0 2px; padding-top: 8px; border-top: 2px solid var(--fc-line); font-size: 10.5px; line-height: 1.35; color: #6d6758; }
 .drawer .empty { color: #6d6758; padding: 6px 0; }
 .done { position: absolute; inset: 0; }
 .done .fc-frame { position: absolute; inset: 5%; display: flex; flex-direction: column; padding: 5%; gap: 12px; }
@@ -270,7 +271,7 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
   <button type="button" id="vibe-btn" aria-expanded="false">categories</button>
   <button type="button" id="stash-btn" aria-expanded="false">stash <b id="stash-n" aria-live="polite">0</b></button>
 </div></nav>
-<div class="drawer fc-card" id="vibe-drawer" hidden><div class="fc-frame"><h2 class="fc-label">categories</h2><div id="vibe-list"></div></div></div>
+<div class="drawer fc-card" id="vibe-drawer" hidden><div class="fc-frame"><h2 class="fc-label">categories</h2><div id="vibe-list"></div><p class="credit" id="tmdb-credit" hidden>Posters, details and trailers from TMDB. This product uses the TMDB API but is not endorsed or certified by TMDB.</p></div></div>
 <div class="drawer fc-card" id="stash-drawer" hidden><div class="fc-frame"><h2 class="fc-label">your stash</h2><div id="stash-list"></div><p class="empty" id="stash-empty">Nothing yet. Peel one to the right.</p></div></div>
 
 <script>
@@ -393,7 +394,8 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
   function imgTag(t, which) { var a = ART[t.key]; var p = a && (which === 'backdrop' ? (a.backdrop || a.poster) : (a.poster || a.backdrop)); return p ? '<img alt="" draggable="false" src="' + IMG + 'w780' + p + '" onload="this.classList.add(\'ok\')">' : ''; }
   function fit(title, base) { var n = title.length; return base * (n <= 8 ? 1 : n <= 14 ? .78 : n <= 22 ? .6 : .48); }
   function front(t) {
-    var real = ART[t.key] && ART[t.key].poster ? IMG + 'w780' + ART[t.key].poster : t.img;
+    // the owner's own picks win; everything else uses the TMDB poster
+    var real = t.img || (ART[t.key] && ART[t.key].poster ? IMG + 'w780' + ART[t.key].poster : '');
     if (real) return '<div class="face p-real" style="--a:' + t.col[0] + '"><h2>' + esc(t.title) + '</h2><img alt="' + esc(t.title) + ' poster" draggable="false" src="' + real + '" onerror="this.remove()"></div>';
     var Wv = 'var(--W)', names = t.cast.slice(0, 3), credits = esc((t.kind === 'tv' ? 'Created by ' : 'Directed by ') + t.dir.join(' & ') + ' · starring ' + t.cast.join(', ') + ' · ' + t.year + ' · ' + t.run);
     if (t.style === 'torn') {
@@ -642,7 +644,7 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
 
   // ---------- real stills and posters from TMDB, via the Worker, once the key is set ----------
   fetch('/api/art?q=' + encodeURIComponent(T.map(function (t) { return t.key; }).join(','))).then(function (r) { return r.ok ? r.json() : {}; })
-    .then(function (j) { if (j && !j.error) { ART = j; render(); } }).catch(function () {});
+    .then(function (j) { if (j && !j.error) { ART = j; document.getElementById('tmdb-credit').hidden = false; render(); } }).catch(function () {});
 
   sizes(); updateCount(); render(); setTimeout(nudge, 900);
 })();
