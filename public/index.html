@@ -14,7 +14,7 @@
 img { max-width: 100%; }
 body { margin: 0; }
 /* Layout: no grid, no sections-with-headings. One drifting night sky; a potato that floats and
-   bakes while pinned; vibes as glowing orbs scattered in the sky; a messy pile of glass cards.
+   bakes, cracks and smokes while pinned; a small row of glowing vibe dots; a messy pile of glass cards.
    Words are few, small, and handwritten. Single deliberate dark look. */
 :root {
   --night: #1a2552;
@@ -85,7 +85,18 @@ main { position: relative; z-index: 2; }
 .spud-wrap { position: absolute; left: 50%; top: 50%; width: min(52vw, 300px); transform: translate(-30%, -52%) rotate(calc(-6deg + 10deg * var(--p))); }
 .heat { position: absolute; inset: -45% -60%; border-radius: 50%; filter: blur(30px);
   background: radial-gradient(circle, rgba(242, 196, 90, calc(.18 + .55 * var(--p))), rgba(232, 85, 58, calc(.25 * var(--p))) 45%, transparent 70%); }
-.spud { position: relative; width: 100%; animation: bob 7s ease-in-out infinite;
+.spud-float { position: relative; animation: bob 7s ease-in-out infinite; }
+.marks { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible;
+  -webkit-mask: url("potato-dreamy.webp") center / 100% 100% no-repeat; mask: url("potato-dreamy.webp") center / 100% 100% no-repeat;
+  --toast: clamp(0, (var(--p) - .2) * 1.8, 1); --char: clamp(0, (var(--p) - .45) * 2.4, 1); --crack: clamp(0, (var(--p) - .32) * 1.9, 1); }
+.marks .toast ellipse { fill: #7a360c; opacity: calc(.55 * var(--toast)); filter: url(#soft); }
+.marks .char path { fill: none; stroke: #4a1d06; stroke-width: 9px; stroke-linecap: round; opacity: calc(.32 * var(--char)); filter: url(#wrinkle); }
+.marks .crack-shadow { fill: none; stroke: #2a0e03; stroke-width: calc(10px + 26px * var(--crack)); stroke-linejoin: round; stroke-linecap: round; opacity: calc(.5 * var(--crack)); filter: url(#soft); }
+.marks .crack { fill: none; stroke: #3a1404; stroke-width: calc(2px + 14px * var(--crack)); filter: url(#softer); stroke-linejoin: round; stroke-linecap: round;
+  stroke-dasharray: 1px; stroke-dashoffset: calc(1px - 1px * var(--crack)); }
+.marks .crack-glow { fill: none; stroke: #ffd98a; stroke-width: calc(1px + 5px * var(--crack)); stroke-linejoin: round; stroke-linecap: round;
+  stroke-dasharray: 1px; stroke-dashoffset: calc(1px - 1px * var(--crack)); opacity: calc(.85 * var(--crack)); filter: url(#wrinkle); }
+.spud { position: relative; width: 100%; display: block;
   filter: saturate(calc(.3 + 1 * var(--p))) brightness(calc(1.25 - .3 * var(--p))) hue-rotate(calc(-14deg + 14deg * var(--p))); }
 @keyframes bob { 50% { transform: translateY(-14px) rotate(2deg); } }
 .hello { position: absolute; left: max(22px, 8vw); bottom: 18vh; max-width: 14ch; font-size: clamp(38px, 7vw, 64px); transform: rotate(-5deg);
@@ -100,31 +111,20 @@ main { position: relative; z-index: 2; }
 .done { position: absolute; left: 50%; bottom: 9vh; transform: translateX(-50%) rotate(-3deg); font-size: clamp(34px, 6vw, 56px); color: var(--gold);
   opacity: calc((var(--p) - .9) * 10); text-align: center; white-space: nowrap; }
 
-/* ---------- vibes: orbs floating in the sky ---------- */
-.vibes { position: relative; padding: 14vh max(18px, env(safe-area-inset-right, 0px)) 10vh max(18px, env(safe-area-inset-left, 0px)); }
-.vibes .ask { font-size: clamp(44px, 8vw, 84px); max-width: 11ch; transform: rotate(-4deg); margin-left: 4vw; }
-.orbs { position: relative; max-width: 980px; margin: 6vh auto 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 3vh 4vw; }
-.orb {
-  --base: 170px; --s: var(--base); width: var(--s); height: var(--s); border-radius: 50%; border: 0; cursor: pointer; position: relative;
-  display: grid; place-items: center; background: none; padding: 0;
-  transform: translate(var(--x, 0), var(--y, 0)); animation: float var(--d, 9s) ease-in-out infinite; animation-delay: var(--dl, 0s);
-}
-.orb::before { content: ""; position: absolute; inset: 0; border-radius: 50%; filter: blur(18px);
-  background: radial-gradient(circle at 40% 38%, var(--c), transparent 68%); opacity: .85; transition: transform .3s ease, opacity .3s ease; }
-.orb::after { content: ""; position: absolute; inset: 28%; border-radius: 50%; filter: blur(8px); background: var(--c); opacity: .55; }
-.orb span { position: relative; z-index: 1; font-weight: 700; font-size: 15px; letter-spacing: -.01em; text-transform: lowercase; max-width: 9ch; text-align: center;
-  text-shadow: 0 1px 12px rgba(10, 14, 40, .8); }
-.orb:hover::before, .orb:focus-visible::before { transform: scale(1.18); opacity: 1; }
-.orb[aria-pressed="true"] span { text-decoration: underline wavy var(--gold); text-underline-offset: 6px; }
-@keyframes float { 50% { transform: translate(var(--x, 0), calc(var(--y, 0px) - 16px)); } }
-.orb-hint { text-align: center; margin-top: 4vh; font-size: 28px; color: var(--cream-dim); transform: rotate(-2deg); }
+/* ---------- vibe row: small glowing dots above the pile ---------- */
+.vibe-row { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 6px 14px; max-width: 560px; }
+.vibe-row > .hand { font-size: 26px; color: var(--cream-dim); margin-right: 2px; }
+.vibe { display: inline-flex; align-items: center; gap: 7px; background: none; border: 0; padding: 4px 2px; cursor: pointer; font-size: 13.5px; color: var(--cream-dim);
+  text-transform: lowercase; transform: rotate(var(--r, 0deg)); }
+.vibe i { width: 9px; height: 9px; border-radius: 50%; background: var(--c); box-shadow: 0 0 10px 2px var(--c); opacity: .7; }
+.vibe:hover { color: var(--cream); }
+.vibe[aria-pressed="true"] { color: var(--cream); text-decoration: underline wavy var(--gold); text-underline-offset: 5px; }
+.vibe[aria-pressed="true"] i { opacity: 1; box-shadow: 0 0 14px 4px var(--c); }
 
 /* ---------- the pile ---------- */
 .pile-zone { position: relative; padding: 8vh max(18px, env(safe-area-inset-right, 0px)) 22vh max(18px, env(safe-area-inset-left, 0px)); display: grid; justify-items: center; gap: 22px; }
 .pile-zone .say { font-size: clamp(36px, 6vw, 60px); transform: rotate(3deg); text-align: center; }
 .pile-zone .say em { font-style: normal; color: var(--gold); }
-.filter-note { font-size: 24px; color: var(--cream-dim); }
-.filter-note button { background: none; border: 0; cursor: pointer; text-decoration: underline; font: inherit; color: var(--gold); padding: 0 4px; }
 .deck { position: relative; width: min(330px, 84vw); height: 500px; touch-action: pan-y; outline: none; margin-top: 10px; }
 .card { position: absolute; inset: 0; border-radius: 28px; padding: 12px; display: grid; grid-template-rows: auto 1fr; gap: 12px;
   user-select: none; -webkit-user-select: none; cursor: grab; will-change: transform; transition: transform .35s ease; }
@@ -181,14 +181,12 @@ main { position: relative; z-index: 2; }
   text-align: center; font-size: 22px; color: var(--cream-dim); }
 
 @media (max-width: 640px) {
-  .orb { --base: 132px; }
-  .orb span { font-size: 13.5px; }
   .spud-wrap { width: 58vw; transform: translate(-45%, -58%) rotate(calc(-6deg + 10deg * var(--p))); }
   .hello { bottom: 12vh; }
   .pct { top: 14vh; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .blob, .shoot, .grain, .spud, .orb, .stash-pill.bump { animation: none !important; }
+  .blob, .shoot, .grain, .spud-float, .stash-pill.bump { animation: none !important; }
   .card, .note { transition: none !important; }
 }
 </style>
@@ -209,7 +207,19 @@ main { position: relative; z-index: 2; }
   <section class="oven" aria-label="A potato baking as you scroll">
     <div class="stage" id="stage">
       <canvas id="smoke" aria-hidden="true"></canvas>
-      <div class="spud-wrap"><div class="heat"></div><img class="spud" src="potato-dreamy.webp" alt="A glowing potato"></div>
+      <div class="spud-wrap"><div class="heat"></div>
+        <div class="spud-float">
+          <img class="spud" src="potato-dreamy.webp" alt="A glowing potato, browning and cracking open as it bakes">
+          <svg class="marks" id="marks" viewBox="0 0 561 900" aria-hidden="true">
+            <defs><filter id="soft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="7"/></filter><filter id="softer"><feGaussianBlur stdDeviation="1.6"/></filter><filter id="wrinkle" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="3.5"/></filter></defs>
+            <g class="toast"><ellipse cx="419" cy="330" rx="60" ry="22" transform="rotate(-5 419 330)"/><ellipse cx="338" cy="367" rx="27" ry="17" transform="rotate(-8 338 367)"/><ellipse cx="381" cy="322" rx="53" ry="26" transform="rotate(13 381 322)"/><ellipse cx="313" cy="617" rx="59" ry="19" transform="rotate(10 313 617)"/><ellipse cx="290" cy="255" rx="54" ry="32" transform="rotate(21 290 255)"/><ellipse cx="299" cy="183" rx="32" ry="34" transform="rotate(-28 299 183)"/><ellipse cx="235" cy="321" rx="28" ry="32" transform="rotate(11 235 321)"/><ellipse cx="302" cy="265" rx="29" ry="27" transform="rotate(-21 302 265)"/><ellipse cx="224" cy="186" rx="46" ry="27" transform="rotate(-14 224 186)"/><ellipse cx="184" cy="585" rx="31" ry="22" transform="rotate(-8 184 585)"/><ellipse cx="127" cy="762" rx="29" ry="26" transform="rotate(37 127 762)"/><ellipse cx="302" cy="759" rx="28" ry="31" transform="rotate(15 302 759)"/><ellipse cx="297" cy="255" rx="28" ry="30" transform="rotate(17 297 255)"/><ellipse cx="310" cy="691" rx="36" ry="30" transform="rotate(-20 310 691)"/><ellipse cx="276" cy="251" rx="44" ry="21" transform="rotate(8 276 251)"/><ellipse cx="152" cy="558" rx="48" ry="22" transform="rotate(19 152 558)"/></g>
+            <g class="char"><path d="M247,230 Q236,260 230,275 Q224,290 218,305 Q213,320 206,335 Q199,350 196,365 Q192,380 187,395 Q181,410 175,425 Q169,440 168,455 Q167,470 165,485 L164,500"/><path d="M161,330 Q156,360 148,375 Q140,390 134,405 Q128,420 127,435 Q127,450 123,465 Q119,480 121,495 Q124,510 121,525 Q118,540 116,555 Q115,570 114,585 Q114,600 113,615 Q113,630 112,645 Q112,660 114,675 L116,690"/><path d="M176,560 Q170,590 168,605 Q166,620 165,635 Q165,650 168,665 Q171,680 171,695 Q171,710 175,725 Q180,740 181,755 L182,770"/><path d="M403,200 Q397,230 391,245 Q385,260 378,275 Q371,290 365,305 Q359,320 353,335 Q346,350 341,365 Q335,380 329,395 L322,410"/><path d="M411,300 Q397,330 390,345 Q383,360 379,375 Q375,390 368,405 Q361,420 358,435 Q355,450 355,465 Q355,480 356,495 Q357,510 353,525 Q349,540 352,555 L354,570"/><path d="M304,480 Q302,510 302,525 Q301,540 302,555 Q302,570 302,585 Q303,600 301,615 Q299,630 299,645 Q300,660 298,675 Q296,690 299,705 L302,720"/></g>
+            <path class="crack-shadow" d="M361,170 Q351,196 345,209 Q339,222 331,235 Q324,248 318,261 Q313,274 309,287 Q305,300 298,313 Q290,326 286,339 Q282,352 281,365 Q279,378 274,391 Q269,404 266,417 Q263,430 261,443 Q259,456 257,469 Q255,482 252,495 Q249,508 248,521 Q246,534 247,547 Q248,560 246,573 Q245,586 245,599 Q245,612 246,625 Q247,638 247,651 Q246,664 249,677 Q251,690 251,703 L250,716"/>
+            <path class="crack" d="M361,170 Q351,196 345,209 Q339,222 331,235 Q324,248 318,261 Q313,274 309,287 Q305,300 298,313 Q290,326 286,339 Q282,352 281,365 Q279,378 274,391 Q269,404 266,417 Q263,430 261,443 Q259,456 257,469 Q255,482 252,495 Q249,508 248,521 Q246,534 247,547 Q248,560 246,573 Q245,586 245,599 Q245,612 246,625 Q247,638 247,651 Q246,664 249,677 Q251,690 251,703 L250,716" pathLength="1"/>
+            <path class="crack-glow" d="M361,170 Q351,196 345,209 Q339,222 331,235 Q324,248 318,261 Q313,274 309,287 Q305,300 298,313 Q290,326 286,339 Q282,352 281,365 Q279,378 274,391 Q269,404 266,417 Q263,430 261,443 Q259,456 257,469 Q255,482 252,495 Q249,508 248,521 Q246,534 247,547 Q248,560 246,573 Q245,586 245,599 Q245,612 246,625 Q247,638 247,651 Q246,664 249,677 Q251,690 251,703 L250,716" pathLength="1"/>
+          </svg>
+        </div>
+      </div>
       <p class="hello hand">what to watch when you're baked<small>scroll. let it cook.</small></p>
       <p class="pct hand" aria-hidden="true"><span id="pct">0</span>%<small>baked</small></p>
       <p class="note hand" data-at=".22" data-on="false" style="--r:-6deg; left: 12vw; top: 30vh">warming up...</p>
@@ -219,15 +229,10 @@ main { position: relative; z-index: 2; }
     </div>
   </section>
 
-  <section class="vibes" id="vibes" aria-labelledby="vibes-q">
-    <p class="ask hand" id="vibes-q">what kind of night is it?</p>
-    <div class="orbs" id="orbs"></div>
-    <p class="orb-hint hand">tap one. or don't. we're not your mom.</p>
-  </section>
 
   <section class="pile-zone" id="pile" aria-labelledby="pile-say">
     <p class="say hand" id="pile-say">swipe right to <em>stash it</em>. left to pass.</p>
-    <p class="filter-note hand" id="filter-note" hidden></p>
+    <div class="vibe-row" id="vibe-row" role="group" aria-label="Filter by vibe"><span class="hand">vibe:</span></div>
     <div class="deck" id="deck" tabindex="0" aria-label="Movie cards. Left and right arrow keys pass or stash."></div>
     <div class="ctrls">
       <button class="round glass" id="pass" type="button" aria-label="Pass"><span class="hand">pass</span></button>
@@ -346,7 +351,17 @@ main { position: relative; z-index: 2; }
 
   // ---------- smoke: long soft wisps ----------
   var smoke = document.getElementById('smoke'), mx = smoke.getContext('2d'), parts = [], inView = false, running = false;
-  var spudImg = document.querySelector('.spud');
+  var spudImg = document.querySelector('.spud'), marksSvg = document.getElementById('marks'), crackPath = marksSvg.querySelector('.crack');
+  var crackLen = crackPath.getTotalLength();
+  function fromCrack() {
+    var crack = Math.min(1, Math.max(0, (P - .32) * 1.9)); if (crack <= 0) return;
+    var m = marksSvg.getScreenCTM(); if (!m) return;
+    var q = crackPath.getPointAtLength(Math.random() * crack * crackLen), pt = marksSvg.createSVGPoint();
+    pt.x = q.x; pt.y = q.y; pt = pt.matrixTransform(m);
+    var b = smoke.getBoundingClientRect();
+    parts.push({ x: pt.x - b.left, y: pt.y - b.top, r: 3 + Math.random() * 4, life: 0, max: 200 + Math.random() * 180, ph: Math.random() * 6.28,
+      vy: 1.1 + Math.random() * 1.2, amp: .3 + Math.random() * .9, jet: true, hue: Math.random() < .12 });
+  }
   function sizeSmoke() { var d = Math.min(devicePixelRatio || 1, 2); smoke.width = smoke.clientWidth * d; smoke.height = smoke.clientHeight * d; mx.setTransform(d, 0, 0, d, 0, 0); }
   sizeSmoke();
   function spawn() {
@@ -358,15 +373,17 @@ main { position: relative; z-index: 2; }
     if (!inView) { running = false; return; }
     drawStars(t);
     var w = smoke.clientWidth, h = smoke.clientHeight; mx.clearRect(0, 0, w, h);
-    var rate = .15 + P * P * 3.5;
+    var rate = .3 + P * P * 6;
     for (var k = 0; k < Math.floor(rate) + (Math.random() < rate % 1 ? 1 : 0); k++) spawn();
+    var jet = P > .35 ? (P - .35) * 9 : 0;
+    for (k = 0; k < Math.floor(jet) + (Math.random() < jet % 1 ? 1 : 0); k++) fromCrack();
     for (var i = parts.length - 1; i >= 0; i--) {
-      var p = parts[i]; p.life++; p.y -= p.vy; p.x += Math.sin(p.ph + p.life * .022) * p.amp; p.r += .16;
+      var p = parts[i]; p.life++; p.y -= p.vy; p.x += Math.sin(p.ph + p.life * .022) * p.amp * Math.min(1, p.life / 60); p.r += p.jet ? .2 : .18;
       var u = p.life / p.max, a = u < .12 ? u / .12 : 1 - (u - .12) / .88;
       if (p.life > p.max) { parts.splice(i, 1); continue; }
-      var col = p.hue ? '242,196,90' : '230,222,240';
+      var col = p.hue ? '242,196,90' : p.jet ? '244,238,246' : '230,222,240';
       var g = mx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r);
-      g.addColorStop(0, 'rgba(' + col + ',' + (a * .10 * (.35 + P * .65)).toFixed(3) + ')'); g.addColorStop(1, 'rgba(' + col + ',0)');
+      g.addColorStop(0, 'rgba(' + col + ',' + (a * (p.jet ? .2 : .14) * (.35 + P * .65)).toFixed(3) + ')'); g.addColorStop(1, 'rgba(' + col + ',0)');
       mx.fillStyle = g; mx.beginPath(); mx.arc(p.x, p.y, p.r, 0, 6.283); mx.fill();
     }
     requestAnimationFrame(frame);
@@ -377,24 +394,18 @@ main { position: relative; z-index: 2; }
   // keep stars twinkling when the oven is off screen
   (function twinkle(t) { if (!inView && !reduce) drawStars(t); if (!reduce) requestAnimationFrame(twinkle); })(0);
 
-  // ---------- orbs ----------
-  var orbs = document.getElementById('orbs'), filter = 'all';
-  var OFFS = [['-1vw', '2vh'], ['2vw', '-2vh'], ['-2vw', '3vh'], ['1vw', '0vh'], ['-1vw', '-2vh'], ['2vw', '2vh'], ['-2vw', '-1vh'], ['1vw', '3vh']];
-  CATS.forEach(function (c, i) {
-    var b = document.createElement('button'); b.type = 'button'; b.className = 'orb';
-    b.style.setProperty('--c', c.c); b.style.setProperty('--x', OFFS[i][0]); b.style.setProperty('--y', OFFS[i][1]);
-    b.style.setProperty('--d', (7 + (i * 1.7) % 5) + 's'); b.style.setProperty('--dl', (-i * 1.3) + 's');
-    if (i % 3 === 1) b.style.setProperty('--s', 'calc(var(--base, 170px) * 1.2)');
-    var sp = document.createElement('span'); sp.textContent = c.name; b.appendChild(sp);
-    b.addEventListener('click', function () {
-      setFilter(filter === c.id ? 'all' : c.id);
-      if (filter !== 'all') document.getElementById('pile').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' });
-    });
-    orbs.appendChild(b);
+  // ---------- vibe row ----------
+  var vibes = document.getElementById('vibe-row'), filter = 'all';
+  [{ id: 'all', name: 'everything', c: '#f0dcc0' }].concat(CATS).forEach(function (c, i) {
+    var b = document.createElement('button'); b.type = 'button'; b.className = 'vibe'; b.dataset.id = c.id;
+    b.style.setProperty('--c', c.c); b.style.setProperty('--r', ((i * 37) % 7 - 3) + 'deg');
+    b.innerHTML = '<i></i>'; b.appendChild(document.createTextNode(c.name));
+    b.addEventListener('click', function () { setFilter(filter === c.id ? 'all' : c.id); });
+    vibes.appendChild(b);
   });
 
   // ---------- pile ----------
-  var deck = document.getElementById('deck'), seen = {}, note = document.getElementById('filter-note');
+  var deck = document.getElementById('deck'), seen = {};
   function queue() {
     return MOVIES.filter(function (m) {
       return !seen[m.id] && stash.indexOf(m.id) < 0 && (filter === 'all' ? m.cats.indexOf('sober') < 0 : m.cats.indexOf(filter) > -1);
@@ -402,13 +413,7 @@ main { position: relative; z-index: 2; }
   }
   function setFilter(id) {
     filter = id;
-    [].forEach.call(orbs.children, function (b, i) { b.setAttribute('aria-pressed', String(CATS[i].id === id)); });
-    if (id === 'all') { note.hidden = true; }
-    else {
-      note.hidden = false; note.textContent = 'only ' + cat(id).name + ' ';
-      var clr = document.createElement('button'); clr.type = 'button'; clr.textContent = '(show everything)';
-      clr.addEventListener('click', function () { setFilter('all'); }); note.appendChild(clr);
-    }
+    [].forEach.call(vibes.querySelectorAll('.vibe'), function (b) { b.setAttribute('aria-pressed', String(b.dataset.id === id)); });
     render();
   }
   function bloomHTML(m) {
