@@ -46,7 +46,7 @@ one line of small text under the poster ("← pass · tap for the plot · stash 
 button), and on a first visit the top poster peels a little to the right, then to the
 left, to show the gesture, until someone peels or flips. Owner wants these low key, not flash cards. The
 filters are called **categories** (not vibes) on the page. The stash list shows a mini
-poster beside each title. A one/grid toggle at the start of the nav switches to a
+poster beside each title. A one/grid toggle (glass, floating top right under the header card, not in the nav) switches to a
 scrolling grid of every poster left (tap one to open it on top of the stack); the choice
 is remembered.
 
