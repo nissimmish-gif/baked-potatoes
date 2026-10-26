@@ -50,8 +50,6 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
 /* ---------- night scene ---------- */
 #twinkle { position: fixed; inset: 0; width: 100%; height: 100%; display: block; pointer-events: none; }
 #scene { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
-.grain { position: fixed; inset: 0; pointer-events: none; z-index: 1; opacity: .35; mix-blend-mode: overlay;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='.6'/></svg>"); }
 
 /* ---------- top line ---------- */
 /* ---------- flash card parts (shared) ---------- */
@@ -154,7 +152,11 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
 .back .fc-frame { position: absolute; inset: 4%; display: flex; flex-direction: column; padding: 4%; gap: calc(var(--W) * .022); }
 .back .trailer { flex: 0 0 auto; aspect-ratio: 16 / 9; background: #111; border-radius: 2px; overflow: hidden; }
 .back .trailer iframe { display: block; width: 100%; height: 100%; border: 0; }
-.back .trailer:not([hidden]) ~ .plot { display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+.back .trailer { position: relative; }
+.back .trailer .big { position: absolute; right: 6px; top: 6px; padding: 4px 8px 5px; background: rgba(20,20,20,.78); color: #fff; font-size: 11px; font-weight: 500; text-decoration: none; border-radius: 3px; text-transform: lowercase; }
+.back .plot { flex-shrink: 0; }
+.back .trailer:not([hidden]) ~ .plot { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.back .trailer:not([hidden]) ~ dl dt:nth-of-type(n+3), .back .trailer:not([hidden]) ~ dl dd:nth-of-type(n+3) { display: none; }
 .back .head { display: flex; justify-content: space-between; align-items: flex-end; gap: 10px; }
 .back .fc-label { font-size: calc(var(--W) * .1); }
 .spud { height: 1.6em; width: auto; margin-right: .18em; vertical-align: -.42em; transform: rotate(8deg); filter: drop-shadow(0 0 .5px rgba(27,26,23,.9)) drop-shadow(0 1px 0 rgba(27,26,23,.25)); }
@@ -225,17 +227,40 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
 }
 
 /* the paper roll when a poster is sent off */
-.roll { position: absolute; inset: 0; z-index: 50; perspective: 1400px; transform-style: preserve-3d; pointer-events: none; }
+.roll { position: absolute; inset: 0; z-index: 50; pointer-events: none; }
+.roll .rframe { position: absolute; perspective: 1400px; transform-style: preserve-3d; }
 .roll .strip { position: absolute; left: 0; width: 100%; transform-style: preserve-3d; }
-.roll .sf, .roll .sb, .roll .shade { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
-.roll .sf { overflow: hidden; }
-.roll .sb { background: #e4d8bd; transform: rotateX(180deg); }
-.roll .shade { background: #1b1a17; opacity: 0; }
-.roll .hl { position: absolute; inset: 0; background: #fffaf0; opacity: 0; transform: rotateX(180deg); backface-visibility: hidden; -webkit-backface-visibility: hidden; }
-.roll .cast { position: absolute; left: 0; right: 0; top: 0; opacity: 0; background: linear-gradient(rgba(0,0,0,.42), rgba(0,0,0,0)); transform: translateZ(.5px); pointer-events: none; }
+.roll .sf, .roll .sb { position: absolute; left: 0; top: 0; width: 100%; height: 100%; display: block; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+div.sf { overflow: hidden; }
+.roll .sb { transform: rotateX(180deg); }
+.roll .pc { position: absolute; }
+.roll .pc .face { box-shadow: none; border-radius: 0; }
+.roll .face::after { display: none; }
 .roll *, .roll *::after { mix-blend-mode: normal !important; }
-.roll .face { box-shadow: none; border-radius: 0; }
+.roll .castclip { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+.roll .cast { position: absolute; left: 0; right: 0; top: 0; opacity: 0; background: linear-gradient(rgba(0,0,0,.42), rgba(0,0,0,0)); }
 .roll .tag { top: auto; bottom: 9%; z-index: 60; }
+
+/* grid view: every poster in a scrolling grid */
+.views { display: inline-flex; border: 2px solid var(--fc-line); border-radius: 3px; overflow: hidden; }
+.views button { display: grid; place-items: center; width: 28px; height: 24px; color: var(--fc-line); }
+.views button + button { border-left: 2px solid var(--fc-line); }
+.views svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.6; }
+.views button[aria-pressed="true"] { background: var(--fc-line); color: var(--fc-paper); text-decoration: none; }
+body.gridview .wall, body.gridview .top { display: none; }
+.grid { position: fixed; inset: 0; z-index: 4; overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch;
+  padding: calc(18px + env(safe-area-inset-top, 0px)) 16px calc(96px + env(safe-area-inset-bottom, 0px)); }
+.tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 22px 14px; max-width: 1100px; margin: 0 auto; }
+.tile { display: block; text-align: left; color: var(--cream); }
+.tile .poster-mini { position: relative; display: block; width: 100%; aspect-ratio: 2 / 3; box-shadow: 0 14px 28px -12px rgba(0,0,0,.8); }
+.tile .poster-mini .face { box-shadow: none; }
+.tile .poster-mini *, .tile .poster-mini *::after { mix-blend-mode: normal !important; }
+.tile .info { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-top: 8px; }
+.tile .nm { font-size: 13px; font-weight: 500; text-transform: lowercase; line-height: 1.2; min-width: 0; }
+.tile .sc { font-size: 13px; font-weight: 600; color: var(--ink-yellow); white-space: nowrap; }
+.tile .sc .spud { filter: none; }
+.grid .none { text-align: center; color: var(--soft); padding: 40px 0; }
+@media (hover: hover) { .tile:hover .poster-mini { transform: translateY(-3px); transition: transform .2s ease; } }
 
 /* mini posters in the stash */
 .drawer .r.st { grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 12px; }
@@ -250,10 +275,10 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
 <body>
 <canvas id="scene" aria-hidden="true"></canvas>
 <canvas id="twinkle" aria-hidden="true"></canvas>
-<div class="grain" aria-hidden="true"></div>
 
 <header class="top fc-card" aria-live="polite"><div class="fc-frame"><div class="ti"><h1 class="fc-label" id="top-title">tonight</h1><p id="top-meta"></p></div><div class="rate"><b id="top-score"></b><small id="top-tier"></small></div></div></header>
 
+<section class="grid" id="grid" hidden aria-label="All posters"><div class="tiles" id="tiles"></div></section>
 <main class="wall">
   <div class="deck" id="deck">
     <div class="stack" id="stack" aria-label="Poster stack. Drag right to stash, left to pass, tap to flip. Arrow keys work too." tabindex="0"></div>
@@ -266,6 +291,10 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
 </main>
 
 <nav class="pill fc-card" aria-label="Library"><div class="fc-frame">
+  <span class="views" role="group" aria-label="View">
+    <button type="button" id="view-one" aria-pressed="true" aria-label="One at a time"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="4" y="2" width="8" height="12" rx="1"/></svg></button>
+    <button type="button" id="view-grid" aria-pressed="false" aria-label="Grid"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="2" y="2" width="5" height="5" rx=".6"/><rect x="9" y="2" width="5" height="5" rx=".6"/><rect x="2" y="9" width="5" height="5" rx=".6"/><rect x="9" y="9" width="5" height="5" rx=".6"/></svg></button>
+  </span>
   <button type="button" data-k="movie" aria-pressed="false">films</button>
   <button type="button" data-k="tv" aria-pressed="false">tv</button>
   <button type="button" id="vibe-btn" aria-expanded="false">categories</button>
@@ -310,22 +339,29 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
     stars = [];
     for (var i = 0; i < Math.max(40, w * h / 5000); i++) stars.push({ x: r() * w, y: r() * h, s: .7 + r() * r() * 1.8, ph: r() * 6.283, sp: .6 + r() * 1.6, glint: r() < .08, blue: r() < .3 });
   }
+  // each star is a soft dot drawn once into a small sprite, then stamped with its brightness
+  function sprite(col) {
+    var c = document.createElement('canvas'); c.width = c.height = 32; var x = c.getContext('2d'), g = x.createRadialGradient(16, 16, 0, 16, 16, 16);
+    g.addColorStop(0, 'rgba(' + col + ',1)'); g.addColorStop(.35, 'rgba(' + col + ',.45)'); g.addColorStop(1, 'rgba(' + col + ',0)');
+    x.fillStyle = g; x.fillRect(0, 0, 32, 32); return c;
+  }
+  var WARM = sprite('255,250,236'), COOL = sprite('200,214,255');
   function drawStars(time) {
     tx.clearRect(0, 0, innerWidth, innerHeight);
     for (var i = 0; i < stars.length; i++) {
       var st = stars[i], a = reduce ? .6 : Math.pow(.5 + .5 * Math.sin(time / 1000 * st.sp + st.ph), 3);
       if (a < .03) continue;
-      var col = st.blue ? '200,214,255' : '255,250,236', rad = st.s * 2.4, g = tx.createRadialGradient(st.x, st.y, 0, st.x, st.y, rad);
-      g.addColorStop(0, 'rgba(' + col + ',' + a + ')'); g.addColorStop(.35, 'rgba(' + col + ',' + a * .45 + ')'); g.addColorStop(1, 'rgba(' + col + ',0)');
-      tx.fillStyle = g; tx.beginPath(); tx.arc(st.x, st.y, rad, 0, 6.283); tx.fill();
-      if (st.glint && a > .5) { var gl = 4 + st.s * 4 * a; tx.strokeStyle = 'rgba(255,250,236,' + (a - .5) * 1.2 + ')'; tx.lineWidth = .7; tx.beginPath(); tx.moveTo(st.x - gl, st.y); tx.lineTo(st.x + gl, st.y); tx.moveTo(st.x, st.y - gl); tx.lineTo(st.x, st.y + gl); tx.stroke(); }
+      var rad = st.s * 2.4; tx.globalAlpha = a; tx.drawImage(st.blue ? COOL : WARM, st.x - rad, st.y - rad, rad * 2, rad * 2);
+      if (st.glint && a > .5) { var gl = 4 + st.s * 4 * a; tx.globalAlpha = (a - .5) * 1.2; tx.strokeStyle = '#fffaec'; tx.lineWidth = .7; tx.beginPath(); tx.moveTo(st.x - gl, st.y); tx.lineTo(st.x + gl, st.y); tx.moveTo(st.x, st.y - gl); tx.lineTo(st.x, st.y + gl); tx.stroke(); }
     }
+    tx.globalAlpha = 1;
   }
-  var lastT = 0;
-  function loop(time) { if (time - lastT > 40) { lastT = time; drawStars(time); } requestAnimationFrame(loop); }
+  // the stars hold still while a poster is being peeled, so the peel gets the whole frame
+  var lastT = 0, peeling = 0;
+  function loop(time) { if (!peeling && time - lastT > 50) { lastT = time; drawStars(time); } requestAnimationFrame(loop); }
   paint(); seedStars();
   if (reduce) drawStars(0); else requestAnimationFrame(loop);
-  var lastW = innerWidth; addEventListener('resize', function () { if (innerWidth !== lastW || Math.abs(innerHeight - H) > 120) { lastW = innerWidth; paint(); seedStars(); if (reduce) drawStars(0); } sizes(); });
+  var lastW = innerWidth; addEventListener('resize', function () { if (innerWidth !== lastW || Math.abs(innerHeight - H) > 120) { lastW = innerWidth; paint(); seedStars(); if (reduce) drawStars(0); } sizes(); if (view === 'grid') render(); });
 
   // ---------- data (credits from memory; scores are placeholders) ----------
   // kind, title, year, dir, cast, runtime, genre, vibes, score, tagline, plot, style, colours [a, b, c]
@@ -436,13 +472,41 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
   // ---------- stack ----------
   var stack = document.getElementById('stack'), kindF = 'all', vibeF = 'all', seen = {};
   function sizes() { var w = Math.min(innerWidth * (innerWidth < 600 ? .7 : .84), (innerHeight - 270) / 1.5, 380); document.documentElement.style.setProperty('--W', Math.round(w) + 'px'); }
-  function queue() { return T.filter(function (t) { return !seen[t.key] && stash.indexOf(t.key) < 0 && (kindF === 'all' || t.kind === kindF) && (vibeF === 'all' ? t.vibes.indexOf('sober') < 0 : t.vibes.indexOf(vibeF) > -1); }); }
+  var view = 'one', pin = null, grid = document.getElementById('grid'), tiles = document.getElementById('tiles');
+  try { view = localStorage.getItem('baked-potatoes-view') === 'grid' ? 'grid' : 'one'; } catch (e) {}
+  function setView(v) {
+    view = v; document.body.classList.toggle('gridview', v === 'grid'); grid.hidden = v !== 'grid';
+    document.getElementById('view-one').setAttribute('aria-pressed', String(v === 'one'));
+    document.getElementById('view-grid').setAttribute('aria-pressed', String(v === 'grid'));
+    try { localStorage.setItem('baked-potatoes-view', v); } catch (e) {}
+    render();
+  }
+  // smaller TMDB sizes and lazy loading for the grid and stash thumbnails
+  function small(html, size) { return html.replace(/\/t\/p\/w780\//g, '/t/p/' + size + '/').replace(/<img /g, '<img loading="lazy" decoding="async" '); }
+  function drawGrid(q) {
+    tiles.innerHTML = '';
+    var cols = Math.max(2, Math.floor((Math.min(1100, innerWidth - 32) + 14) / (150 + 14))), w = (Math.min(1100, innerWidth - 32) - 14 * (cols - 1)) / cols;
+    tiles.style.setProperty('--W', Math.floor(w) + 'px');
+    if (!q.length) { tiles.innerHTML = '<p class="none">That\'s all of them. Check your stash or pick another category.</p>'; return; }
+    q.forEach(function (t) {
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'tile';
+      b.innerHTML = '<span class="poster-mini" aria-hidden="true"><span class="face mount"><span class="mat">' + small(front(t), 'w342') + '</span></span></span><span class="info"><span class="nm"></span><span class="sc">' + SPUD + rating(t) + '</span></span>';
+      b.querySelector('.nm').textContent = t.title;
+      b.setAttribute('aria-label', t.title + ', ' + rating(t) + ' out of 10. Open it.');
+      b.addEventListener('click', function () { pin = t.key; setView('one'); });
+      tiles.appendChild(b);
+    });
+  }
+  function queue() { var q = T.filter(function (t) { return !seen[t.key] && stash.indexOf(t.key) < 0 && (kindF === 'all' || t.kind === kindF) && (vibeF === 'all' ? t.vibes.indexOf('sober') < 0 : t.vibes.indexOf(vibeF) > -1); });
+    if (pin) { var i = q.findIndex(function (t) { return t.key === pin; }); if (i > 0) q.unshift(q.splice(i, 1)[0]); }
+    return q; }
   function render() {
     stopNudge();
     stack.innerHTML = '';
     var q = queue();
     vb.textContent = vibeF === 'all' ? 'categories' : vibeName(vibeF).toLowerCase();
     showTop(q[0]);
+    if (view === 'grid') drawGrid(q);
     deck.classList.toggle('empty', !q.length); pull(0, 0); capText(false);
     if (!q.length) {
       var d = document.createElement('div'); d.className = 'done fc-card';
@@ -460,6 +524,9 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
       el._t = t; stack.appendChild(el);
     });
     bind();
+    var top = topEl(), img = top && top.querySelector('.mount .p-real img');
+    function prep() { (window.requestIdleCallback || setTimeout)(function () { if (top === topEl()) snapshot(top); }); }
+    if (img) { if (img.complete) prep(); else img.addEventListener('load', prep, { once: true }); }
   }
   function showTop(t) {
     document.getElementById('top-title').textContent = t ? t.title : 'that\'s all of them';
@@ -477,8 +544,11 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
     });
     el.addEventListener('pointermove', function (e) {
       if (!down) return; dx = e.clientX - x0; dy = e.clientY - y0;
-      if (!moved && Math.abs(dx) + Math.abs(dy) > 8) { moved = true; pr = peel(el); }
-      if (!pr) return;
+      if (!moved && Math.abs(dx) + Math.abs(dy) > 8) moved = true;
+      if (!moved) return;
+      var dir = dx >= 0 ? 1 : -1;
+      if (!pr) pr = peel(el, dir);
+      else if (pr.dir !== dir && Math.abs(dx) > 14) { pr.remove(); pr = peel(el, dir); }
       // the further you drag, the further the top rolls down; the sheet follows your finger
       var p = Math.min(.82, Math.hypot(dx, Math.max(dy, 0) * 1.4) / (el.offsetWidth * 1.15));
       pr.set(p, dx * .55, Math.max(-20, dy * .25), dx);
@@ -503,55 +573,99 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
     if (keep) { if (stash.indexOf(t.key) < 0) stash.push(t.key); save(); updateCount(); } else seen[t.key] = true;
     pull(0, 0);
     if (reduce) { if (pr) pr.remove(); render(); return; }
-    (pr || peel(el)).leave(keep); render();
+    (pr || peel(el, keep ? 1 : -1)).leave(keep); render();
   }
 
-  // ---------- the peel: the poster rolls down from its top edge like paper coming off a wall ----------
-  // The sheet is cut into thin horizontal strips chained from the bottom up, each hinged to the
-  // one below. Strips above the roll line bend by a fixed angle, so the peeled part wraps into a
-  // tube that sits on the line; strips below stay flat. Moving the line down rolls more paper up.
-  function peel(el) {
-    var face = el.classList.contains('flipped') ? el.querySelector('.back') : el.querySelector('.mount');
-    var w = el.offsetWidth, h = el.offsetHeight, N = Math.max(24, Math.round(h / 12)), sh = h / N;
+  // ---------- the peel: the poster rolls up from the top corner opposite the swipe ----------
+  // The sheet is cut into thin strips running across a diagonal (tilted so the roll starts at
+  // the top-left corner when you swipe right, top-right when you swipe left). The strips are
+  // chained from the bottom up, each hinged to the one below. Strips above the roll line bend by
+  // a fixed angle, so the peeled part wraps into a tube on the line; strips below stay flat.
+  // Fast path: a poster with an image is painted once into a canvas and each strip is a small
+  // canvas slice. Anything else (a flipped back, a placeholder) falls back to cloned markup.
+  var TILT = .46, PAPER = '#efe5d0', BACKPAPER = [228, 216, 189];
+  function snapshot(el) {
+    var img = el.querySelector('.mount .p-real img'); if (!img || !img.complete || !img.naturalWidth) return null;
+    if (el._snap) return el._snap;
+    var w = el.offsetWidth, h = el.offsetHeight, s = Math.min(devicePixelRatio || 1, 1.5), c = document.createElement('canvas'), x = c.getContext('2d');
+    c.width = Math.round(w * s); c.height = Math.round(h * s); x.scale(s, s);
+    // the cream mount, the black frame line, then the poster inside (cover fit), like the CSS
+    x.fillStyle = PAPER; x.fillRect(0, 0, w, h);
+    var mx = w * .045, my = h * .045, mw = w - 2 * mx, mh = h - 2 * my;
+    x.lineWidth = 3; x.strokeStyle = '#1b1a17'; x.strokeRect(mx + 1.5, my + 1.5, mw - 3, mh - 3);
+    var ix = mx + 3 + (mw - 6) * .022, iy = my + 3 + (mh - 6) * .022, iw = (mw - 6) * .956, ih = (mh - 6) * .956;
+    var r = Math.max(iw / img.naturalWidth, ih / img.naturalHeight), sw = iw / r, sh = ih / r;
+    try { x.drawImage(img, (img.naturalWidth - sw) / 2, (img.naturalHeight - sh) / 2, sw, sh, ix, iy, iw, ih); } catch (e) { return null; }
+    el._snap = c; return c;
+  }
+  function peel(el, dir) {
+    var w = el.offsetWidth, h = el.offsetHeight, rho = -dir * TILT;
+    var Dx = w * Math.abs(Math.cos(rho)) + h * Math.abs(Math.sin(rho)), Dy = w * Math.abs(Math.sin(rho)) + h * Math.abs(Math.cos(rho));
+    var N = Math.max(26, Math.round(Dy / 13)), sh = Dy / N, s = Math.min(devicePixelRatio || 1, 1.5);
+    var flipped = el.classList.contains('flipped'), snap = flipped ? null : snapshot(el);
+    var face = flipped ? el.querySelector('.back') : el.querySelector('.mount');
     var box = document.createElement('div'); box.className = 'roll';
     var rest = el.dataset.rest; box.style.transform = rest;
-    var parent = box, strips = [];
-    for (var j = N - 1; j >= 0; j--) {
-      var s = document.createElement('div'); s.className = 'strip';
-      s.style.height = (sh + .7) + 'px'; s.style.top = (j === N - 1 ? j * sh : -sh) + 'px';
-      s.style.transformOrigin = '50% ' + sh + 'px';
-      var f = document.createElement('div'); f.className = 'sf';
-      var c = face.cloneNode(true); c.style.cssText = 'transform:none;visibility:visible;inset:auto;left:0;top:' + (-j * sh) + 'px;width:' + w + 'px;height:' + h + 'px';
-      f.appendChild(c);
-      var b = document.createElement('div'); b.className = 'sb';
-      var shade = document.createElement('i'); shade.className = 'shade';
-      var hl = document.createElement('i'); hl.className = 'hl';
-      s.appendChild(f); s.appendChild(b); s.appendChild(shade); s.appendChild(hl); parent.appendChild(s); parent = s; strips[j] = [s, shade, hl];
+    var frame = document.createElement('div'); frame.className = 'rframe';
+    frame.style.cssText = 'left:' + (w - Dx) / 2 + 'px;top:' + (h - Dy) / 2 + 'px;width:' + Dx + 'px;height:' + Dy + 'px;transform:rotate(' + rho + 'rad)';
+    // draws the poster's outline (or the poster) into a strip, in frame coordinates
+    function place(x, j, flip) {
+      x.setTransform(s, 0, 0, s, 0, 0);
+      if (flip) { x.translate(0, sh + .7); x.scale(1, -1); }
+      x.translate(0, -j * sh); x.translate(Dx / 2, Dy / 2); x.rotate(-rho); x.translate(-w / 2, -h / 2);
     }
+    function backPaint(st, level) {
+      var x = st.bx; x.setTransform(1, 0, 0, 1, 0, 0); x.clearRect(0, 0, st.b.width, st.b.height); place(x, st.j, true);
+      var k = 1 - level * .5, hl = level < 0 ? -level : 0; k = level < 0 ? 1 : k;
+      x.fillStyle = 'rgb(' + Math.round(BACKPAPER[0] * k + 255 * hl * .3) + ',' + Math.round(BACKPAPER[1] * k + 250 * hl * .3) + ',' + Math.round(BACKPAPER[2] * k + 240 * hl * .3) + ')';
+      x.fillRect(0, 0, w, h);
+    }
+    var parent = frame, strips = [];
+    for (var j = N - 1; j >= 0; j--) {
+      var st = { j: j, lv: null }, d = document.createElement('div'); d.className = 'strip';
+      d.style.height = (sh + .7) + 'px'; d.style.top = (j === N - 1 ? j * sh : -sh) + 'px'; d.style.transformOrigin = '50% ' + sh + 'px';
+      if (snap) {
+        var f = document.createElement('canvas'); f.className = 'sf'; f.width = Math.ceil(Dx * s); f.height = Math.ceil((sh + .7) * s);
+        var fx = f.getContext('2d'); place(fx, j, false); fx.drawImage(snap, 0, 0, w, h); d.appendChild(f);
+      } else {
+        var fw = document.createElement('div'); fw.className = 'sf';
+        var pc = document.createElement('div'); pc.className = 'pc';
+        pc.style.cssText = 'width:' + w + 'px;height:' + h + 'px;left:' + (Dx - w) / 2 + 'px;top:' + ((Dy - h) / 2 - j * sh) + 'px;transform:rotate(' + (-rho) + 'rad)';
+        var c = face.cloneNode(true); c.style.cssText = 'transform:none;visibility:visible;inset:0'; pc.appendChild(c); fw.appendChild(pc); d.appendChild(fw);
+      }
+      var b = document.createElement('canvas'); b.className = 'sb'; b.width = Math.ceil(Dx * s); b.height = Math.ceil((sh + .7) * s);
+      st.b = b; st.bx = b.getContext('2d'); d.appendChild(b);
+      parent.appendChild(d); parent = d; st.el = d; strips[j] = st;
+    }
+    box.appendChild(frame);
+    // the roll's shadow on the flat paper below it, clipped to the poster
+    var cc = document.createElement('div'); cc.className = 'castclip';
+    var cf = document.createElement('div'); cf.className = 'rframe'; cf.style.cssText = frame.style.cssText;
+    var cast = document.createElement('i'); cast.className = 'cast'; cf.appendChild(cast); cc.appendChild(cf); box.appendChild(cc);
     var yes = document.createElement('span'), no = document.createElement('span');
     yes.className = 'tag yes'; yes.textContent = 'stash it'; no.className = 'tag no'; no.textContent = 'pass';
-    var cast = document.createElement('i'); cast.className = 'cast';
-    box.appendChild(cast); box.appendChild(yes); box.appendChild(no);
-    deck.appendChild(box); el.style.opacity = '0';
-    var cur = { p: 0, x: 0, y: 0, d: 0 }, raf = 0;
-    function set(p, x, y, d) {
-      cur = { p: p, x: x, y: y, d: d };
-      var line = p * h, r = Math.max(10, w * .05) + line * .035, th = sh / r, cum = 0;
+    box.appendChild(yes); box.appendChild(no);
+    deck.appendChild(box); el.style.opacity = '0'; peeling++;
+    var cur = { p: 0, x: 0, y: 0, d: 0 }, raf = 0, last = '';
+    function set(p, x, y, dd) {
+      cur = { p: p, x: x, y: y, d: dd };
+      var line = p * Dy * .96, r = Math.max(9, w * .045) + line * .03, th = sh / r, cum = 0;
       for (var j = N - 2; j >= 0; j--) {
-        var hinge = (j + 1) * sh, f = Math.max(0, Math.min(1, (line - hinge) / sh + 1)), a = th * f;
+        var hinge = (j + 1) * sh, f = Math.max(0, Math.min(1, (line - hinge) / sh + 1)), a = th * f, st = strips[j];
         cum += a;
-        strips[j][0].style.transform = 'rotateX(' + (-a) + 'rad)';
-        // a curled strip darkens as it turns edge-on and catches a highlight where it faces you
-        var co = Math.cos(cum), si = Math.sin(cum);
-        strips[j][1].style.opacity = a ? Math.min(.62, .5 * (1 - Math.abs(co)) + (si < 0 ? .18 * -si : 0) + (co < 0 ? .05 : 0)) : 0;
-        strips[j][2].style.opacity = co < 0 ? Math.pow(-co, 10) * .5 : 0;
+        var tr = a ? 'rotateX(' + (-a).toFixed(4) + 'rad)' : '';
+        if (st.tr !== tr) { st.el.style.transform = tr; st.tr = tr; }
+        // the back of the paper darkens as it turns edge-on, brightens where it faces you
+        var co = Math.cos(cum), si = Math.sin(cum), lv = co < -.985 ? -Math.pow(-co, 10) : Math.min(1, .8 * (1 - Math.abs(co)) + (si < 0 ? .3 * -si : 0));
+        lv = Math.round(lv * 16) / 16;
+        if (a && st.lv !== lv) { st.lv = lv; backPaint(st, lv); }
       }
-      // the roll casts a soft shadow on the paper just below it
       cast.style.top = line + 'px'; cast.style.height = (r * 2.2) + 'px'; cast.style.opacity = p > .01 ? Math.min(1, p * 6) : 0;
       box.style.transform = rest + ' translate(' + x + 'px,' + y + 'px) rotate(' + (x / 22) + 'deg)';
-      var k = Math.min(1, Math.abs(d) / 100);
-      yes.style.opacity = d > 0 ? k : 0; no.style.opacity = d < 0 ? k : 0;
+      var k = Math.min(1, Math.abs(dd) / 100);
+      yes.style.opacity = dd > 0 ? k : 0; no.style.opacity = dd < 0 ? k : 0;
     }
+    set(0, 0, 0, 0);
     function tween(to, ms, done) {
       cancelAnimationFrame(raf);
       var from = cur, t0 = performance.now();
@@ -562,14 +676,15 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
         if (q < 1) raf = requestAnimationFrame(step); else if (done) done();
       })(t0);
     }
-    function remove() { cancelAnimationFrame(raf); box.remove(); }
+    var gone = false;
+    function remove() { if (gone) return; gone = true; cancelAnimationFrame(raf); box.remove(); peeling = Math.max(0, peeling - 1); }
     return {
-      set: set, remove: remove,
+      dir: dir, set: set, remove: remove,
       cancel: function () { tween({ p: 0, x: 0, y: 0, d: 0 }, 320, function () { remove(); el.style.opacity = ''; }); },
-      leave: function (keep) { var dir = keep ? 1 : -1; tween({ p: 1, x: dir * innerWidth * .95, y: -40, d: dir * 100, fade: true }, 620, remove); },
+      leave: function (keep) { var dd = keep ? 1 : -1; tween({ p: 1, x: dd * innerWidth * .95, y: -40, d: dd * 100, fade: true }, 620, remove); },
       demo: function (steps, done) {
         var i = 0;
-        (function next() { if (i >= steps.length) { remove(); el.style.opacity = ''; if (done) done(); return; } var s = steps[i++]; tween({ p: s[0], x: s[1], y: 0, d: s[1] }, s[2], next); })();
+        (function next() { if (gone) return; if (i >= steps.length) { remove(); el.style.opacity = ''; if (done) done(); return; } var st = steps[i++]; tween({ p: st[0], x: st[1], y: 0, d: st[1] }, st[2], next); })();
       }
     };
   }
@@ -578,7 +693,7 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
   var TRAILER = {};
   function trailer(el) {
     var t = el._t, a = ART[t.key], slot = el.querySelector('.trailer'); if (!slot || !a || !a.id) return;
-    function show(key) { if (!key || !el.classList.contains('flipped')) return; slot.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + encodeURIComponent(key) + '?playsinline=1&rel=0" title="' + esc(t.title) + ' trailer" allow="encrypted-media; picture-in-picture; fullscreen" loading="lazy"></iframe>'; slot.hidden = false; }
+    function show(key) { if (!key || !el.classList.contains('flipped')) return; slot.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + encodeURIComponent(key) + '?playsinline=1&rel=0&fs=1" title="' + esc(t.title) + ' trailer" allow="encrypted-media; picture-in-picture; fullscreen" allowfullscreen loading="lazy"></iframe><a class="big" href="https://www.youtube.com/watch?v=' + encodeURIComponent(key) + '" target="_blank" rel="noopener">full screen ↗</a>'; slot.hidden = false; }
     if (TRAILER[t.key] !== undefined) return show(TRAILER[t.key]);
     fetch('/api/trailer?kind=' + t.kind + '&id=' + a.id).then(function (r) { return r.ok ? r.json() : {}; })
       .then(function (j) { TRAILER[t.key] = j.key || ''; show(TRAILER[t.key]); }).catch(function () {});
@@ -595,13 +710,16 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
   document.getElementById('side-keep').addEventListener('click', function () { decide(true); });
   document.getElementById('caption').addEventListener('click', function () { var el = topEl(); if (el) flip(el); });
   var demoing = null;
-  function stopNudge() { if (demoing) { demoing.remove(); var el = topEl(); if (el) el.style.opacity = ''; demoing = null; } }
+  function stopNudge() { if (demoing) { var d = demoing; demoing = null; d.remove(); var el = topEl(); if (el) el.style.opacity = ''; } }
   function nudge() {
     // once per visit until it's been used: peel the top a little to the right, then to the left, and lay it back
-    if (knows || reduce || busy) return;
+    if (knows || reduce || busy || view === 'grid') return;
     var el = topEl(); if (!el) return;
-    demoing = peel(el);
-    demoing.demo([[.22, 34, 700], [0, 0, 500], [.22, -34, 700], [0, 0, 500]], function () { demoing = null; });
+    demoing = peel(el, 1);
+    demoing.demo([[.24, 34, 700], [0, 0, 500]], function () {
+      if (busy || el !== topEl()) { demoing = null; return; }
+      demoing = peel(el, -1); demoing.demo([[.24, -34, 700], [0, 0, 500]], function () { demoing = null; });
+    });
   }
 
 
@@ -633,7 +751,7 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
     document.getElementById('stash-empty').hidden = stash.length > 0;
     stash.slice().reverse().forEach(function (k) {
       var t = T.filter(function (x) { return x.key === k; })[0], r = document.createElement('div'); r.className = 'r st';
-      r.innerHTML = '<span class="thumb" aria-hidden="true"><span class="face mount"><span class="mat">' + front(t) + '</span></span></span><span class="k"></span><button type="button"><small>Remove</small></button>'; r.querySelector('.k').textContent = t.title + ' · ' + t.year;
+      r.innerHTML = '<span class="thumb" aria-hidden="true"><span class="face mount"><span class="mat">' + small(front(t), 'w154') + '</span></span></span><span class="k"></span><button type="button"><small>Remove</small></button>'; r.querySelector('.k').textContent = t.title + ' · ' + t.year;
       r.querySelector('button').addEventListener('click', function () { stash = stash.filter(function (x) { return x !== k; }); save(); updateCount(); drawStash(); render(); });
       box.appendChild(r);
     });
@@ -646,6 +764,10 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
   fetch('/api/art?q=' + encodeURIComponent(T.map(function (t) { return t.key; }).join(','))).then(function (r) { return r.ok ? r.json() : {}; })
     .then(function (j) { if (j && !j.error) { ART = j; document.getElementById('tmdb-credit').hidden = false; render(); } }).catch(function () {});
 
+  document.getElementById('view-one').addEventListener('click', function () { if (view !== 'one') setView('one'); });
+  document.getElementById('view-grid').addEventListener('click', function () { if (view !== 'grid') { stopNudge(); setView('grid'); grid.scrollTop = 0; } });
+  document.body.classList.toggle('gridview', view === 'grid'); grid.hidden = view !== 'grid';
+  document.getElementById('view-one').setAttribute('aria-pressed', String(view === 'one')); document.getElementById('view-grid').setAttribute('aria-pressed', String(view === 'grid'));
   sizes(); updateCount(); render(); setTimeout(nudge, 900);
 })();
 </script>

@@ -24,9 +24,12 @@ added to the same Worker (see README).
 ## Feel of the site (owner's call, 2026-10-26)
 
 A wall of movie posters on a grainy black starfield (dense speckled stars, a few bright
-glints, paper-grain noise), with a layer of stars that slowly twinkle. Drag a poster to peel it: the top edge rolls down like paper coming off a wall and
-follows your finger the whole way (`peel()`: horizontal strips hinged from the bottom up;
-strips above the roll line wrap into a tube). Let go far enough right to stash, left to
+glints, paper-grain noise), with a layer of stars that slowly twinkle. Drag a poster to peel it: it rolls up from the top corner opposite the swipe (top-left
+when you swipe right, top-right when you swipe left) like paper coming off a wall, and
+follows your finger the whole way (`peel()`: strips across a tilted axis, hinged from the
+bottom up; strips above the roll line wrap into a tube). For speed the poster is painted
+once into a canvas (`snapshot()`, prepared at idle) and each strip is a canvas slice;
+flipped backs fall back to cloned markup. The twinkle pauses while a poster is peeled. Let go far enough right to stash, left to
 pass, and it rolls the rest of the way off; let go early and it lays back flat. The next
 poster is live underneath while the roll plays. Tap
 to flip it. Fronts are real TMDB posters once `TMDB_TOKEN` is set; until then, original
@@ -43,13 +46,16 @@ one line of small text under the poster ("← pass · tap for the plot · stash 
 button), and on a first visit the top poster peels a little to the right, then to the
 left, to show the gesture, until someone peels or flips. Owner wants these low key, not flash cards. The
 filters are called **categories** (not vibes) on the page. The stash list shows a mini
-poster beside each title.
+poster beside each title. A one/grid toggle at the start of the nav switches to a
+scrolling grid of every poster left (tap one to open it on top of the stack); the choice
+is remembered.
 
 The back of each poster, the header, the nav and the drawers are **vintage flash cards**:
 cream paper, a heavy black rounded frame and a lowercase grotesque label (Inter Tight). No
 drawings (owner removed them, 2026-10-26). The top of each poster back is the **trailer
 slot**: once TMDB is connected, flipping a poster loads its YouTube trailer there
-(`/api/trailer`, youtube-nocookie embed, removed again on flip back). The name is on hold, so the page carries no brand name.
+(`/api/trailer`, youtube-nocookie embed, removed again on flip back), with a "full screen"
+button that opens it on YouTube (iPhone can't full-screen an embed inside the 3D card). The name is on hold, so the page carries no brand name.
 Rejected so far: space gradients, texture everywhere, typewriter/handwriting fonts,
 stickers/VHS, the 70s eyeball broadcast, the A24 disc library.
 
