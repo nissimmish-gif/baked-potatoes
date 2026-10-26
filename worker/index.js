@@ -25,7 +25,10 @@ async function art(url, env, ctx) {
   const keys = (url.searchParams.get('q') || '').split(',').filter(Boolean).slice(0, 40);
   const out = {};
   await Promise.all(keys.map(async (key) => {
-    const [kind, title, year] = key.split(':');
+    // titles can contain colons ("Mad Max: Fury Road"), so kind is the first part and year the last
+    const parts = key.split(':');
+    const kind = parts[0], year = parts.length > 2 ? parts[parts.length - 1] : '';
+    const title = parts.slice(1, parts.length > 2 ? -1 : undefined).join(':');
     if (!['movie', 'tv'].includes(kind) || !title) return;
     try {
       const yearParam = kind === 'tv' ? 'first_air_date_year' : 'year';

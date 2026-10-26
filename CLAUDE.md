@@ -25,7 +25,12 @@ A wall of movie posters on a grainy black starfield (dense speckled stars, a few
 glints, paper-grain noise). Drag a poster to peel it off: right stashes, left passes. Tap
 to flip it. Fronts are real TMDB posters once `TMDB_TOKEN` is set; until then, original
 placeholder posters in three print styles (torn-paper photo, 80s one-sheet, halftone
-screen print). Inspired by real posters, never copies of them.
+screen print). Inspired by real posters, never copies of them. Exception: the three
+posters in `public/posters/` (Ferris Bueller's Day Off, The Truman Show, Fight Club) are
+the owner's own reference images, used as stand-ins until TMDB is on; delete them then.
+
+The header is a flash card for the poster on top of the stack: its picture, title,
+year, runtime, genre and score. It changes as posters are peeled.
 
 The back of each poster, the header, the nav and the drawers are **vintage flash cards**:
 cream paper, a heavy black rounded frame, a flat ink picture (red, violet, pink, sage) with

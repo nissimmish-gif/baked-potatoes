@@ -66,13 +66,17 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
 
 /* ---------- header card ---------- */
 .top { position: fixed; z-index: 5; top: calc(12px + env(safe-area-inset-top, 0px)); left: 50%; transform: translateX(-50%) rotate(-1deg); width: min(360px, calc(100vw - 32px)); }
-.top .fc-frame { display: grid; grid-template-columns: 58px 1fr auto; align-items: center; gap: 10px; padding: 4px 10px 4px 4px; }
-.top .fc-panel { height: 38px; }
-.top .fc-label { font-size: 25px; }
-.top small { font-family: var(--f-card); font-size: 12px; font-weight: 500; text-transform: lowercase; }
+.top .fc-frame { display: grid; grid-template-columns: 76px minmax(0, 1fr) auto; align-items: center; gap: 11px; padding: 5px 12px 5px 5px; }
+.top .fc-panel { height: 58px; }
+.top .ti { min-width: 0; }
+.top .fc-label { font-size: 22px; margin: 0; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; line-height: 1.02; }
+.top p { margin-top: 3px; font-size: 11.5px; font-weight: 500; text-transform: lowercase; color: #5f584b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.top .rate { text-align: right; }
+.top .rate b { display: block; font-family: var(--f-card); font-weight: 600; font-size: 30px; line-height: 1; color: var(--ink-red); letter-spacing: -.02em; }
+.top .rate small { display: block; margin-top: 2px; font-size: 10.5px; font-weight: 500; text-transform: lowercase; white-space: nowrap; }
 
 /* ---------- the stack ---------- */
-.wall { position: fixed; inset: 0; z-index: 3; display: grid; place-items: center; padding: calc(70px + env(safe-area-inset-top, 0px)) 0 calc(84px + env(safe-area-inset-bottom, 0px)); }
+.wall { position: fixed; inset: 0; z-index: 3; display: grid; place-items: center; padding: calc(104px + env(safe-area-inset-top, 0px)) 0 calc(84px + env(safe-area-inset-bottom, 0px)); }
 .stack { position: relative; width: var(--W); height: calc(var(--W) * 1.5); }
 .poster { position: absolute; inset: 0; perspective: 1400px; touch-action: none; user-select: none; -webkit-user-select: none; }
 .poster.behind { pointer-events: none; }
@@ -185,12 +189,12 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
 <canvas id="scene" aria-hidden="true"></canvas>
 <div class="grain" aria-hidden="true"></div>
 
-<header class="top fc-card"><div class="fc-frame"><div class="fc-panel" id="top-art"></div><span class="fc-label">tonight</span><small id="count" aria-live="polite"></small></div></header>
+<header class="top fc-card" aria-live="polite"><div class="fc-frame"><div class="fc-panel" id="top-art"></div><div class="ti"><h1 class="fc-label" id="top-title">tonight</h1><p id="top-meta"></p></div><div class="rate"><b id="top-score"></b><small id="top-tier"></small></div></div></header>
 
 <main class="wall">
   <div class="stack" id="stack" aria-label="Poster stack. Drag right to stash, left to pass, tap to flip. Arrow keys work too." tabindex="0"></div>
 </main>
-<p class="hint-row">peel right to stash · left to pass · tap to flip</p>
+<p class="hint-row"><span id="count"></span> · peel right to stash · left to pass · tap to flip</p>
 
 <nav class="pill fc-card" aria-label="Library"><div class="fc-frame">
   <button type="button" data-k="movie" aria-pressed="false">films</button>
@@ -235,6 +239,9 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
   // ---------- data (credits from memory; scores are placeholders) ----------
   // kind, title, year, dir, cast, runtime, genre, vibes, score, tagline, plot, style, colours [a, b, c]
   var T = [
+    ['movie', 'Ferris Bueller\'s Day Off', 1986, ['John Hughes'], ['Matthew Broderick', 'Alan Ruck', 'Mia Sara'], '103 min', 'Comedy', ['giggle', 'couch'], 88, 'Life moves pretty fast.', 'A high-school senior fakes being sick and drags his best friend and girlfriend through one perfect day off in Chicago, in a borrowed Ferrari. Light, quick and very easy to love.', 'sheet', ['#e2402b', '#2b55a8', '#edc755'], 'posters/ferris-buellers-day-off.jpg'],
+    ['movie', 'The Truman Show', 1998, ['Peter Weir'], ['Jim Carrey', 'Laura Linney', 'Ed Harris'], '103 min', 'Comedy, Drama', ['brain', 'couch'], 90, 'On the air. Unaware.', 'A cheerful insurance salesman slowly works out that his whole life is a TV show and everyone he knows is acting. Funny, then strange, then it gets you.', 'print', ['#c8322b', '#1b1a17', '#efe4cc'], 'posters/the-truman-show.jpg'],
+    ['movie', 'Fight Club', 1999, ['David Fincher'], ['Edward Norton', 'Brad Pitt', 'Helena Bonham Carter'], '139 min', 'Drama, Thriller', ['brain'], 79, 'Mischief. Mayhem. Soap.', 'An insomniac office worker meets a soap salesman and they start an underground fight club that grows into something much bigger. Has a twist you will want to talk about after.', 'torn', ['#4f7a52', '#1a375f', '#edc755'], 'posters/fight-club.jpg'],
     ['movie', 'Fantastic Planet', 1973, ['René Laloux'], ['Jennifer Drake', 'Eric Baugin', 'Jean Topart'], '72 min', 'Animation, Sci-fi', ['plot', 'eye'], 94, 'Tiny humans. Giant blue aliens.', 'Humans the size of a thumbnail are kept as pets by enormous blue aliens on a strange planet. A French cartoon that drifts more than it explains. You won\'t follow it. You don\'t need to.', 'print', ['#2f6f8f', '#e2402b', '#edc755']],
     ['movie', 'Into the Spider-Verse', 2018, ['Bob Persichetti', 'Peter Ramsey', 'Rodney Rothman'], ['Shameik Moore', 'Hailee Steinfeld', 'Jake Johnson'], '117 min', 'Animation, Action', ['eye', 'couch'], 96, 'Anyone can wear the mask.', 'A Brooklyn teenager gets bitten, and then meets five other Spider-People from other dimensions. Every frame looks like a comic book that came to life and had three espressos.', 'sheet', ['#d8263c', '#1f3f8a', '#edc755']],
     ['movie', 'Paddington 2', 2017, ['Paul King'], ['Ben Whishaw', 'Hugh Grant', 'Brendan Gleeson'], '103 min', 'Comedy, Family', ['couch', 'giggle'], 92, 'Marmalade. Prison. Kindness.', 'A bear in a duffle coat is framed for theft and makes prison a nicer place to be. Hugh Grant is having the time of his life. Impossible to feel bad during this.', 'print', ['#1f3f8a', '#edc755', '#e2402b']],
@@ -256,7 +263,7 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
     ['movie', 'Dazed and Confused', 1993, ['Richard Linklater'], ['Jason London', 'Wiley Wiggins', 'Matthew McConaughey'], '102 min', 'Comedy', ['couch'], 89, 'The last day of school, 1976.', 'Texas teenagers drift through the last day of school and the night that follows. Nothing much happens, beautifully.', 'print', ['#e8b04a', '#2f6b3a', '#e2402b']],
     ['movie', 'Uncut Gems', 2019, ['Josh Safdie', 'Benny Safdie'], ['Adam Sandler', 'Julia Fox', 'LaKeith Stanfield'], '135 min', 'Crime, Thriller', ['sober'], 28, 'This is how I win.', 'A jeweller with a gambling problem makes every wrong choice at full volume for two hours. A great film. Not tonight.', 'torn', ['#6b2fa3', '#e2402b', '#edc755']],
     ['movie', 'Midsommar', 2019, ['Ari Aster'], ['Florence Pugh', 'Jack Reynor', 'Will Poulter'], '148 min', 'Horror, Drama', ['sober'], 22, 'Let the festivities begin.', 'A grieving woman joins her boyfriend on a trip to a Swedish midsummer festival that goes very, very wrong. Save it for a clear head.', 'sheet', ['#9cbf6a', '#e2402b', '#edc755']]
-  ].map(function (r, i) { return { i: i, kind: r[0], title: r[1], year: r[2], dir: r[3], cast: r[4], run: r[5], genre: r[6], vibes: r[7], score: r[8], tag: r[9], plot: r[10], style: r[11], col: r[12], key: r[0] + ':' + r[1] + ':' + r[2] }; });
+  ].map(function (r, i) { return { i: i, kind: r[0], title: r[1], year: r[2], dir: r[3], cast: r[4], run: r[5], genre: r[6], vibes: r[7], score: r[8], tag: r[9], plot: r[10], style: r[11], col: r[12], img: r[13] || '', key: r[0] + ':' + r[1] + ':' + r[2] }; });
   var VIBES = [['all', 'Everything'], ['couch', 'Couch-locked'], ['eye', 'Eye candy'], ['plot', 'Plot optional'], ['giggle', 'Giggle fits'], ['brain', '2 a.m. big brain'], ['munch', 'Munchie bait'], ['short', 'Short trips'], ['sober', 'Save for sober']];
   function vibeName(id) { for (var i = 0; i < VIBES.length; i++) if (VIBES[i][0] === id) return VIBES[i][1]; return id; }
   function tier(s) { return s >= 75 ? 'Fully loaded' : s >= 50 ? 'Half baked' : 'Cold'; }
@@ -294,8 +301,8 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
   function imgTag(t, which) { var a = ART[t.key]; var p = a && (which === 'backdrop' ? (a.backdrop || a.poster) : (a.poster || a.backdrop)); return p ? '<img alt="" draggable="false" src="' + IMG + 'w780' + p + '" onload="this.classList.add(\'ok\')">' : ''; }
   function fit(title, base) { var n = title.length; return base * (n <= 8 ? 1 : n <= 14 ? .78 : n <= 22 ? .6 : .48); }
   function front(t) {
-    var real = ART[t.key] && ART[t.key].poster;
-    if (real) return '<div class="face p-real" style="--a:' + t.col[0] + '"><h2>' + esc(t.title) + '</h2><img alt="' + esc(t.title) + ' poster" draggable="false" src="' + IMG + 'w780' + real + '" onerror="this.remove()"></div>';
+    var real = ART[t.key] && ART[t.key].poster ? IMG + 'w780' + ART[t.key].poster : t.img;
+    if (real) return '<div class="face p-real" style="--a:' + t.col[0] + '"><h2>' + esc(t.title) + '</h2><img alt="' + esc(t.title) + ' poster" draggable="false" src="' + real + '" onerror="this.remove()"></div>';
     var Wv = 'var(--W)', names = t.cast.slice(0, 3), credits = esc((t.kind === 'tv' ? 'Created by ' : 'Directed by ') + t.dir.join(' & ') + ' · starring ' + t.cast.join(', ') + ' · ' + t.year + ' · ' + t.run);
     if (t.style === 'torn') {
       var words = t.title.toUpperCase().split(' '), half = Math.ceil(words.length / 2);
@@ -324,6 +331,7 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
   // flash card pictures: flat inks, rough edges, a yellow plate slipped out of register
   var INK = { red: '#e8472b', violet: '#4a3f97', pink: '#ec93ad', sage: '#9aa597', yellow: '#f0c64a', paper: '#efe5d0', cream: '#f6efe0', post: '#2c5a4f', blue: '#2f4fa0' };
   var PICS = ['moon', 'explosion', 'alley', 'candle', 'bucket', 'pink'];
+  function picKind(t) { return t.vibes[0] === 'sober' ? 'white' : PICS[t.i % PICS.length]; }
   function burst(cx0, cy0, r1, r2, n, seed, col) {
     var r = rng(seed), pts = [];
     for (var k = 0; k <= n; k++) { var a = Math.PI + Math.PI * k / n, rr = k % 2 ? r1 + r() * (r2 - r1) : r1 * (.5 + r() * .3); pts.push((cx0 + Math.cos(a) * rr * 1.6).toFixed(1) + ',' + (cy0 + Math.sin(a) * rr).toFixed(1)); }
@@ -347,7 +355,7 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
   function back(t) {
     var inStash = stash.indexOf(t.key) > -1, n = t.title.length, lab = n <= 12 ? 1 : n <= 20 ? .82 : .64;
     return '<div class="face back"><div class="fc-frame">' +
-      '<div class="fc-panel">' + picture(t.vibes[0] === 'sober' ? 'white' : PICS[t.i % PICS.length], t.i + 1) + '</div>' +
+      '<div class="fc-panel">' + picture(picKind(t), t.i + 1) + '</div>' +
       '<div class="head"><h3 class="fc-label" style="font-size:calc(var(--W) * ' + (.1 * lab).toFixed(3) + ')">' + esc(t.title) + '</h3><span class="pct" title="Score: ' + tier(t.score) + '">' + t.score + '%</span></div>' +
       '<p class="meta">' + t.year + ' · ' + esc(t.run) + ' · ' + esc(t.genre) + ' · ' + tier(t.score).toLowerCase() + '</p>' +
       '<p class="plot">' + esc(t.plot) + '</p>' +
@@ -357,12 +365,13 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
 
   // ---------- stack ----------
   var stack = document.getElementById('stack'), kindF = 'all', vibeF = 'all', seen = {};
-  function sizes() { var w = Math.min(innerWidth * .84, (innerHeight - 190) / 1.5, 380); document.documentElement.style.setProperty('--W', Math.round(w) + 'px'); }
+  function sizes() { var w = Math.min(innerWidth * .84, (innerHeight - 224) / 1.5, 380); document.documentElement.style.setProperty('--W', Math.round(w) + 'px'); }
   function queue() { return T.filter(function (t) { return !seen[t.key] && stash.indexOf(t.key) < 0 && (kindF === 'all' || t.kind === kindF) && (vibeF === 'all' ? t.vibes.indexOf('sober') < 0 : t.vibes.indexOf(vibeF) > -1); }); }
   function render() {
     stack.innerHTML = '';
     var q = queue();
     document.getElementById('count').textContent = q.length + ' left' + (vibeF !== 'all' ? ' · ' + vibeName(vibeF).toLowerCase() : '');
+    showTop(q[0]);
     if (!q.length) {
       var d = document.createElement('div'); d.className = 'done fc-card';
       d.innerHTML = '<div class="fc-frame"><div class="fc-panel">' + picture('white', 1) + '</div><h3 class="fc-label">that\'s all of them</h3><p>Check your stash or pick another vibe.</p></div>';
@@ -379,6 +388,13 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
       el._t = t; stack.appendChild(el);
     });
     bind();
+  }
+  function showTop(t) {
+    document.getElementById('top-art').innerHTML = picture(t ? picKind(t) : 'white', t ? t.i + 101 : 1);
+    document.getElementById('top-title').textContent = t ? t.title : 'that\'s all of them';
+    document.getElementById('top-meta').textContent = t ? t.year + ' · ' + t.run + ' · ' + t.genre : 'check your stash or pick another vibe';
+    document.getElementById('top-score').textContent = t ? t.score + '%' : '';
+    document.getElementById('top-tier').textContent = t ? tier(t.score).toLowerCase() : '';
   }
   function topEl() { return stack.querySelector('.poster:not(.behind)'); }
   function bind() {
@@ -462,7 +478,6 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
   fetch('/api/art?q=' + encodeURIComponent(T.map(function (t) { return t.key; }).join(','))).then(function (r) { return r.ok ? r.json() : {}; })
     .then(function (j) { if (j && !j.error) { ART = j; render(); } }).catch(function () {});
 
-  document.getElementById('top-art').innerHTML = picture('candle', 7);
   sizes(); updateCount(); render();
 })();
 </script>
