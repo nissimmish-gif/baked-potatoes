@@ -48,14 +48,14 @@ the owner's own reference images, used as stand-ins until TMDB is on; delete the
 There is no header bar (owner: it took too much space). Each poster card carries its own
 flash-card label under the picture, inside the black frame: title (two lines at most),
 year · runtime · genre, and the potato score. The card is 1:1.66 so the poster keeps its
-2:3 shape above the label. 
+2:3 shape above the label.
 
 Every poster sits in a cream mount with a black frame line, with one even gap (`--gap`,
-2.8% of the card width) from the card edge to the line and from the line to the poster;
+2.8% of the card width) from the card edge to the line and from the line to the poster.
 How to use it is said quietly:
 one line of small text under the poster ("← pass · tap for more · stash →", each a
 button), and on a first visit the top poster peels a little to the right, then to the
-left, to show the gesture, until someone peels or flips. Owner wants these low key, not flash cards. The
+left, to show the gesture, until someone peels or taps. Owner wants these low key, not flash cards. The
 filters are called **categories** (not vibes) on the page. The default category is
 **highest rated** (everything except "save for sober"), and every category is ordered by
 score, best first. The current category sits over the poster's top left as a small glass
@@ -86,4 +86,4 @@ Plain, deadpan, kind. Specific beats clever. Errors say what happened and what t
 - Test at 375px wide and on desktop; the body must never scroll sideways.
 - Wrap every `localStorage` access in try/catch.
 - Don't hardcode streaming availability; it comes from live data.
-- Respect `prefers-reduced-motion` (the peel and flip animations already do).
+- Respect `prefers-reduced-motion` (the peel and details animations already do).
