@@ -73,7 +73,7 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
   font-family: "Arimo", Arial, sans-serif; font-weight: 700; font-size: var(--wmfs); line-height: 1; display: flex; align-items: center; gap: .22em; letter-spacing: -.02em; text-transform: lowercase; color: var(--cream); text-align: left; }
 
 /* ---------- the stack ---------- */
-.wall { position: fixed; inset: 0; z-index: 3; display: grid; place-items: center; padding: calc(132px + env(safe-area-inset-top, 0px)) 0 calc(190px + env(safe-area-inset-bottom, 0px)); }
+.wall { position: fixed; inset: 0; z-index: 3; display: grid; place-items: center; padding: calc(132px + env(safe-area-inset-top, 0px)) 0 calc(178px + env(safe-area-inset-bottom, 0px)); }
 .stack { position: relative; width: var(--W); height: calc(var(--W) * var(--AR)); }
 .poster { position: absolute; inset: 0; perspective: 1400px; touch-action: none; user-select: none; -webkit-user-select: none; }
 .poster.behind { pointer-events: none; }
@@ -166,19 +166,19 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
 
 /* ---------- how-to: side cards, caption, first-visit nudge ---------- */
 .deck { position: relative; width: var(--W); height: calc(var(--W) * var(--AR)); }
-.howto { position: absolute; left: -4px; right: -4px; top: 100%; margin-top: 64px; display: flex; justify-content: space-between; align-items: baseline; }
+.howto { position: absolute; left: -4px; right: -4px; top: 100%; margin-top: 52px; display: flex; justify-content: space-between; align-items: baseline; }
 .howto button { font-family: var(--f-card); font-weight: 500; font-size: 13px; text-transform: lowercase; color: var(--soft); padding: 6px 4px; white-space: nowrap; transition: color .2s ease, transform .2s ease; }
 .howto .pass { transform: translateX(calc(var(--pp, 0) * -6px)); }
 .howto .keep { transform: translateX(calc(var(--pk, 0) * 6px)); }
 .deck.lean-p .pass, .deck.lean-k .keep { color: var(--cream); }
 .howto button:disabled { opacity: .35; cursor: default; }
 /* stash it: right under the poster */
-.stashbtn { position: absolute; left: 50%; top: 100%; margin-top: 12px; transform: translateX(-50%) rotate(-1deg); display: inline-flex; align-items: center; gap: 8px; padding: 7px 16px 8px 12px; white-space: nowrap;
-  background: var(--fc-paper); color: var(--fc-line); border: 3px solid var(--fc-line); border-radius: 3px; box-shadow: 0 0 0 4px var(--fc-paper), 0 10px 24px -8px rgba(0,0,0,.7);
-  font-family: var(--f-card); font-weight: 600; font-size: 17px; letter-spacing: -.01em; text-transform: lowercase; transition: background .2s ease, color .2s ease; }
-.stashbtn img { height: 22px; width: auto; transform: rotate(10deg); }
-.stashbtn[aria-pressed="true"] { background: var(--ink-red); color: var(--fc-paper); }
-@media (hover: hover) { .stashbtn[aria-pressed="false"]:hover { color: var(--ink-red); } }
+.stashbtn { position: absolute; left: 50%; top: 100%; margin-top: 12px; transform: translateX(-50%); display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px 6px 9px; white-space: nowrap; border-radius: 999px;
+  background: rgba(255, 255, 255, .08); border: 1px solid rgba(255, 255, 255, .2); color: var(--cream); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+  font-family: var(--f-card); font-weight: 500; font-size: 14px; letter-spacing: -.005em; text-transform: lowercase; transition: background .2s ease, color .2s ease, border-color .2s ease; }
+.stashbtn img { height: 16px; width: auto; transform: rotate(10deg); }
+.stashbtn[aria-pressed="true"] { background: rgba(240, 198, 74, .14); border-color: rgba(240, 198, 74, .5); color: var(--ink-yellow); }
+@media (hover: hover) { .stashbtn:hover { background: rgba(255, 255, 255, .16); } }
 .deck.empty .stashbtn { display: none; }
 .roll .tag { display: none !important; }
 .tag { top: 7%; padding: 3px 9px 4px; font-family: var(--f-card); font-weight: 600; font-size: 15px; letter-spacing: -.01em; text-transform: lowercase; background: var(--fc-paper); color: var(--fc-line); border-radius: 2px; box-shadow: 0 6px 16px rgba(0,0,0,.35); }
@@ -199,7 +199,7 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
 
 /* phones: smaller pieces, more sky between them */
 @media (max-width: 599px) {
-  .wall { padding-top: calc(132px + env(safe-area-inset-top, 0px)); padding-bottom: calc(190px + env(safe-area-inset-bottom, 0px)); }
+  .wall { padding-top: calc(132px + env(safe-area-inset-top, 0px)); padding-bottom: calc(178px + env(safe-area-inset-bottom, 0px)); }
   .pill { bottom: calc(22px + env(safe-area-inset-bottom, 0px)); }
   .pill .fc-frame { gap: 15px; padding: 5px 12px 6px; }
   .pill button { font-size: 15px; }
@@ -563,7 +563,7 @@ body.gridview .wall, body.gridview .top { display: none; }
 
   // ---------- stack ----------
   var stack = document.getElementById('stack'), kindF = 'all', vibeF = 'all', pos = 0;
-  function sizes() { var w = Math.min(innerWidth * (innerWidth < 600 ? .7 : .84), (innerHeight - 338) / 1.66, 380); document.documentElement.style.setProperty('--W', Math.round(w) + 'px'); }
+  function sizes() { var w = Math.min(innerWidth * (innerWidth < 600 ? .7 : .84), (innerHeight - 326) / 1.66, 380); document.documentElement.style.setProperty('--W', Math.round(w) + 'px'); }
   var view = 'one', grid = document.getElementById('grid'), tiles = document.getElementById('tiles');
   try { view = localStorage.getItem('baked-potatoes-view') === 'grid' ? 'grid' : 'one'; } catch (e) {}
   function placeCat() {
@@ -617,9 +617,9 @@ body.gridview .wall, body.gridview .top { display: none; }
     syncStashBtn();
     if (pos >= q.length) {
       var d = document.createElement('div'); d.className = 'done fc-card';
-      d.innerHTML = '<div class="fc-frame"><h3 class="fc-label">that\'s all of them</h3><p>Swipe left to go back, check your stash, or pick another category.</p></div>';
+      d.innerHTML = '<div class="fc-frame"><h3 class="fc-label">that\'s all of them</h3><p>Go back, check your stash, or pick another category.</p></div>';
       var b = document.createElement('button'); b.type = 'button'; b.textContent = 'start over'; b.addEventListener('click', function () { pos = 0; render(); });
-      d.querySelector('.fc-frame').appendChild(b); stack.appendChild(d); bindDone(d); return;
+      d.querySelector('.fc-frame').appendChild(b); stack.appendChild(d); return;
     }
     q.slice(pos, pos + 3).reverse().forEach(function (t, k, arr) {
       var depth = arr.length - 1 - k, el = document.createElement('div');
@@ -651,13 +651,9 @@ body.gridview .wall, body.gridview .top { display: none; }
       if (!down) return; dx = e.clientX - x0; dy = e.clientY - y0;
       if (!moved && Math.abs(dx) + Math.abs(dy) > 8) moved = true;
       if (!moved) return;
+      // either way is next; the roll just follows the swipe
       var dir = dx >= 0 ? 1 : -1;
-      if (dir < 0 && pos === 0) {
-        // nothing before the first one: a small give, then it springs back
-        if (pr) { pr.remove(); pr = null; el.style.opacity = ''; underFor(1); }
-        el.style.transition = 'none'; el.style.transform = el.dataset.rest + ' translateX(' + (dx * .12) + 'px)'; return;
-      }
-      if (!pr || (pr.dir !== dir && Math.abs(dx) > 14)) { if (pr) pr.remove(); underFor(dir); pr = peel(el, dir); }
+      if (!pr || (pr.dir !== dir && Math.abs(dx) > 14)) { if (pr) pr.remove(); pr = peel(el, dir); }
       // the further you drag, the further the top rolls down; the sheet follows your finger
       var p = Math.min(.82, Math.hypot(dx, Math.max(dy, 0) * 1.4) / (el.offsetWidth * 1.15));
       pr.set(p, dx * .55, Math.max(-20, dy * .25), dx);
@@ -667,9 +663,8 @@ body.gridview .wall, body.gridview .top { display: none; }
       if (!down) return; down = false;
       if (!moved) { openDetail(el); return; }
       var fast = Math.abs(dx) / Math.max(1, Date.now() - t0) > .6;
-      if (!pr) { el.style.transition = 'transform .3s ease'; el.style.transform = el.dataset.rest; return; }
-      if (Math.abs(dx) > 100 || (fast && Math.abs(dx) > 40)) { go(dx > 0 ? 1 : -1, pr); pr = null; return; }
-      pr.cancel(function () { underFor(1); }); pr = null; pull(0, 0);
+      if (Math.abs(dx) > 100 || (fast && Math.abs(dx) > 40)) { go(1, pr, dx > 0 ? 1 : -1); pr = null; return; }
+      pr.cancel(); pr = null; pull(0, 0);
     }
     el.addEventListener('pointerup', end); el.addEventListener('pointercancel', end);
   }
@@ -688,21 +683,17 @@ body.gridview .wall, body.gridview .top { display: none; }
     if (u._t === t) return;
     u._t = t; u.innerHTML = '<div class="sheet"><div class="face mount labeled"><div class="mat">' + front(t) + plabel(t) + '</div></div></div>';
   }
-  // step +1 shows the next poster, -1 the previous one
-  function go(step, pr) {
+  // step +1 shows the next poster, -1 the previous one (the back button); dir is which way the
+  // poster rolls off
+  function go(step, pr, dir) {
+    dir = dir || 1;
     var q = queue(), el = topEl(); stopNudge();
     if (step < 0 && pos === 0) { if (pr) pr.cancel(); return; }
     if (step > 0 && pos >= q.length) return;
     learned(); pull(0, 0);
-    if (el && !reduce) { underFor(step); (pr || peel(el, step)).leave(step > 0); }
+    if (el && !reduce) { underFor(step); (pr || peel(el, dir)).leave(dir > 0); }
     else if (pr) pr.remove();
     pos += step; render();
-  }
-  // the end card: swipe left (or ← back) to go back
-  function bindDone(d) {
-    var x0 = null;
-    d.addEventListener('pointerdown', function (e) { if (!e.target.closest('button')) x0 = e.clientX; });
-    d.addEventListener('pointerup', function (e) { if (x0 !== null && e.clientX - x0 < -50) go(-1); x0 = null; });
   }
   function isStashed(t) { return stash.indexOf(t.key) > -1; }
   function toggleStash(t) {

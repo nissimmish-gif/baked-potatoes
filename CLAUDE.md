@@ -28,9 +28,9 @@ A wall of movie posters on a grainy black starfield (dense speckled stars, a few
 glints, paper-grain noise), with a layer of stars that slowly twinkle. Every poster image
 carries a very light, even paper texture, not specks (a generated tile, `GRAIN`, no blend
 modes; also painted into
-the peel snapshot). Swiping browses: drag right to roll the poster off and see the next one, left to see the
-previous one (the poster underneath shows where you're going; the first one won't go
-back). Nothing is removed from the deck. Drag a poster to peel it: it rolls up from the top corner opposite the swipe (top-left
+the peel snapshot). Swiping browses: a swipe either way rolls the poster off (in the direction of the swipe)
+and shows the next one. Going back is only the "← back" button (owner: no swipe back).
+Nothing is removed from the deck. Drag a poster to peel it: it rolls up from the top corner opposite the swipe (top-left
 when you swipe right, top-right when you swipe left) like paper coming off a wall, and
 follows your finger the whole way. `peel()` draws it flat on one canvas each frame: the
 poster below the fold line (from `frontSnapshot()`, prepared at idle), a light cream tube
@@ -54,8 +54,8 @@ year · runtime · genre, and the potato score. The card is 1:1.66 so the poster
 Every poster sits in a cream mount with a black frame line, with one even gap (`--gap`,
 2.8% of the card width) from the card edge to the line and from the line to the poster.
 How to use it is said quietly:
-a **stash it** button right under the poster (flash-card style, potato icon, red "in your
-stash" when pressed), then one line of small text ("← back · tap for more · next →", each
+a small, quiet **stash it** chip right under the poster (frosted glass like the view
+toggle, potato icon, 14px; soft yellow "in your stash" when on; owner: not loud), then one line of small text ("← back · tap for more · next →", each
 a button), and on a first visit the top poster peels a little to the right to show the
 gesture, until someone peels or taps. Owner wants these low key, not flash cards. The
 filters are called **categories** (not vibes) on the page. The categories (owner's list,
