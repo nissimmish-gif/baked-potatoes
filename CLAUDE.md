@@ -33,7 +33,9 @@ follows your finger the whole way (`peel()`: strips across a tilted axis; strips
 roll line wrap into a tube). Whatever side is showing is painted once into a canvas
 (`frontSnapshot()`, prepared at idle; `backSnapshot()` draws the details side from the
 live layout, with the trailer's YouTube still, never the live player) and each strip is a
-canvas slice. Strips are flat siblings placed by code, and code decides which side of each
+canvas slice. The roll is one light cream curl: paper past half a turn is hidden, never
+drawn as layers (owner: "light, simple and cream"). A glass back button top left
+(`undo()`) brings back the last poster passed or stashed. Strips are flat siblings placed by code, and code decides which side of each
 strip shows: no nested 3D, no backface-visibility (iOS Safari gets both wrong). The twinkle pauses while a poster is peeled. Let go far enough right to stash, left to
 pass, and it rolls the rest of the way off; let go early and it lays back flat. The next
 poster is live underneath while the roll plays. Tap
