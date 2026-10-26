@@ -12,8 +12,9 @@ added to the same Worker (see README).
   (owner's call, 2026-10-26). Fully Loaded 7.5–10, Half Baked 5.0–7.4, Cold Potato 0–4.9.
   Scores are stored 0–100 in the data and divided by 10 for display. "Half Baked" is a Ben &
   Jerry's trademark; check before launch.
-- **Watchlist vocabulary:** swipe right = **stash it**, left = **pass**; the watchlist
-  is **your stash**.
+- **Watchlist vocabulary:** the button is **stash it** (pressed: **in your stash**); the
+  watchlist is **your stash**. Swiping no longer stashes or passes (owner's call,
+  2026-10-26): it only browses.
 - **Logo:** the traced fingerling potato (from a public-domain USDA photo), 30% chunkier,
   mostly upright leaning right, flipped and mirrored, next to "baked potatoes" in
   **Arimo Bold, lowercase, stacked**. Files in `brand/logo/`. No faces on the potato.
@@ -27,19 +28,18 @@ A wall of movie posters on a grainy black starfield (dense speckled stars, a few
 glints, paper-grain noise), with a layer of stars that slowly twinkle. Every poster image
 carries a very light, even paper texture, not specks (a generated tile, `GRAIN`, no blend
 modes; also painted into
-the peel snapshot). Drag a poster to peel it: it rolls up from the top corner opposite the swipe (top-left
+the peel snapshot). Swiping browses: drag right to roll the poster off and see the next one, left to see the
+previous one (the poster underneath shows where you're going; the first one won't go
+back). Nothing is removed from the deck. Drag a poster to peel it: it rolls up from the top corner opposite the swipe (top-left
 when you swipe right, top-right when you swipe left) like paper coming off a wall, and
 follows your finger the whole way. `peel()` draws it flat on one canvas each frame: the
 poster below the fold line (from `frontSnapshot()`, prepared at idle), a light cream tube
 along the line and its soft shadow. No 3D at all: every 3D version (strips, backface
-tricks) glitched on iOS Safari. The twinkle pauses while a poster is peeled. A glass back
-button top right, beside the view toggle (`undo()`), brings back the last poster passed or
-stashed. Let go far enough right to stash, left to
-pass, and it rolls the rest of the way off; let go early and it lays back flat. The next
+tricks) glitched on iOS Safari. The twinkle pauses while a poster is peeled. Let go far enough and it rolls the rest of the way off; let go early and it lays back flat. The next
 poster is live underneath while the roll plays. Tapping a poster no longer flips it
 (owner: the back was too small to read): it grows from its own rectangle into a big
-flash-card details view (`openDetail()`): trailer, title, score, plot, credits, then pass
-/ stash it buttons at the bottom (they close the card and roll the poster away), with a
+flash-card details view (`openDetail()`): trailer, title, score, plot, credits, then one
+stash it / in your stash toggle at the bottom (the card stays open), with a
 plain heavy black × top right (no circle); Esc or a tap outside also closes it. Fronts are real TMDB posters once `TMDB_TOKEN` is set; until then, original
 placeholder posters in three print styles (torn-paper photo, 80s one-sheet, halftone
 screen print). Inspired by real posters, never copies of them. Exception: the three
@@ -54,16 +54,17 @@ year · runtime · genre, and the potato score. The card is 1:1.66 so the poster
 Every poster sits in a cream mount with a black frame line, with one even gap (`--gap`,
 2.8% of the card width) from the card edge to the line and from the line to the poster.
 How to use it is said quietly:
-one line of small text under the poster ("← pass · tap for more · stash →", each a
-button), and on a first visit the top poster peels a little to the right, then to the
-left, to show the gesture, until someone peels or taps. Owner wants these low key, not flash cards. The
+a **stash it** button right under the poster (flash-card style, potato icon, red "in your
+stash" when pressed), then one line of small text ("← back · tap for more · next →", each
+a button), and on a first visit the top poster peels a little to the right to show the
+gesture, until someone peels or taps. Owner wants these low key, not flash cards. The
 filters are called **categories** (not vibes) on the page. The categories (owner's list,
 2026-10-26): **highest rated** (default; score 5.0 and up), **new** (2015 on, newest
 first), **comedy**, **trippy as balls**, **scary AF**, **what did I just watch?** (the last
 three are hand-picked title lists in `CATS`). Ordered by score unless said otherwise. The
 current category sits above the poster, lined up with the wordmark at the page's left edge, as a small heading, no button shape: a
-tiny "now showing" line in soft cream, then the category in Arimo Bold ~24px in brass
-yellow (`--ink-yellow`) with a small arrow (owner: it got lost in the background); tapping it opens a small flash-card menu right there. The bottom nav keeps a
+tiny "now showing" line in soft cream, then the category in Arimo Bold ~24px in cream with
+a small arrow (owner: it got lost in the background; yellow was tried and dropped); tapping it opens a small flash-card menu right there. The bottom nav keeps a
 categories entry too. The stash is a panel that slides
 in from the right (full height, flash-card style, dimmed page behind; close with ×, a tap
 outside, a swipe right or Esc). Rows: the real mini poster (`miniPoster()`, the image

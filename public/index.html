@@ -71,7 +71,7 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
   font-family: "Arimo", Arial, sans-serif; font-weight: 700; font-size: clamp(20px, calc(11.6vw - 16px), 32px); line-height: 1; display: flex; align-items: center; gap: .22em; letter-spacing: -.02em; text-transform: lowercase; color: var(--cream); text-align: left; }
 
 /* ---------- the stack ---------- */
-.wall { position: fixed; inset: 0; z-index: 3; display: grid; place-items: center; padding: calc(132px + env(safe-area-inset-top, 0px)) 0 calc(134px + env(safe-area-inset-bottom, 0px)); }
+.wall { position: fixed; inset: 0; z-index: 3; display: grid; place-items: center; padding: calc(132px + env(safe-area-inset-top, 0px)) 0 calc(190px + env(safe-area-inset-bottom, 0px)); }
 .stack { position: relative; width: var(--W); height: calc(var(--W) * var(--AR)); }
 .poster { position: absolute; inset: 0; perspective: 1400px; touch-action: none; user-select: none; -webkit-user-select: none; }
 .poster.behind { pointer-events: none; }
@@ -164,12 +164,21 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
 
 /* ---------- how-to: side cards, caption, first-visit nudge ---------- */
 .deck { position: relative; width: var(--W); height: calc(var(--W) * var(--AR)); }
-.howto { position: absolute; left: -4px; right: -4px; top: 100%; margin-top: 6px; display: flex; justify-content: space-between; align-items: baseline; }
+.howto { position: absolute; left: -4px; right: -4px; top: 100%; margin-top: 64px; display: flex; justify-content: space-between; align-items: baseline; }
 .howto button { font-family: var(--f-card); font-weight: 500; font-size: 13px; text-transform: lowercase; color: var(--soft); padding: 6px 4px; white-space: nowrap; transition: color .2s ease, transform .2s ease; }
 .howto .pass { transform: translateX(calc(var(--pp, 0) * -6px)); }
 .howto .keep { transform: translateX(calc(var(--pk, 0) * 6px)); }
 .deck.lean-p .pass, .deck.lean-k .keep { color: var(--cream); }
-.deck.empty .howto { display: none; }
+.howto button:disabled { opacity: .35; cursor: default; }
+/* stash it: right under the poster */
+.stashbtn { position: absolute; left: 50%; top: 100%; margin-top: 12px; transform: translateX(-50%) rotate(-1deg); display: inline-flex; align-items: center; gap: 8px; padding: 7px 16px 8px 12px; white-space: nowrap;
+  background: var(--fc-paper); color: var(--fc-line); border: 3px solid var(--fc-line); border-radius: 3px; box-shadow: 0 0 0 4px var(--fc-paper), 0 10px 24px -8px rgba(0,0,0,.7);
+  font-family: var(--f-card); font-weight: 600; font-size: 17px; letter-spacing: -.01em; text-transform: lowercase; transition: background .2s ease, color .2s ease; }
+.stashbtn img { height: 22px; width: auto; transform: rotate(10deg); }
+.stashbtn[aria-pressed="true"] { background: var(--ink-red); color: var(--fc-paper); }
+@media (hover: hover) { .stashbtn[aria-pressed="false"]:hover { color: var(--ink-red); } }
+.deck.empty .stashbtn { display: none; }
+.roll .tag { display: none !important; }
 .tag { top: 7%; padding: 3px 9px 4px; font-family: var(--f-card); font-weight: 600; font-size: 15px; letter-spacing: -.01em; text-transform: lowercase; background: var(--fc-paper); color: var(--fc-line); border-radius: 2px; box-shadow: 0 6px 16px rgba(0,0,0,.35); }
 .tag.yes { color: var(--ink-red); left: 9%; }
 .tag.no { right: 9%; background: var(--fc-paper); }
@@ -188,7 +197,7 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
 
 /* phones: smaller pieces, more sky between them */
 @media (max-width: 599px) {
-  .wall { padding-top: calc(132px + env(safe-area-inset-top, 0px)); padding-bottom: calc(134px + env(safe-area-inset-bottom, 0px)); }
+  .wall { padding-top: calc(132px + env(safe-area-inset-top, 0px)); padding-bottom: calc(190px + env(safe-area-inset-bottom, 0px)); }
   .pill { bottom: calc(22px + env(safe-area-inset-bottom, 0px)); }
   .pill .fc-frame { gap: 15px; padding: 5px 12px 6px; }
   .pill button { font-size: 15px; }
@@ -208,21 +217,16 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
 .views button[aria-pressed="true"] { background: rgba(255, 255, 255, .2); color: var(--cream); }
 @media (hover: hover) { .views button:hover { color: var(--cream); } }
 body.gridview .grid { padding-top: calc(72px + env(safe-area-inset-top, 0px)); }
-.undo { position: fixed; z-index: 11; right: calc(max(16px, env(safe-area-inset-right, 0px)) + 70px); top: calc(14px + env(safe-area-inset-top, 0px)); display: grid; place-items: center; width: 32px; height: 28px; border-radius: 8px; color: var(--cream);
-  background: rgba(255, 255, 255, .1); border: 1px solid rgba(255, 255, 255, .22); box-shadow: 0 8px 24px rgba(0, 0, 0, .35), inset 0 1px 0 rgba(255, 255, 255, .18);
-  -webkit-backdrop-filter: blur(14px) saturate(1.4); backdrop-filter: blur(14px) saturate(1.4); }
-.undo svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
-@media (hover: hover) { .undo:hover { background: rgba(255, 255, 255, .18); } }
 /* in the grid it sits above the tiles, lined up with them */
 .grid .catwrap { position: relative; left: -2px; bottom: auto; max-width: 1100px; margin: 0 auto 10px; }
 /* lined up with the wordmark at the page's left edge (the deck is centred, --W wide) */
 .catwrap { position: absolute; left: calc(max(16px, env(safe-area-inset-left, 0px)) - (100vw - var(--W)) / 2 - 2px); bottom: 100%; margin-bottom: 32px; z-index: 40; }
-.cat { display: grid; grid-template-columns: auto auto; justify-content: start; align-items: center; column-gap: 7px; padding: 4px 2px; text-align: left; white-space: nowrap; color: var(--ink-yellow); }
+.cat { display: grid; grid-template-columns: auto auto; justify-content: start; align-items: center; column-gap: 7px; padding: 4px 2px; text-align: left; white-space: nowrap; color: var(--cream); }
 .cat .kick { grid-column: 1 / -1; font-family: var(--f-card); font-weight: 500; font-size: 11px; letter-spacing: .08em; text-transform: lowercase; color: var(--soft); margin-bottom: 1px; }
-.cat #cat-name { font-family: "Arimo", Arial, sans-serif; font-weight: 700; font-size: 24px; line-height: 1.05; letter-spacing: -.02em; text-transform: lowercase; text-shadow: 0 0 18px rgba(240, 198, 74, .28); }
+.cat #cat-name { font-family: "Arimo", Arial, sans-serif; font-weight: 700; font-size: 24px; line-height: 1.05; letter-spacing: -.02em; text-transform: lowercase; }
 .cat svg { width: 16px; height: 16px; margin-top: 3px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; transition: transform .2s ease; }
 .cat[aria-expanded="true"] svg { transform: rotate(180deg); }
-@media (hover: hover) { .cat:hover { color: #ffd968; } }
+@media (hover: hover) { .cat:hover { color: #fff; } }
 .catmenu { position: absolute; left: 0; top: 100%; margin-top: 4px; width: 240px; padding: 4px; transform: rotate(-.6deg); }
 .catmenu .fc-frame { padding: 4px 12px; }
 .catmenu button { display: block; width: 100%; text-align: left; padding: 9px 0; font-family: var(--f-card); font-weight: 500; font-size: 17px; letter-spacing: -.01em; text-transform: lowercase; color: var(--fc-line); }
@@ -284,10 +288,12 @@ body.gridview .wall, body.gridview .top { display: none; }
 .dcard .x { position: absolute; z-index: 3; top: 8px; right: 8px; display: grid; place-items: center; width: 40px; height: 40px; color: var(--fc-line); }
 .dcard .x svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 3; stroke-linecap: square; }
 @media (hover: hover) { .dcard .x:hover { color: var(--ink-red); } }
-.dacts { display: flex; gap: 10px; margin-top: 8px; padding-top: 4px; }
+.dacts { display: flex; margin-top: 8px; padding-top: 4px; }
 .dacts button { flex: 1; padding: 10px 0 11px; font-family: var(--f-card); font-weight: 500; font-size: 20px; text-transform: lowercase; letter-spacing: -.01em; border: 3px solid var(--fc-line); border-radius: 3px; color: var(--fc-line); }
-.dacts .yes { background: var(--ink-red); color: var(--fc-paper); }
-@media (hover: hover) { .dacts button:hover { color: var(--ink-red); } .dacts .yes:hover { color: var(--fc-paper); background: #c9381f; } }
+.dacts button { display: inline-flex; justify-content: center; align-items: center; gap: 8px; }
+.dacts img { height: 24px; width: auto; transform: rotate(10deg); }
+.dacts button[aria-pressed="true"] { background: var(--ink-red); color: var(--fc-paper); }
+@media (hover: hover) { .dacts button[aria-pressed="false"]:hover { color: var(--ink-red); } }
 .dbody { height: 100%; overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; padding: 52px 18px 22px; display: flex; flex-direction: column; gap: 12px; opacity: 0; transition: opacity .2s ease .12s; }
 .detail.on .dbody { opacity: 1; }
 .dbody .trailer { flex: 0 0 auto; aspect-ratio: 16 / 9; background: #111; border-radius: 2px; overflow: hidden; }
@@ -314,7 +320,6 @@ body.gridview .wall, body.gridview .top { display: none; }
 
 <h1 class="wordmark"><img src="img/potato.png" alt="" width="58" height="96">baked potatoes</h1>
 
-<button type="button" class="undo" id="undo" hidden aria-label="Bring back the last poster"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3 2.5 6.5 6 10"/><path d="M3 6.5h6.5a4 4 0 0 1 0 8H7"/></svg></button>
 <div class="views" role="group" aria-label="View">
     <button type="button" id="view-one" aria-pressed="true" aria-label="One at a time"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="4" y="2" width="8" height="12" rx="1"/></svg></button>
     <button type="button" id="view-grid" aria-pressed="false" aria-label="Grid"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="2" y="2" width="5" height="5" rx=".6"/><rect x="9" y="2" width="5" height="5" rx=".6"/><rect x="2" y="9" width="5" height="5" rx=".6"/><rect x="9" y="9" width="5" height="5" rx=".6"/></svg></button>
@@ -327,10 +332,11 @@ body.gridview .wall, body.gridview .top { display: none; }
       <div class="catmenu fc-card" id="catmenu" role="menu" hidden><div class="fc-frame" id="catmenu-list"></div></div>
     </div>
     <div class="stack" id="stack" aria-label="Poster stack. Drag right to stash, left to pass, tap to flip. Arrow keys work too." tabindex="0"></div>
+    <button type="button" class="stashbtn" id="stashbtn" aria-pressed="false"><img src="img/potato.png" alt="" width="58" height="96"><span>stash it</span></button>
     <div class="howto">
-      <button type="button" class="side pass" id="side-pass">← pass</button>
+      <button type="button" class="side pass" id="side-prev">← back</button>
       <button type="button" class="caption" id="caption"><span id="cap-text">tap for more</span></button>
-      <button type="button" class="side keep" id="side-keep">stash →</button>
+      <button type="button" class="side keep" id="side-next">next →</button>
     </div>
   </div>
 </main>
@@ -555,9 +561,9 @@ body.gridview .wall, body.gridview .top { display: none; }
 
 
   // ---------- stack ----------
-  var stack = document.getElementById('stack'), kindF = 'all', vibeF = 'all', seen = {};
-  function sizes() { var w = Math.min(innerWidth * (innerWidth < 600 ? .7 : .84), (innerHeight - 282) / 1.66, 380); document.documentElement.style.setProperty('--W', Math.round(w) + 'px'); }
-  var view = 'one', pin = null, grid = document.getElementById('grid'), tiles = document.getElementById('tiles');
+  var stack = document.getElementById('stack'), kindF = 'all', vibeF = 'all', pos = 0;
+  function sizes() { var w = Math.min(innerWidth * (innerWidth < 600 ? .7 : .84), (innerHeight - 338) / 1.66, 380); document.documentElement.style.setProperty('--W', Math.round(w) + 'px'); }
+  var view = 'one', grid = document.getElementById('grid'), tiles = document.getElementById('tiles');
   try { view = localStorage.getItem('baked-potatoes-view') === 'grid' ? 'grid' : 'one'; } catch (e) {}
   function placeCat() {
     var cw = document.querySelector('.catwrap');
@@ -587,27 +593,36 @@ body.gridview .wall, body.gridview .top { display: none; }
       tiles.appendChild(b);
     });
   }
-  function queue() { var q = T.filter(function (t) { return t.key === pin || !seen[t.key] && stash.indexOf(t.key) < 0 && (kindF === 'all' || t.kind === kindF) && catOf(vibeF)[2](t); }).sort(catOf(vibeF)[3]);
-    if (pin) { var i = q.findIndex(function (t) { return t.key === pin; }); if (i > 0) q.unshift(q.splice(i, 1)[0]); }
-    return q; }
+  // every title in the category, in order; pos is the one you're looking at
+  function queue() { return T.filter(function (t) { return (kindF === 'all' || t.kind === kindF) && catOf(vibeF)[2](t); }).sort(catOf(vibeF)[3]); }
+  function showKey(k) {
+    // put a title on top: in this category if it's there, otherwise in highest rated with no filter
+    var q = queue(), i = q.findIndex(function (t) { return t.key === k; });
+    if (i < 0) { vibeF = 'all'; kindF = 'all'; syncKind(); q = queue(); i = q.findIndex(function (t) { return t.key === k; }); }
+    pos = Math.max(0, i);
+  }
   function render() {
     stopNudge();
     stack.innerHTML = '';
     var q = queue();
     vb.textContent = vibeF === 'all' ? 'categories' : vibeName(vibeF).toLowerCase();
     document.getElementById('cat-name').textContent = vibeName(vibeF).toLowerCase(); drawCatMenu();
-    showTop(q[0]);
+    pos = Math.max(0, Math.min(pos, q.length));
+    showTop(q[pos]);
     if (view === 'grid') drawGrid(q);
-    deck.classList.toggle('empty', !q.length); pull(0, 0); capText(false);
-    if (!q.length) {
+    deck.classList.toggle('empty', pos >= q.length); pull(0, 0); capText(false);
+    document.getElementById('side-prev').disabled = pos === 0;
+    document.getElementById('side-next').disabled = pos >= q.length;
+    syncStashBtn();
+    if (pos >= q.length) {
       var d = document.createElement('div'); d.className = 'done fc-card';
-      d.innerHTML = '<div class="fc-frame"><h3 class="fc-label">that\'s all of them</h3><p>Check your stash or pick another category.</p></div>';
-      var b = document.createElement('button'); b.type = 'button'; b.textContent = 'start over'; b.addEventListener('click', function () { seen = {}; past = []; undoBtn.hidden = true; render(); });
-      d.querySelector('.fc-frame').appendChild(b); stack.appendChild(d); return;
+      d.innerHTML = '<div class="fc-frame"><h3 class="fc-label">that\'s all of them</h3><p>Swipe left to go back, check your stash, or pick another category.</p></div>';
+      var b = document.createElement('button'); b.type = 'button'; b.textContent = 'start over'; b.addEventListener('click', function () { pos = 0; render(); });
+      d.querySelector('.fc-frame').appendChild(b); stack.appendChild(d); bindDone(d); return;
     }
-    q.slice(0, 3).reverse().forEach(function (t, k, arr) {
+    q.slice(pos, pos + 3).reverse().forEach(function (t, k, arr) {
       var depth = arr.length - 1 - k, el = document.createElement('div');
-      el.className = 'poster' + (depth ? ' behind' : ''); el.style.zIndex = String(10 - depth);
+      el.className = 'poster' + (depth ? ' behind' : ''); el.style.zIndex = String(10 - depth); el.dataset.depth = String(depth);
       var rot = ((t.i * 37) % 7 - 3) * (depth ? 1 : .35);
       el.dataset.rest = 'translate(' + depth * 6 + 'px,' + depth * -6 + 'px) rotate(' + rot + 'deg)';
       el.style.transform = el.dataset.rest;
@@ -636,8 +651,12 @@ body.gridview .wall, body.gridview .top { display: none; }
       if (!moved && Math.abs(dx) + Math.abs(dy) > 8) moved = true;
       if (!moved) return;
       var dir = dx >= 0 ? 1 : -1;
-      if (!pr) pr = peel(el, dir);
-      else if (pr.dir !== dir && Math.abs(dx) > 14) { pr.remove(); pr = peel(el, dir); }
+      if (dir < 0 && pos === 0) {
+        // nothing before the first one: a small give, then it springs back
+        if (pr) { pr.remove(); pr = null; el.style.opacity = ''; underFor(1); }
+        el.style.transition = 'none'; el.style.transform = el.dataset.rest + ' translateX(' + (dx * .12) + 'px)'; return;
+      }
+      if (!pr || (pr.dir !== dir && Math.abs(dx) > 14)) { if (pr) pr.remove(); underFor(dir); pr = peel(el, dir); }
       // the further you drag, the further the top rolls down; the sheet follows your finger
       var p = Math.min(.82, Math.hypot(dx, Math.max(dy, 0) * 1.4) / (el.offsetWidth * 1.15));
       pr.set(p, dx * .55, Math.max(-20, dy * .25), dx);
@@ -647,34 +666,53 @@ body.gridview .wall, body.gridview .top { display: none; }
       if (!down) return; down = false;
       if (!moved) { openDetail(el); return; }
       var fast = Math.abs(dx) / Math.max(1, Date.now() - t0) > .6;
-      if (Math.abs(dx) > 100 || (fast && Math.abs(dx) > 40)) { decide(dx > 0, pr); pr = null; return; }
-      pr.cancel(); pr = null; pull(0, 0);
+      if (!pr) { el.style.transition = 'transform .3s ease'; el.style.transform = el.dataset.rest; return; }
+      if (Math.abs(dx) > 100 || (fast && Math.abs(dx) > 40)) { go(dx > 0 ? 1 : -1, pr); pr = null; return; }
+      pr.cancel(function () { underFor(1); }); pr = null; pull(0, 0);
     }
     el.addEventListener('pointerup', end); el.addEventListener('pointercancel', end);
   }
 
-  var past = [], undoBtn = document.getElementById('undo');
-  function decide(keep, pr) {
-    var el = topEl(); if (!el) return; var t = el._t; learned(); stopNudge();
-    past.push({ key: t.key, kept: keep }); undoBtn.hidden = false;
-    if (pin === t.key) pin = null;
-    if (keep) { if (stash.indexOf(t.key) < 0) stash.push(t.key); save(); updateCount(); } else seen[t.key] = true;
-    pull(0, 0);
-    if (reduce) { if (pr) pr.remove(); render(); return; }
-    (pr || peel(el, keep ? 1 : -1)).leave(keep); render();
+  // the poster just under the top one shows the next title, or the previous one while you
+  // peel to the left, so what you uncover is where you're going
+  function underFor(dir) {
+    var q = queue(), t = dir < 0 ? q[pos - 1] : q[pos + 1], u = stack.querySelector('.poster.behind[data-depth="1"]');
+    if (!u) {
+      if (!t) return;
+      u = document.createElement('div'); u.className = 'poster behind'; u.dataset.depth = '1'; u.style.zIndex = '9';
+      u.dataset.rest = 'translate(6px,-6px)'; u.style.transform = u.dataset.rest; stack.insertBefore(u, topEl());
+    }
+    if (!t) { u.style.visibility = 'hidden'; return; }
+    u.style.visibility = '';
+    if (u._t === t) return;
+    u._t = t; u.innerHTML = '<div class="sheet"><div class="face mount labeled"><div class="mat">' + front(t) + plabel(t) + '</div></div></div>';
   }
-
-  // the same as decide, for a poster that isn't on top (the grid): no roll, the grid redraws
-  function decideQuietly(t, keep) {
-    learned(); past.push({ key: t.key, kept: keep }); undoBtn.hidden = false; if (pin === t.key) pin = null;
-    if (keep) { if (stash.indexOf(t.key) < 0) stash.push(t.key); save(); updateCount(); } else seen[t.key] = true;
-    render();
+  // step +1 shows the next poster, -1 the previous one
+  function go(step, pr) {
+    var q = queue(), el = topEl(); stopNudge();
+    if (step < 0 && pos === 0) { if (pr) pr.cancel(); return; }
+    if (step > 0 && pos >= q.length) return;
+    learned(); pull(0, 0);
+    if (el && !reduce) { underFor(step); (pr || peel(el, step)).leave(step > 0); }
+    else if (pr) pr.remove();
+    pos += step; render();
   }
-  // brings back the last poster you passed or stashed, on top of the stack
-  function undo() {
-    var last = past.pop(); if (!last) return;
-    if (last.kept) { stash = stash.filter(function (k) { return k !== last.key; }); save(); updateCount(); } else delete seen[last.key];
-    pin = last.key; undoBtn.hidden = !past.length; render();
+  // the end card: swipe left (or ← back) to go back
+  function bindDone(d) {
+    var x0 = null;
+    d.addEventListener('pointerdown', function (e) { if (!e.target.closest('button')) x0 = e.clientX; });
+    d.addEventListener('pointerup', function (e) { if (x0 !== null && e.clientX - x0 < -50) go(-1); x0 = null; });
+  }
+  function isStashed(t) { return stash.indexOf(t.key) > -1; }
+  function toggleStash(t) {
+    learned();
+    if (isStashed(t)) stash = stash.filter(function (k) { return k !== t.key; }); else stash.push(t.key);
+    save(); updateCount(); syncStashBtn();
+  }
+  function syncStashBtn() {
+    var q = queue(), t = q[pos], b = document.getElementById('stashbtn'), on = !!t && isStashed(t);
+    b.setAttribute('aria-pressed', String(on)); b.querySelector('span').textContent = on ? 'in your stash' : 'stash it';
+    b.setAttribute('aria-label', t ? (on ? 'Remove ' + t.title + ' from your stash' : 'Stash ' + t.title) : 'Stash it');
   }
 
   function canvasFor(w, h) { var s = Math.min(devicePixelRatio || 1, 1.5), c = document.createElement('canvas'); c.width = Math.round(w * s); c.height = Math.round(h * s); var x = c.getContext('2d'); x.scale(s, s); return [c, x]; }
@@ -791,7 +829,7 @@ body.gridview .wall, body.gridview .top { display: none; }
     function remove() { if (gone) return; gone = true; cancelAnimationFrame(raf); box.remove(); peeling = Math.max(0, peeling - 1); }
     return {
       dir: dir, set: set, remove: remove,
-      cancel: function () { tween({ p: 0, x: 0, y: 0, d: 0 }, 320, function () { remove(); el.style.opacity = ''; }); },
+      cancel: function (done) { tween({ p: 0, x: 0, y: 0, d: 0 }, 320, function () { remove(); el.style.opacity = ''; if (done) done(); }); },
       leave: function (keep) { var dd = keep ? 1 : -1; tween({ p: 1, x: dd * innerWidth * .95, y: -40, d: dd * 100, fade: true }, 620, remove); },
       demo: function (steps, done) {
         var i = 0;
@@ -810,7 +848,7 @@ body.gridview .wall, body.gridview .top { display: none; }
       '<p class="meta">' + t.year + ' · ' + esc(t.run) + ' · ' + esc(t.genre) + ' · ' + tier(t.score).toLowerCase() + '</p>' +
       '<p class="plot">' + esc(t.plot) + '</p>' +
       '<dl><dt>' + (t.kind === 'tv' ? 'made by' : 'directed by') + '</dt><dd>' + esc(t.dir.join(', ')) + '</dd><dt>starring</dt><dd>' + esc(t.cast.join(', ')) + '</dd><dt>category</dt><dd>' + esc((catsFor(t).join(', ') || 'highest rated').toLowerCase()) + '</dd><dt>watch on</dt><dd>coming soon</dd></dl>' +
-      '<div class="dacts"><button type="button" data-d="pass">pass</button><button type="button" class="yes" data-d="stash">' + (stash.indexOf(t.key) > -1 ? 'keep in stash' : 'stash it') + '</button></div>';
+      '<div class="dacts"><button type="button" data-d="stash" aria-pressed="' + isStashed(t) + '"><img src="img/potato.png" alt="" width="58" height="96"><span>' + (isStashed(t) ? 'in your stash' : 'stash it') + '</span></button></div>';
     detail.hidden = false; dbody.scrollTop = 0;
     // grow from the poster's own rectangle into the big card
     var a = el.getBoundingClientRect(), b = dcard.getBoundingClientRect();
@@ -834,14 +872,12 @@ body.gridview .wall, body.gridview .top { display: none; }
     setTimeout(function () { detail.hidden = true; dcard.style.transform = ''; el.style.opacity = ''; }, 340);
   }
   document.getElementById('dclose').addEventListener('click', closeDetail);
-  // pass or stash from the card: it closes on the spot and the poster rolls away as if swiped
+  // stash from the big card: it stays open and the button flips
   dbody.addEventListener('click', function (e) {
-    var b = e.target.closest('[data-d]'); if (!b) return;
-    var el = openFrom; openFrom = null; dbody.querySelector('.trailer').innerHTML = '';
-    detail.classList.remove('on'); detail.hidden = true; dcard.style.transform = '';
-    if (el) el.style.opacity = '';
-    if (el === topEl()) decide(b.dataset.d === 'stash');
-    else if (el && el._t) decideQuietly(el._t, b.dataset.d === 'stash');
+    var b = e.target.closest('[data-d]'); if (!b || !openFrom) return;
+    var t = openFrom._t; toggleStash(t);
+    b.setAttribute('aria-pressed', String(isStashed(t))); b.querySelector('span').textContent = isStashed(t) ? 'in your stash' : 'stash it';
+    if (view === 'grid') drawGrid(queue());
   });
   detail.addEventListener('click', function (e) { if (e.target === detail) closeDetail(); });
   addEventListener('keydown', function (e) { if (e.key === 'Escape') closeDetail(); });
@@ -859,26 +895,26 @@ body.gridview .wall, body.gridview .top { display: none; }
   function learned() { busy = true; if (!knows) { knows = true; try { localStorage.setItem(HKEY, '1'); } catch (e) {} } }
   function pull(k, p) { deck.style.setProperty('--pk', k); deck.style.setProperty('--pp', p); deck.classList.toggle('lean-k', k > .4); deck.classList.toggle('lean-p', p > .4); }
   function capText() { cap.textContent = 'tap for more'; }
-  document.getElementById('side-pass').addEventListener('click', function () { decide(false); });
-  document.getElementById('side-keep').addEventListener('click', function () { decide(true); });
+  document.getElementById('side-prev').addEventListener('click', function () { go(-1); });
+  document.getElementById('side-next').addEventListener('click', function () { go(1); });
+  document.getElementById('stashbtn').addEventListener('click', function () { var t = queue()[pos]; if (t) toggleStash(t); });
   document.getElementById('caption').addEventListener('click', function () { var el = topEl(); if (el) openDetail(el); });
   var demoing = null;
   function stopNudge() { if (demoing) { var d = demoing; demoing = null; d.remove(); var el = topEl(); if (el) el.style.opacity = ''; } }
   function nudge() {
-    // once per visit until it's been used: peel the top a little to the right, then to the left, and lay it back
+    // once per visit until it's been used
     if (knows || reduce || busy || view === 'grid') return;
     var el = topEl(); if (!el) return;
+    // a little peel to the right, showing the next poster underneath, then it lays back
     demoing = peel(el, 1);
-    demoing.demo([[.24, 34, 700], [0, 0, 500]], function () {
-      if (busy || el !== topEl()) { demoing = null; return; }
-      demoing = peel(el, -1); demoing.demo([[.24, -34, 700], [0, 0, 500]], function () { demoing = null; });
-    });
+    demoing.demo([[.26, 36, 750], [0, 0, 550]], function () { demoing = null; });
   }
 
 
   stack.addEventListener('keydown', function (e) {
-    if (e.key === 'ArrowRight') { e.preventDefault(); decide(true); }
-    if (e.key === 'ArrowLeft') { e.preventDefault(); decide(false); }
+    if (e.key === 'ArrowRight') { e.preventDefault(); go(1); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); go(-1); }
+    if (e.key === 's' || e.key === 'S') { var t = queue()[pos]; if (t) { e.preventDefault(); toggleStash(t); } }
     if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); var el = topEl(); if (el) openDetail(el); }
   });
 
@@ -904,8 +940,9 @@ body.gridview .wall, body.gridview .top { display: none; }
     function up() { if (x0 === null) return; x0 = null; sd.style.transition = ''; if (dx > 70) closeStash(); else sd.style.transform = ''; }
     sd.addEventListener('pointerup', up); sd.addEventListener('pointercancel', up);
   })();
+  function syncKind() { [].forEach.call(document.querySelectorAll('.pill [data-k]'), function (x) { x.setAttribute('aria-pressed', String(kindF === x.dataset.k)); }); }
   [].forEach.call(document.querySelectorAll('.pill [data-k]'), function (b) {
-    b.addEventListener('click', function () { kindF = kindF === b.dataset.k ? 'all' : b.dataset.k; [].forEach.call(document.querySelectorAll('.pill [data-k]'), function (x) { x.setAttribute('aria-pressed', String(kindF === x.dataset.k)); }); closeAll(); render(); });
+    b.addEventListener('click', function () { kindF = kindF === b.dataset.k ? 'all' : b.dataset.k; pos = 0; syncKind(); closeAll(); render(); });
   });
   function toggleCats() { var o = vd.hidden; closeAll(); if (o) { drawVibes(); vd.hidden = false; vb.setAttribute('aria-expanded', 'true'); } }
   vb.addEventListener('click', toggleCats);
@@ -915,7 +952,7 @@ body.gridview .wall, body.gridview .top { display: none; }
     var box = document.getElementById('catmenu-list'); box.innerHTML = '';
     CATS.forEach(function (c) {
       var b = document.createElement('button'); b.type = 'button'; b.setAttribute('role', 'menuitemradio'); b.setAttribute('aria-checked', String(vibeF === c[0])); b.textContent = c[1].toLowerCase();
-      b.addEventListener('click', function () { vibeF = c[0]; closeCatMenu(); render(); }); box.appendChild(b);
+      b.addEventListener('click', function () { vibeF = c[0]; pos = 0; closeCatMenu(); render(); }); box.appendChild(b);
     });
   }
   catBtn.addEventListener('click', function () { var o = catMenu.hidden; closeAll(); if (o) { drawCatMenu(); catMenu.hidden = false; catBtn.setAttribute('aria-expanded', 'true'); } });
@@ -926,7 +963,7 @@ body.gridview .wall, body.gridview .top { display: none; }
       var n = T.filter(v[2]).length;
       var b = document.createElement('button'); b.type = 'button'; b.className = 'r'; b.setAttribute('aria-pressed', String(vibeF === v[0]));
       b.innerHTML = '<span class="k"></span><small>' + n + ' posters</small>'; b.querySelector('.k').textContent = v[1];
-      b.addEventListener('click', function () { vibeF = v[0]; closeAll(); render(); }); box.appendChild(b);
+      b.addEventListener('click', function () { vibeF = v[0]; pos = 0; closeAll(); render(); }); box.appendChild(b);
     });
   }
   function miniPoster(t) {
@@ -944,7 +981,7 @@ body.gridview .wall, body.gridview .top { display: none; }
       r.querySelector('.nm').textContent = t.title;
       r.querySelector('.open').setAttribute('aria-label', 'Open ' + t.title);
       // open it on top of the stack, to flip for the trailer and details
-      r.querySelector('.open').addEventListener('click', function () { pin = k; if (view === 'grid') setView('one'); else render(); closeStash(); });
+      r.querySelector('.open').addEventListener('click', function () { showKey(k); if (view === 'grid') setView('one'); else render(); closeStash(); });
       r.querySelector('.rm').addEventListener('click', function () { stash = stash.filter(function (x) { return x !== k; }); save(); updateCount(); drawStash(); render(); });
       box.appendChild(r);
     });
@@ -961,7 +998,6 @@ body.gridview .wall, body.gridview .top { display: none; }
   document.getElementById('view-grid').addEventListener('click', function () { if (view !== 'grid') { stopNudge(); setView('grid'); grid.scrollTop = 0; } });
   document.body.classList.toggle('gridview', view === 'grid'); grid.hidden = view !== 'grid';
   document.getElementById('view-one').setAttribute('aria-pressed', String(view === 'one')); document.getElementById('view-grid').setAttribute('aria-pressed', String(view === 'grid'));
-  undoBtn.addEventListener('click', undo);
   placeCat();
   sizes(); updateCount(); render(); setTimeout(nudge, 900);
 })();
