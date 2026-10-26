@@ -182,6 +182,24 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
 .done .fc-label { font-size: calc(var(--W) * .1); }
 .done button { margin-top: auto; padding: 8px 0; font-family: var(--f-card); font-weight: 500; font-size: 19px; text-transform: lowercase; border: 3px solid var(--fc-line); border-radius: 3px; }
 
+/* phones: smaller pieces, more sky between them */
+@media (max-width: 599px) {
+  .top { width: min(318px, calc(100vw - 56px)); top: calc(18px + env(safe-area-inset-top, 0px)); }
+  .top .fc-frame { grid-template-columns: 60px minmax(0, 1fr) auto; gap: 9px; padding: 4px 10px 4px 4px; }
+  .top .fc-panel { height: 46px; }
+  .top .fc-label { font-size: 17px; }
+  .top p { font-size: 10.5px; }
+  .top .rate b { font-size: 24px; }
+  .top .rate small { font-size: 9.5px; }
+  .wall { padding-top: calc(96px + env(safe-area-inset-top, 0px)); padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
+  .pill { bottom: calc(22px + env(safe-area-inset-bottom, 0px)); }
+  .pill .fc-frame { gap: 15px; padding: 5px 12px 6px; }
+  .pill button { font-size: 15px; }
+  .hint-row { bottom: calc(72px + env(safe-area-inset-bottom, 0px)); font-size: 10.5px; }
+  .back .plot { font-size: max(12px, calc(var(--W) * .043)); }
+  .back .fc-panel { height: calc(var(--W) * .33); }
+}
+
 @media (prefers-reduced-motion: reduce) { .sheet { transition: none; } }
 </style>
 </head>
@@ -365,7 +383,7 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
 
   // ---------- stack ----------
   var stack = document.getElementById('stack'), kindF = 'all', vibeF = 'all', seen = {};
-  function sizes() { var w = Math.min(innerWidth * .84, (innerHeight - 224) / 1.5, 380); document.documentElement.style.setProperty('--W', Math.round(w) + 'px'); }
+  function sizes() { var w = Math.min(innerWidth * (innerWidth < 600 ? .7 : .84), (innerHeight - 250) / 1.5, 380); document.documentElement.style.setProperty('--W', Math.round(w) + 'px'); }
   function queue() { return T.filter(function (t) { return !seen[t.key] && stash.indexOf(t.key) < 0 && (kindF === 'all' || t.kind === kindF) && (vibeF === 'all' ? t.vibes.indexOf('sober') < 0 : t.vibes.indexOf(vibeF) > -1); }); }
   function render() {
     stack.innerHTML = '';
