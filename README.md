@@ -19,7 +19,8 @@ brand/logo/         Logo files from the earlier brand round (PNG)
 
 Add a **Secret** named `TMDB_TOKEN` to the Worker (Cloudflare dashboard → baked-potatoes →
 Settings → Variables and Secrets) with your TMDB "API Read Access Token". Until then the
-wall shows placeholder posters; with it, the real posters appear without a code change.
+wall shows placeholder posters; with it, the real posters appear without a code change,
+and flipping a poster plays its trailer on the back.
 
 ## Run it locally
 

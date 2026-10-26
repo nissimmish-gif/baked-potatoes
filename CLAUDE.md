@@ -24,28 +24,32 @@ added to the same Worker (see README).
 ## Feel of the site (owner's call, 2026-10-26)
 
 A wall of movie posters on a grainy black starfield (dense speckled stars, a few bright
-glints, paper-grain noise), with a layer of stars that slowly twinkle. Drag a poster to peel it off: right stashes, left passes; as it leaves it rolls up like
-paper into a tube (`roll()`: a chain of hinged strips) while the next poster is already live. Tap
+glints, paper-grain noise), with a layer of stars that slowly twinkle. Drag a poster to peel it: the top edge rolls down like paper coming off a wall and
+follows your finger the whole way (`peel()`: horizontal strips hinged from the bottom up;
+strips above the roll line wrap into a tube). Let go far enough right to stash, left to
+pass, and it rolls the rest of the way off; let go early and it lays back flat. The next
+poster is live underneath while the roll plays. Tap
 to flip it. Fronts are real TMDB posters once `TMDB_TOKEN` is set; until then, original
 placeholder posters in three print styles (torn-paper photo, 80s one-sheet, halftone
 screen print). Inspired by real posters, never copies of them. Exception: the three
 posters in `public/posters/` (Ferris Bueller's Day Off, The Truman Show, Fight Club) are
 the owner's own reference images, used as stand-ins until TMDB is on; delete them then.
 
-The header is a flash card for the poster on top of the stack: its picture, title,
-year, runtime, genre and score. It changes as posters are peeled.
+The header is a flash card for the poster on top of the stack: its title, year, runtime,
+genre and score. It changes as posters are peeled.
 
 Every poster sits in a cream mount with a black frame line. How to use it is said quietly:
 one line of small text under the poster ("← pass · tap for the plot · stash →", each a
-button), and on a first visit the top poster leans right then left once to show the
-gesture, until someone peels or flips. Owner wants these low key, not flash cards. The
+button), and on a first visit the top poster peels a little to the right, then to the
+left, to show the gesture, until someone peels or flips. Owner wants these low key, not flash cards. The
 filters are called **categories** (not vibes) on the page. The stash list shows a mini
 poster beside each title.
 
 The back of each poster, the header, the nav and the drawers are **vintage flash cards**:
-cream paper, a heavy black rounded frame, a flat ink picture (red, violet, pink, sage) with
-rough edges and a yellow plate slipped out of register, and a lowercase grotesque label
-underneath (Inter Tight). The name is on hold, so the page carries no brand name.
+cream paper, a heavy black rounded frame and a lowercase grotesque label (Inter Tight). No
+drawings (owner removed them, 2026-10-26). The top of each poster back is the **trailer
+slot**: once TMDB is connected, flipping a poster loads its YouTube trailer there
+(`/api/trailer`, youtube-nocookie embed, removed again on flip back). The name is on hold, so the page carries no brand name.
 Rejected so far: space gradients, texture everywhere, typewriter/handwriting fonts,
 stickers/VHS, the 70s eyeball broadcast, the A24 disc library.
 

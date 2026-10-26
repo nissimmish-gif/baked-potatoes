@@ -13,7 +13,7 @@
 /* Layout: a grainy black starfield fills the screen. A stack of movie posters sits on it:
    drag one to peel it off (right stashes, left passes), tap it to flip. The back of each
    poster, the header, the nav and the drawers are vintage flash cards: cream paper, a heavy
-   black frame, a flat misprinted ink picture and a lowercase label. */
+   black frame and a lowercase label. Peeling rolls the poster down from its top edge. */
 :root {
   --night: #040509;
   --fc-paper: #efe5d0;
@@ -67,8 +67,7 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
 
 /* ---------- header card ---------- */
 .top { position: fixed; z-index: 5; top: calc(12px + env(safe-area-inset-top, 0px)); left: 50%; transform: translateX(-50%) rotate(-1deg); width: min(360px, calc(100vw - 32px)); }
-.top .fc-frame { display: grid; grid-template-columns: 76px minmax(0, 1fr) auto; align-items: center; gap: 11px; padding: 5px 12px 5px 5px; }
-.top .fc-panel { height: 58px; }
+.top .fc-frame { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 12px; padding: 7px 12px 7px 13px; }
 .top .ti { min-width: 0; }
 .top .fc-label { font-size: 22px; margin: 0; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; line-height: 1.02; }
 .top p { margin-top: 3px; font-size: 11.5px; font-weight: 500; text-transform: lowercase; color: #5f584b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -98,10 +97,6 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
     linear-gradient(180deg, rgba(255,255,255,0) 48%, rgba(0,0,0,.08) 50%, rgba(255,255,255,0) 52%),
     linear-gradient(90deg, rgba(255,255,255,0) 48%, rgba(0,0,0,.07) 50%, rgba(255,255,255,0) 52%); }
 .back { transform: rotateY(180deg); }
-.lift { position: absolute; inset: 0; pointer-events: none; z-index: 4; opacity: 0;
-  background: linear-gradient(var(--la, 120deg), rgba(0,0,0,0) 40%, rgba(0,0,0,.25) 70%, rgba(255,255,255,.35) 86%, rgba(0,0,0,.35)); }
-.curl { position: absolute; bottom: 0; width: 0; height: 0; z-index: 5; pointer-events: none;
-  background: linear-gradient(var(--ca, 135deg), #fbf6e9 0%, #d8cdb2 45%, rgba(0,0,0,.35) 50%, transparent 51%); filter: drop-shadow(-4px -4px 6px rgba(0,0,0,.35)); }
 .tag { position: absolute; top: 18%; z-index: 6; padding: 4px 12px 2px; font-family: var(--f-cond); font-size: 30px; letter-spacing: .04em; text-transform: uppercase; opacity: 0;
   background: var(--gold); color: var(--ink); box-shadow: 3px 3px 0 rgba(0,0,0,.4); }
 .tag.yes { left: 14px; transform: rotate(-9deg); }
@@ -157,7 +152,9 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
 /* back of the poster: a flash card */
 .back { background: var(--fc-paper); color: var(--fc-line); padding: 4%; border-radius: 3px; }
 .back .fc-frame { position: absolute; inset: 4%; display: flex; flex-direction: column; padding: 4%; gap: calc(var(--W) * .022); }
-.back .fc-panel { flex: 0 0 auto; height: calc(var(--W) * .4); }
+.back .trailer { flex: 0 0 auto; aspect-ratio: 16 / 9; background: #111; border-radius: 2px; overflow: hidden; }
+.back .trailer iframe { display: block; width: 100%; height: 100%; border: 0; }
+.back .trailer:not([hidden]) ~ .plot { display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
 .back .head { display: flex; justify-content: space-between; align-items: flex-end; gap: 10px; }
 .back .fc-label { font-size: calc(var(--W) * .1); }
 .spud { height: 1.6em; width: auto; margin-right: .18em; vertical-align: -.42em; transform: rotate(8deg); filter: drop-shadow(0 0 .5px rgba(27,26,23,.9)) drop-shadow(0 1px 0 rgba(27,26,23,.25)); }
@@ -189,7 +186,6 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
 .drawer .empty { color: #6d6758; padding: 6px 0; }
 .done { position: absolute; inset: 0; }
 .done .fc-frame { position: absolute; inset: 5%; display: flex; flex-direction: column; padding: 5%; gap: 12px; }
-.done .fc-panel { height: 45%; }
 .done .fc-label { font-size: calc(var(--W) * .1); }
 .done button { margin-top: auto; padding: 8px 0; font-family: var(--f-card); font-weight: 500; font-size: 19px; text-transform: lowercase; border: 3px solid var(--fc-line); border-radius: 3px; }
 
@@ -212,8 +208,7 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
 /* phones: smaller pieces, more sky between them */
 @media (max-width: 599px) {
   .top { width: min(318px, calc(100vw - 56px)); top: calc(18px + env(safe-area-inset-top, 0px)); }
-  .top .fc-frame { grid-template-columns: 60px minmax(0, 1fr) auto; gap: 9px; padding: 4px 10px 4px 4px; }
-  .top .fc-panel { height: 46px; }
+  .top .fc-frame { gap: 9px; padding: 6px 10px 6px 11px; }
   .top .fc-label { font-size: 17px; }
   .top p { font-size: 10.5px; }
   .top .rate b { font-size: 18px; }
@@ -226,18 +221,20 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
   .howto button { font-size: 12.5px; }
 
   .back .plot { font-size: max(12px, calc(var(--W) * .043)); }
-  .back .fc-panel { height: calc(var(--W) * .33); }
 }
 
 /* the paper roll when a poster is sent off */
 .roll { position: absolute; inset: 0; z-index: 50; perspective: 1400px; transform-style: preserve-3d; pointer-events: none; }
-.roll .strip { position: absolute; top: 0; height: 100%; transform-style: preserve-3d; }
+.roll .strip { position: absolute; left: 0; width: 100%; transform-style: preserve-3d; }
 .roll .sf, .roll .sb, .roll .shade { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
 .roll .sf { overflow: hidden; }
-.roll .sb { background: linear-gradient(90deg, #e6dbc2, #f1e8d4 50%, #e2d6bb); transform: rotateY(180deg); }
+.roll .sb { background: #e4d8bd; transform: rotateX(180deg); }
 .roll .shade { background: #1b1a17; opacity: 0; }
+.roll .hl { position: absolute; inset: 0; background: #fffaf0; opacity: 0; transform: rotateX(180deg); backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.roll .cast { position: absolute; left: 0; right: 0; top: 0; opacity: 0; background: linear-gradient(rgba(0,0,0,.42), rgba(0,0,0,0)); transform: translateZ(.5px); pointer-events: none; }
 .roll *, .roll *::after { mix-blend-mode: normal !important; }
 .roll .face { box-shadow: none; border-radius: 0; }
+.roll .tag { top: auto; bottom: 9%; z-index: 60; }
 
 /* mini posters in the stash */
 .drawer .r.st { grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 12px; }
@@ -254,7 +251,7 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
 <canvas id="twinkle" aria-hidden="true"></canvas>
 <div class="grain" aria-hidden="true"></div>
 
-<header class="top fc-card" aria-live="polite"><div class="fc-frame"><div class="fc-panel" id="top-art"></div><div class="ti"><h1 class="fc-label" id="top-title">tonight</h1><p id="top-meta"></p></div><div class="rate"><b id="top-score"></b><small id="top-tier"></small></div></div></header>
+<header class="top fc-card" aria-live="polite"><div class="fc-frame"><div class="ti"><h1 class="fc-label" id="top-title">tonight</h1><p id="top-meta"></p></div><div class="rate"><b id="top-score"></b><small id="top-tier"></small></div></div></header>
 
 <main class="wall">
   <div class="deck" id="deck">
@@ -423,34 +420,10 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
       '<div class="art"><div class="pic dots">' + genArt(t, 'print') + imgTag(t, 'poster') + '</div></div>' +
       '<p class="billing">' + credits + '</p></div>';
   }
-  // flash card pictures: flat inks, rough edges, a yellow plate slipped out of register
-  var INK = { red: '#e8472b', violet: '#4a3f97', pink: '#ec93ad', sage: '#9aa597', yellow: '#f0c64a', paper: '#efe5d0', cream: '#f6efe0', post: '#2c5a4f', blue: '#2f4fa0' };
-  var PICS = ['moon', 'explosion', 'alley', 'candle', 'bucket', 'pink'];
-  function picKind(t) { return t.vibes[0] === 'sober' ? 'white' : PICS[t.i % PICS.length]; }
-  function burst(cx0, cy0, r1, r2, n, seed, col) {
-    var r = rng(seed), pts = [];
-    for (var k = 0; k <= n; k++) { var a = Math.PI + Math.PI * k / n, rr = k % 2 ? r1 + r() * (r2 - r1) : r1 * (.5 + r() * .3); pts.push((cx0 + Math.cos(a) * rr * 1.6).toFixed(1) + ',' + (cy0 + Math.sin(a) * rr).toFixed(1)); }
-    return '<polygon fill="' + col + '" points="' + cx0 + ',' + (cy0 + 2) + ' ' + pts.join(' ') + '"/>';
-  }
-  function picture(kind, seed) {
-    var bg = INK.paper, shapes = '';
-    if (kind === 'alley') shapes = '<polygon fill="' + INK.red + '" points="2,3 10,3 10,24 42,27 42,44 2,58"/><polygon fill="' + INK.red + '" points="58,3 98,3 98,58 58,44"/><polygon fill="' + INK.sage + '" points="2,58 98,58 58,42 42,42"/><rect fill="' + INK.post + '" x="48.6" y="24" width="2.6" height="18"/>';
-    else if (kind === 'candle') { bg = INK.violet; shapes = '<rect fill="' + INK.cream + '" x="42" y="30" width="16" height="30"/><polygon fill="' + INK.red + '" points="50,5 53.5,17 50,27 46.5,17"/>'; }
-    else if (kind === 'explosion') { bg = INK.violet; shapes = burst(50, 56, 26, 46, 34, seed, INK.cream) + burst(50, 56, 12, 28, 26, seed + 3, INK.red); }
-    else if (kind === 'bucket') shapes = '<polygon fill="' + INK.red + '" points="31,7 69,7 78,57 22,57"/>';
-    else if (kind === 'pink') { bg = INK.pink; }
-    else if (kind === 'moon') { bg = INK.blue; shapes = '<circle fill="' + INK.cream + '" cx="62" cy="26" r="13"/><polygon fill="' + INK.red + '" points="0,62 0,48 30,40 62,47 100,42 100,62"/>'; }
-    else if (kind === 'white') shapes = '<rect x="4" y="4" width="92" height="52" fill="none" stroke="#1b1a17" stroke-width=".8"/>';
-    var f = 'rf' + kind + seed, plate = kind === 'white' || kind === 'pink' ? '' : '<g transform="translate(-1,.6)" opacity=".9">' + shapes.replace(/fill="#[0-9a-f]+"/g, 'fill="' + INK.yellow + '"') + '</g>';
-    var field = bg === INK.paper ? '' : '<rect x="2" y="2" width="96" height="56" fill="' + bg + '"/>';
-    if (bg !== INK.paper) plate = '<rect x="1" y="2.6" width="96" height="56" fill="' + INK.yellow + '" opacity=".75"/>' + plate;
-    return '<svg viewBox="0 0 100 60" preserveAspectRatio="none" aria-hidden="true"><defs><filter id="' + f + '" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency="1.3" numOctaves="2" seed="' + seed + '"/><feDisplacementMap in="SourceGraphic" scale="1.3" xChannelSelector="R" yChannelSelector="G"/></filter></defs>' +
-      '<g filter="url(#' + f + ')">' + plate + field + shapes + '</g></svg>';
-  }
   function back(t) {
     var inStash = stash.indexOf(t.key) > -1, n = t.title.length, lab = n <= 12 ? 1 : n <= 20 ? .82 : .64;
     return '<div class="face back"><div class="fc-frame">' +
-      '<div class="fc-panel">' + picture(picKind(t), t.i + 1) + '</div>' +
+      '<div class="trailer" hidden></div>' +
       '<div class="head"><h3 class="fc-label" style="font-size:calc(var(--W) * ' + (.1 * lab).toFixed(3) + ')">' + esc(t.title) + '</h3><span class="pct" aria-label="Score ' + rating(t) + ' out of 10">' + SPUD + rating(t) + '<small>/10</small></span></div>' +
       '<p class="meta">' + t.year + ' · ' + esc(t.run) + ' · ' + esc(t.genre) + ' · ' + tier(t.score).toLowerCase() + '</p>' +
       '<p class="plot">' + esc(t.plot) + '</p>' +
@@ -463,6 +436,7 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
   function sizes() { var w = Math.min(innerWidth * (innerWidth < 600 ? .7 : .84), (innerHeight - 270) / 1.5, 380); document.documentElement.style.setProperty('--W', Math.round(w) + 'px'); }
   function queue() { return T.filter(function (t) { return !seen[t.key] && stash.indexOf(t.key) < 0 && (kindF === 'all' || t.kind === kindF) && (vibeF === 'all' ? t.vibes.indexOf('sober') < 0 : t.vibes.indexOf(vibeF) > -1); }); }
   function render() {
+    stopNudge();
     stack.innerHTML = '';
     var q = queue();
     vb.textContent = vibeF === 'all' ? 'categories' : vibeName(vibeF).toLowerCase();
@@ -470,7 +444,7 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
     deck.classList.toggle('empty', !q.length); pull(0, 0); capText(false);
     if (!q.length) {
       var d = document.createElement('div'); d.className = 'done fc-card';
-      d.innerHTML = '<div class="fc-frame"><div class="fc-panel">' + picture('white', 1) + '</div><h3 class="fc-label">that\'s all of them</h3><p>Check your stash or pick another category.</p></div>';
+      d.innerHTML = '<div class="fc-frame"><h3 class="fc-label">that\'s all of them</h3><p>Check your stash or pick another category.</p></div>';
       var b = document.createElement('button'); b.type = 'button'; b.textContent = 'start over'; b.addEventListener('click', function () { seen = {}; render(); });
       d.querySelector('.fc-frame').appendChild(b); stack.appendChild(d); return;
     }
@@ -480,13 +454,12 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
       var rot = ((t.i * 37) % 7 - 3) * (depth ? 1 : .35);
       el.dataset.rest = 'translate(' + depth * 6 + 'px,' + depth * -6 + 'px) rotate(' + rot + 'deg)';
       el.style.transform = el.dataset.rest;
-      el.innerHTML = '<div class="sheet"><div class="face mount"><div class="mat">' + front(t) + '</div></div>' + back(t) + '</div><div class="lift"></div><div class="curl"></div><span class="tag yes" aria-hidden="true">stash it</span><span class="tag no" aria-hidden="true">pass</span>';
+      el.innerHTML = '<div class="sheet"><div class="face mount"><div class="mat">' + front(t) + '</div></div>' + back(t) + '</div>';
       el._t = t; stack.appendChild(el);
     });
     bind();
   }
   function showTop(t) {
-    document.getElementById('top-art').innerHTML = picture(t ? picKind(t) : 'white', t ? t.i + 101 : 1);
     document.getElementById('top-title').textContent = t ? t.title : 'that\'s all of them';
     document.getElementById('top-meta').textContent = t ? t.year + ' · ' + t.run + ' · ' + t.genre : 'check your stash or pick another category';
     document.getElementById('top-score').innerHTML = t ? SPUD + rating(t) + '<small>/10</small>' : '';
@@ -495,45 +468,121 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
   function topEl() { return stack.querySelector('.poster:not(.behind)'); }
   function bind() {
     var el = topEl(); if (!el) return;
-    var lift = el.querySelector('.lift'), curl = el.querySelector('.curl'), yes = el.querySelector('.tag.yes'), no = el.querySelector('.tag.no');
-    var x0 = 0, y0 = 0, dx = 0, dy = 0, down = false, t0 = 0, moved = false;
+    var x0 = 0, y0 = 0, dx = 0, dy = 0, down = false, t0 = 0, moved = false, pr = null;
     el.addEventListener('pointerdown', function (e) {
-      if (e.target.closest('[data-act]')) return;
-      busy = true; down = true; moved = false; x0 = e.clientX; y0 = e.clientY; t0 = Date.now(); dx = dy = 0; el.setPointerCapture(e.pointerId); el.style.transition = 'none';
+      if (e.target.closest('[data-act]') || e.target.closest('.trailer')) return;
+      busy = true; stopNudge(); down = true; moved = false; x0 = e.clientX; y0 = e.clientY; t0 = Date.now(); dx = dy = 0; el.setPointerCapture(e.pointerId);
     });
     el.addEventListener('pointermove', function (e) {
-      if (!down) return; dx = e.clientX - x0; dy = e.clientY - y0; if (Math.abs(dx) + Math.abs(dy) > 6) moved = true;
-      var a = Math.min(1, Math.abs(dx) / 160), s = dx < 0 ? -1 : 1;
-      // peel: the poster swings off the wall from the far edge, with a curling corner
-      el.style.transformOrigin = (s > 0 ? '0%' : '100%') + ' 100%';
-      el.style.transform = 'translate(' + dx * .6 + 'px,' + (dy * .2 - a * 20) + 'px) rotate(' + dx / 14 + 'deg) rotateY(' + (-s * a * 18) + 'deg)';
-      lift.style.opacity = a * .9; lift.style.setProperty('--la', s > 0 ? '300deg' : '60deg');
-      var cs = a * 90; curl.style.width = cs + 'px'; curl.style.height = cs + 'px';
-      curl.style.left = s > 0 ? 'auto' : '0'; curl.style.right = s > 0 ? '0' : 'auto'; curl.style.setProperty('--ca', s > 0 ? '315deg' : '45deg');
-      yes.style.opacity = s > 0 ? a * 1.4 : 0; no.style.opacity = s < 0 ? a * 1.4 : 0;
-      pull(s > 0 ? a : 0, s < 0 ? a : 0);
+      if (!down) return; dx = e.clientX - x0; dy = e.clientY - y0;
+      if (!moved && Math.abs(dx) + Math.abs(dy) > 8) { moved = true; pr = peel(el); }
+      if (!pr) return;
+      // the further you drag, the further the top rolls down; the sheet follows your finger
+      var p = Math.min(.82, Math.hypot(dx, Math.max(dy, 0) * 1.4) / (el.offsetWidth * 1.15));
+      pr.set(p, dx * .55, Math.max(-20, dy * .25), dx);
+      pull(dx > 30 ? Math.min(1, dx / 120) : 0, dx < -30 ? Math.min(1, -dx / 120) : 0);
     });
     function end() {
       if (!down) return; down = false;
+      if (!moved) { flip(el); return; }
       var fast = Math.abs(dx) / Math.max(1, Date.now() - t0) > .6;
-      if (!moved) {
-        el.style.transition = 'transform .3s ease'; el.style.transform = el.dataset.rest; yes.style.opacity = no.style.opacity = 0; pull(0, 0);
-        flip(el); return;
-      }
-      if (Math.abs(dx) > 110 || (fast && Math.abs(dx) > 40)) { decide(dx > 0); return; }
-      el.style.transition = 'transform .35s ease'; el.style.transform = el.dataset.rest; lift.style.opacity = 0; curl.style.width = curl.style.height = '0'; yes.style.opacity = no.style.opacity = 0; pull(0, 0);
+      if (Math.abs(dx) > 100 || (fast && Math.abs(dx) > 40)) { decide(dx > 0, pr); pr = null; return; }
+      pr.cancel(); pr = null; pull(0, 0);
     }
     el.addEventListener('pointerup', end); el.addEventListener('pointercancel', end);
     el.addEventListener('click', function (e) { var b = e.target.closest('[data-act]'); if (b) { e.stopPropagation(); decide(b.dataset.act === 'stash'); } });
   }
-  function flip(el) { learned(); capText(el.classList.toggle('flipped')); }
-  function decide(keep) {
-    var el = topEl(); if (!el) return; var t = el._t; learned();
+  function flip(el) {
+    learned(); var on = el.classList.toggle('flipped'); capText(on);
+    if (on) setTimeout(function () { if (el.classList.contains('flipped')) trailer(el); }, 620); else clearTrailer(el);
+  }
+  function decide(keep, pr) {
+    var el = topEl(); if (!el) return; var t = el._t; learned(); stopNudge();
     if (keep) { if (stash.indexOf(t.key) < 0) stash.push(t.key); save(); updateCount(); } else seen[t.key] = true;
     pull(0, 0);
-    if (reduce) { render(); return; }
-    roll(el, keep); render();
+    if (reduce) { if (pr) pr.remove(); render(); return; }
+    (pr || peel(el)).leave(keep); render();
   }
+
+  // ---------- the peel: the poster rolls down from its top edge like paper coming off a wall ----------
+  // The sheet is cut into thin horizontal strips chained from the bottom up, each hinged to the
+  // one below. Strips above the roll line bend by a fixed angle, so the peeled part wraps into a
+  // tube that sits on the line; strips below stay flat. Moving the line down rolls more paper up.
+  function peel(el) {
+    var face = el.classList.contains('flipped') ? el.querySelector('.back') : el.querySelector('.mount');
+    var w = el.offsetWidth, h = el.offsetHeight, N = Math.max(24, Math.round(h / 12)), sh = h / N;
+    var box = document.createElement('div'); box.className = 'roll';
+    var rest = el.dataset.rest; box.style.transform = rest;
+    var parent = box, strips = [];
+    for (var j = N - 1; j >= 0; j--) {
+      var s = document.createElement('div'); s.className = 'strip';
+      s.style.height = (sh + .7) + 'px'; s.style.top = (j === N - 1 ? j * sh : -sh) + 'px';
+      s.style.transformOrigin = '50% ' + sh + 'px';
+      var f = document.createElement('div'); f.className = 'sf';
+      var c = face.cloneNode(true); c.style.cssText = 'transform:none;visibility:visible;inset:auto;left:0;top:' + (-j * sh) + 'px;width:' + w + 'px;height:' + h + 'px';
+      f.appendChild(c);
+      var b = document.createElement('div'); b.className = 'sb';
+      var shade = document.createElement('i'); shade.className = 'shade';
+      var hl = document.createElement('i'); hl.className = 'hl';
+      s.appendChild(f); s.appendChild(b); s.appendChild(shade); s.appendChild(hl); parent.appendChild(s); parent = s; strips[j] = [s, shade, hl];
+    }
+    var yes = document.createElement('span'), no = document.createElement('span');
+    yes.className = 'tag yes'; yes.textContent = 'stash it'; no.className = 'tag no'; no.textContent = 'pass';
+    var cast = document.createElement('i'); cast.className = 'cast';
+    box.appendChild(cast); box.appendChild(yes); box.appendChild(no);
+    deck.appendChild(box); el.style.opacity = '0';
+    var cur = { p: 0, x: 0, y: 0, d: 0 }, raf = 0;
+    function set(p, x, y, d) {
+      cur = { p: p, x: x, y: y, d: d };
+      var line = p * h, r = Math.max(10, w * .05) + line * .035, th = sh / r, cum = 0;
+      for (var j = N - 2; j >= 0; j--) {
+        var hinge = (j + 1) * sh, f = Math.max(0, Math.min(1, (line - hinge) / sh + 1)), a = th * f;
+        cum += a;
+        strips[j][0].style.transform = 'rotateX(' + (-a) + 'rad)';
+        // a curled strip darkens as it turns edge-on and catches a highlight where it faces you
+        var co = Math.cos(cum), si = Math.sin(cum);
+        strips[j][1].style.opacity = a ? Math.min(.62, .5 * (1 - Math.abs(co)) + (si < 0 ? .18 * -si : 0) + (co < 0 ? .05 : 0)) : 0;
+        strips[j][2].style.opacity = co < 0 ? Math.pow(-co, 10) * .5 : 0;
+      }
+      // the roll casts a soft shadow on the paper just below it
+      cast.style.top = line + 'px'; cast.style.height = (r * 2.2) + 'px'; cast.style.opacity = p > .01 ? Math.min(1, p * 6) : 0;
+      box.style.transform = rest + ' translate(' + x + 'px,' + y + 'px) rotate(' + (x / 22) + 'deg)';
+      var k = Math.min(1, Math.abs(d) / 100);
+      yes.style.opacity = d > 0 ? k : 0; no.style.opacity = d < 0 ? k : 0;
+    }
+    function tween(to, ms, done) {
+      cancelAnimationFrame(raf);
+      var from = cur, t0 = performance.now();
+      (function step(now) {
+        var q = Math.min(1, (now - t0) / ms), e = 1 - Math.pow(1 - q, 3);
+        set(from.p + (to.p - from.p) * e, from.x + (to.x - from.x) * e, from.y + (to.y - from.y) * e, to.d);
+        if (to.fade) box.style.opacity = q < .55 ? 1 : 1 - (q - .55) / .45;
+        if (q < 1) raf = requestAnimationFrame(step); else if (done) done();
+      })(t0);
+    }
+    function remove() { cancelAnimationFrame(raf); box.remove(); }
+    return {
+      set: set, remove: remove,
+      cancel: function () { tween({ p: 0, x: 0, y: 0, d: 0 }, 320, function () { remove(); el.style.opacity = ''; }); },
+      leave: function (keep) { var dir = keep ? 1 : -1; tween({ p: 1, x: dir * innerWidth * .95, y: -40, d: dir * 100, fade: true }, 620, remove); },
+      demo: function (steps, done) {
+        var i = 0;
+        (function next() { if (i >= steps.length) { remove(); el.style.opacity = ''; if (done) done(); return; } var s = steps[i++]; tween({ p: s[0], x: s[1], y: 0, d: s[1] }, s[2], next); })();
+      }
+    };
+  }
+
+  // ---------- trailers on the back, once TMDB is connected ----------
+  var TRAILER = {};
+  function trailer(el) {
+    var t = el._t, a = ART[t.key], slot = el.querySelector('.trailer'); if (!slot || !a || !a.id) return;
+    function show(key) { if (!key || !el.classList.contains('flipped')) return; slot.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + encodeURIComponent(key) + '?playsinline=1&rel=0" title="' + esc(t.title) + ' trailer" allow="encrypted-media; picture-in-picture; fullscreen" loading="lazy"></iframe>'; slot.hidden = false; }
+    if (TRAILER[t.key] !== undefined) return show(TRAILER[t.key]);
+    fetch('/api/trailer?kind=' + t.kind + '&id=' + a.id).then(function (r) { return r.ok ? r.json() : {}; })
+      .then(function (j) { TRAILER[t.key] = j.key || ''; show(TRAILER[t.key]); }).catch(function () {});
+  }
+  function clearTrailer(el) { var slot = el.querySelector('.trailer'); if (slot) { slot.innerHTML = ''; slot.hidden = true; } }
+
   // ---------- how-to: side cards, caption, and a nudge until the first peel or flip ----------
   var deck = document.getElementById('deck'), cap = document.getElementById('cap-text'), busy = false, HKEY = 'baked-potatoes-learned', knows = false;
   try { knows = localStorage.getItem(HKEY) === '1'; } catch (e) {}
@@ -543,60 +592,16 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
   document.getElementById('side-pass').addEventListener('click', function () { decide(false); });
   document.getElementById('side-keep').addEventListener('click', function () { decide(true); });
   document.getElementById('caption').addEventListener('click', function () { var el = topEl(); if (el) flip(el); });
+  var demoing = null;
+  function stopNudge() { if (demoing) { demoing.remove(); var el = topEl(); if (el) el.style.opacity = ''; demoing = null; } }
   function nudge() {
-    // shows the gesture once per visit until it's been used: lean right (stash), lean left (pass), settle
-    if (knows || reduce) return;
+    // once per visit until it's been used: peel the top a little to the right, then to the left, and lay it back
+    if (knows || reduce || busy) return;
     var el = topEl(); if (!el) return;
-    var yes = el.querySelector('.tag.yes'), no = el.querySelector('.tag.no');
-    [[700, 46], [1500, 0], [2100, -46], [2900, 0]].forEach(function (st) {
-      setTimeout(function () {
-        if (busy || el !== topEl()) return;
-        var dx = st[1], a = Math.abs(dx) / 46;
-        el.style.transition = 'transform .6s cubic-bezier(.3,1.3,.5,1)';
-        el.style.transformOrigin = (dx >= 0 ? '0%' : '100%') + ' 100%';
-        el.style.transform = el.dataset.rest + ' translateX(' + dx + 'px) rotate(' + dx / 10 + 'deg)';
-        yes.style.transition = no.style.transition = 'opacity .3s ease';
-        yes.style.opacity = dx > 0 ? 1 : 0; no.style.opacity = dx < 0 ? 1 : 0;
-        pull(dx > 0 ? a : 0, dx < 0 ? a : 0);
-      }, st[0]);
-    });
+    demoing = peel(el);
+    demoing.demo([[.22, 34, 700], [0, 0, 500], [.22, -34, 700], [0, 0, 500]], function () { demoing = null; });
   }
 
-  // the poster rolls up like paper as it leaves: a chain of thin strips, each hinged to the
-  // next and turned a little further, so the free edge curls into a tube (stash rolls up from
-  // the left and goes right; pass mirrors it)
-  function roll(el, keep) {
-    var face = el.classList.contains('flipped') ? el.querySelector('.back') : el.querySelector('.mount');
-    var w = el.offsetWidth, h = el.offsetHeight, N = 12, sw = w / N, dir = keep ? 1 : -1;
-    var box = document.createElement('div'); box.className = 'roll';
-    var start = el.style.transform || el.dataset.rest; box.style.transformOrigin = el.style.transformOrigin || '50% 50%';
-    box.style.transform = start;
-    var parent = box, strips = [];
-    for (var k = 0; k < N; k++) {
-      var i = keep ? N - 1 - k : k, s = document.createElement('div');
-      s.className = 'strip'; s.style.width = (sw + .8) + 'px';
-      s.style.left = (k ? (keep ? -sw : sw) : i * sw) + 'px';
-      s.style.transformOrigin = keep ? (sw + 'px 50%') : '0 50%';
-      var f = document.createElement('div'); f.className = 'sf';
-      var c = face.cloneNode(true); c.style.cssText = 'transform:none;visibility:visible;inset:auto;top:0;left:' + (-i * sw) + 'px;width:' + w + 'px;height:' + h + 'px';
-      f.appendChild(c);
-      var b = document.createElement('div'); b.className = 'sb';
-      var sh = document.createElement('i'); sh.className = 'shade';
-      s.appendChild(f); s.appendChild(b); s.appendChild(sh); parent.appendChild(s); parent = s; strips.push([s, sh]);
-    }
-    deck.appendChild(box); el.style.visibility = 'hidden';
-    var t0 = performance.now(), D = 900;
-      (function step(now) {
-      var p = Math.min(1, (now - t0) / D), q = Math.min(1, p / .62), th = (1 - Math.pow(1 - q, 2.2)) * 41, mv = Math.max(0, (p - .5) / .5); mv = mv * mv;
-      for (var k = 1; k < N; k++) {
-        strips[k][0].style.transform = 'rotateY(' + (dir * th) + 'deg)';
-        var a = k * th * Math.PI / 180; strips[k][1].style.opacity = (.5 - .5 * Math.cos(a)) * .35 + (Math.sin(a) > 0 ? Math.sin(a) * .08 : 0);
-      }
-      box.style.transform = start + ' translate(' + (dir * mv * innerWidth * .9) + 'px,' + (-mv * 70) + 'px) rotate(' + (dir * mv * 14) + 'deg)';
-      box.style.opacity = p > .86 ? 1 - (p - .86) / .14 : 1;
-      if (p < 1) requestAnimationFrame(step); else box.remove();
-    })(t0);
-  }
 
   stack.addEventListener('keydown', function (e) {
     if (e.key === 'ArrowRight') { e.preventDefault(); decide(true); }
@@ -639,7 +644,7 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
   fetch('/api/art?q=' + encodeURIComponent(T.map(function (t) { return t.key; }).join(','))).then(function (r) { return r.ok ? r.json() : {}; })
     .then(function (j) { if (j && !j.error) { ART = j; render(); } }).catch(function () {});
 
-  sizes(); updateCount(); render(); setTimeout(nudge, 400);
+  sizes(); updateCount(); render(); setTimeout(nudge, 900);
 })();
 </script>
 </body>
