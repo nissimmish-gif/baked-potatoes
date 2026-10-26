@@ -39,7 +39,7 @@ async function art(url, env, ctx) {
       });
       if (!res.ok) { out[key] = { error: `tmdb-${res.status}` }; return; }
       const first = (await res.json()).results?.[0];
-      if (first) out[key] = { poster: first.poster_path || null, backdrop: first.backdrop_path || null, id: first.id };
+      if (first) out[key] = { poster: first.poster_path || null, backdrop: first.backdrop_path || null, id: first.id, title: first.title || first.name || null, date: first.release_date || first.first_air_date || null };
     } catch (e) {
       out[key] = { error: 'fetch-failed' };
     }
