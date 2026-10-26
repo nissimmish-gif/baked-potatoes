@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Untitled Index</title>
+<meta name="theme-color" content="#040509">
 <meta name="description" content="What to watch when you're baked.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -40,7 +41,9 @@
 [hidden] { display: none !important; }
 html { background: var(--night); overflow-x: clip; }
 body { margin: 0; min-height: 100vh; min-height: 100svh; background: var(--night); color: var(--cream); font-family: var(--f-ui); font-size: 13px; overflow: hidden; -webkit-font-smoothing: antialiased; }
-button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+.poster { -webkit-tap-highlight-color: transparent; }
+@media (hover: hover) { .pill button:hover, .drawer .r:hover .k, .back .acts button:hover { color: var(--ink-red); } .back .acts .yes:hover { color: var(--fc-paper); background: #c9381f; } }
 :focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
 p, h1, h2, h3 { margin: 0; font-weight: 400; }
 
@@ -162,7 +165,7 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
 .pill button[aria-pressed="true"], .pill button[aria-expanded="true"] { color: var(--fc-line); text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 4px; }
 .pill b { font-weight: 600; color: var(--ink-red); }
 .drawer { position: fixed; z-index: 9; left: 50%; bottom: calc(70px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); width: min(360px, calc(100vw - 28px)); }
-.drawer .fc-frame { padding: 10px 14px 8px; max-height: 58vh; overflow-y: auto; }
+.drawer .fc-frame { padding: 10px 14px 8px; max-height: 58vh; overflow-y: auto; overscroll-behavior: contain; }
 .drawer h2 { font-size: 30px; margin-bottom: 6px; }
 .drawer .r { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; align-items: baseline; width: 100%; text-align: left; padding: 7px 0; border-top: 2px solid var(--fc-line); }
 .drawer .r .k { font-family: var(--f-card); font-weight: 500; font-size: 17px; text-transform: lowercase; letter-spacing: -.01em; }
@@ -182,7 +185,7 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
 <canvas id="scene" aria-hidden="true"></canvas>
 <div class="grain" aria-hidden="true"></div>
 
-<header class="top fc-card"><div class="fc-frame"><div class="fc-panel" id="top-art"></div><span class="fc-label">tonight</span><small id="count"></small></div></header>
+<header class="top fc-card"><div class="fc-frame"><div class="fc-panel" id="top-art"></div><span class="fc-label">tonight</span><small id="count" aria-live="polite"></small></div></header>
 
 <main class="wall">
   <div class="stack" id="stack" aria-label="Poster stack. Drag right to stash, left to pass, tap to flip. Arrow keys work too." tabindex="0"></div>
@@ -193,7 +196,7 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
   <button type="button" data-k="movie" aria-pressed="false">films</button>
   <button type="button" data-k="tv" aria-pressed="false">tv</button>
   <button type="button" id="vibe-btn" aria-expanded="false">vibes</button>
-  <button type="button" id="stash-btn" aria-expanded="false">stash <b id="stash-n">0</b></button>
+  <button type="button" id="stash-btn" aria-expanded="false">stash <b id="stash-n" aria-live="polite">0</b></button>
 </div></nav>
 <div class="drawer fc-card" id="vibe-drawer" hidden><div class="fc-frame"><h2 class="fc-label">vibes</h2><div id="vibe-list"></div></div></div>
 <div class="drawer fc-card" id="stash-drawer" hidden><div class="fc-frame"><h2 class="fc-label">your stash</h2><div id="stash-list"></div><p class="empty" id="stash-empty">Nothing yet. Peel one to the right.</p></div></div>
