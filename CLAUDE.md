@@ -76,8 +76,8 @@ The details view, the nav and the drawers are **vintage flash cards**:
 cream paper, a heavy black rounded frame and a lowercase grotesque label (Inter Tight). No
 drawings (owner removed them, 2026-10-26). The top of the details view is the trailer
 (`/api/trailer`, youtube-nocookie embed, removed again on close).
-The wordmark sits top left on every page: "baked potatoes", Arimo Bold, lowercase, on one
-line, cream, sized to fill the space up to the buttons on the right (owner's call, 2026-10-26; the name is back on).
+The wordmark sits top left on every page: the potato icon, then "baked potatoes", Arimo
+Bold, lowercase, on one line, cream, sized to fill the space up to the buttons on the right (owner's call, 2026-10-26; the name is back on).
 Rejected so far: space gradients, texture everywhere, typewriter/handwriting fonts,
 stickers/VHS, the 70s eyeball broadcast, the A24 disc library.
 
