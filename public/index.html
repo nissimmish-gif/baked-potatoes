@@ -15,6 +15,7 @@
    poster, the header, the nav and the drawers are vintage flash cards: cream paper, a heavy
    black frame and a lowercase label. Peeling rolls the poster down from its top edge. */
 :root {
+  --AR: 1.66;
   --night: #040509;
   --fc-paper: #efe5d0;
   --fc-line: #1b1a17;
@@ -43,7 +44,7 @@ html { background: var(--night); overflow-x: clip; }
 body { margin: 0; min-height: 100vh; min-height: 100svh; background: var(--night); color: var(--cream); font-family: var(--f-ui); font-size: 13px; overflow: hidden; -webkit-font-smoothing: antialiased; }
 button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
 .poster { -webkit-tap-highlight-color: transparent; }
-@media (hover: hover) { .pill button:hover, .drawer .r:hover .k, .back .acts button:hover { color: var(--ink-red); } .back .acts .yes:hover { color: var(--fc-paper); background: #c9381f; } }
+@media (hover: hover) { .pill button:hover, .drawer .r:hover .k { color: var(--ink-red); } }
 :focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
 p, h1, h2, h3 { margin: 0; font-weight: 400; }
 
@@ -66,18 +67,10 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
 /* ---------- header card ---------- */
 .wordmark { position: fixed; z-index: 6; top: calc(14px + env(safe-area-inset-top, 0px)); left: 50%; transform: translateX(-50%); margin: 0;
   font-family: "Arimo", Arial, sans-serif; font-weight: 700; font-size: 16px; line-height: .9; letter-spacing: -.02em; text-transform: lowercase; color: var(--cream); text-align: left; }
-.top { position: fixed; z-index: 5; top: calc(58px + env(safe-area-inset-top, 0px)); left: 50%; transform: translateX(-50%) rotate(-1deg); width: min(360px, calc(100vw - 32px)); }
-.top .fc-frame { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 12px; padding: 7px 12px 7px 13px; }
-.top .ti { min-width: 0; }
-.top .fc-label { font-size: 22px; margin: 0; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; line-height: 1.02; }
-.top p { margin-top: 3px; font-size: 11.5px; font-weight: 500; text-transform: lowercase; color: #5f584b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.top .rate { text-align: right; }
-.top .rate b { display: block; font-family: var(--f-card); font-weight: 600; font-size: 23px; line-height: 1; color: var(--ink-red); letter-spacing: -.02em; white-space: nowrap; }
-.top .rate small { display: block; margin-top: 2px; font-size: 10.5px; font-weight: 500; text-transform: lowercase; white-space: nowrap; }
 
 /* ---------- the stack ---------- */
-.wall { position: fixed; inset: 0; z-index: 3; display: grid; place-items: center; padding: calc(176px + env(safe-area-inset-top, 0px)) 0 calc(134px + env(safe-area-inset-bottom, 0px)); }
-.stack { position: relative; width: var(--W); height: calc(var(--W) * 1.5); }
+.wall { position: fixed; inset: 0; z-index: 3; display: grid; place-items: center; padding: calc(76px + env(safe-area-inset-top, 0px)) 0 calc(134px + env(safe-area-inset-bottom, 0px)); }
+.stack { position: relative; width: var(--W); height: calc(var(--W) * var(--AR)); }
 .poster { position: absolute; inset: 0; perspective: 1400px; touch-action: none; user-select: none; -webkit-user-select: none; }
 .poster.behind { pointer-events: none; }
 .sheet { position: absolute; inset: 0; transform-style: preserve-3d; transition: transform .6s cubic-bezier(.45, .05, .55, .95); will-change: transform; }
@@ -156,13 +149,11 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
 .back .trailer iframe { display: block; width: 100%; height: 100%; border: 0; }
 .back .trailer { position: relative; }
 .back .trailer .big { position: absolute; right: 6px; top: 6px; padding: 4px 8px 5px; background: rgba(20,20,20,.78); color: #fff; font-size: 11px; font-weight: 500; text-decoration: none; border-radius: 3px; text-transform: lowercase; }
-.back .plot { flex-shrink: 0; }
-.back .trailer:not([hidden]) ~ .plot { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-.back .trailer:not([hidden]) ~ dl dt:nth-of-type(n+3), .back .trailer:not([hidden]) ~ dl dd:nth-of-type(n+3) { display: none; }
+.back .plot { flex: 0 1 auto; min-height: 0; overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: var(--lines, 99); }
+.back dl { flex-shrink: 0; }
 .back .head { display: flex; justify-content: space-between; align-items: flex-end; gap: 10px; }
 .back .fc-label { font-size: calc(var(--W) * .1); }
 .spud { height: 1.6em; width: auto; margin-right: .18em; vertical-align: -.42em; transform: rotate(8deg); filter: drop-shadow(0 0 .5px rgba(27,26,23,.9)) drop-shadow(0 1px 0 rgba(27,26,23,.25)); }
-.top .rate b small { display: inline; }
 .pct small, .top .rate b small { font-size: .45em; font-weight: 500; color: #6d6758; margin-left: 1px; letter-spacing: 0; }
 .back .pct { font-family: var(--f-card); font-weight: 600; font-size: calc(var(--W) * .062); line-height: 1; color: var(--ink-red); white-space: nowrap; }
 .back .meta { font-size: calc(var(--W) * .036); font-weight: 500; text-transform: lowercase; color: #5f584b; margin-top: -2px; }
@@ -170,9 +161,6 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
 .back dl { margin: 0; display: grid; grid-template-columns: auto 1fr; column-gap: 12px; font-size: calc(var(--W) * .035); line-height: 1.3; }
 .back dt { font-weight: 600; text-transform: lowercase; }
 .back dd { margin: 0; }
-.back .acts { margin-top: auto; display: flex; gap: 8px; }
-.back .acts button { flex: 1; padding: 7px 0 8px; font-family: var(--f-card); font-weight: 500; font-size: calc(var(--W) * .058); text-transform: lowercase; letter-spacing: -.01em; border: 3px solid var(--fc-line); border-radius: 3px; background: var(--fc-paper); }
-.back .acts .yes { background: var(--ink-red); color: var(--fc-paper); }
 
 /* ---------- controls + pill ---------- */
 .pill { position: fixed; z-index: 10; left: 50%; bottom: calc(14px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); white-space: nowrap; }
@@ -195,7 +183,7 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
 .done button { margin-top: auto; padding: 8px 0; font-family: var(--f-card); font-weight: 500; font-size: 19px; text-transform: lowercase; border: 3px solid var(--fc-line); border-radius: 3px; }
 
 /* ---------- how-to: side cards, caption, first-visit nudge ---------- */
-.deck { position: relative; width: var(--W); height: calc(var(--W) * 1.5); }
+.deck { position: relative; width: var(--W); height: calc(var(--W) * var(--AR)); }
 .howto { position: absolute; left: -4px; right: -4px; top: 100%; margin-top: 22px; display: flex; justify-content: space-between; align-items: baseline; }
 .howto button { font-family: var(--f-card); font-weight: 500; font-size: 13px; text-transform: lowercase; color: var(--soft); padding: 6px 4px; white-space: nowrap; transition: color .2s ease, transform .2s ease; }
 .howto .pass { transform: translateX(calc(var(--pp, 0) * -6px)); }
@@ -209,16 +197,18 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
 .mount { background: var(--fc-paper); }
 .mount .mat { position: absolute; inset: 4.5%; border: 3px solid var(--fc-line); border-radius: 3px; background: var(--fc-paper); }
 .mount .mat > .face { inset: 2.2%; border-radius: 1px; box-shadow: 0 0 0 1px rgba(0,0,0,.15); }
+.mount.labeled .mat > .face { inset: 2.2% 2.2% calc(var(--W) * .2) 2.2%; }
+.plabel { position: absolute; left: 4.4%; right: 4.4%; bottom: 0; height: calc(var(--W) * .2); display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-rows: auto auto; align-content: center; column-gap: 10px; color: var(--fc-line); }
+.plabel p { margin: 0; }
+.plabel .pt { font-family: var(--f-card); font-weight: 500; font-size: calc(var(--W) * .06); line-height: 1.08; letter-spacing: -.015em; text-transform: lowercase; overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+.plabel .pm { grid-row: 2; font-size: calc(var(--W) * .037); font-weight: 500; line-height: 1.4; text-transform: lowercase; color: #6d6758; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.plabel .pr { grid-column: 2; grid-row: 1 / span 2; align-self: center; font-family: var(--f-card); font-weight: 600; font-size: calc(var(--W) * .075); color: var(--ink-red); white-space: nowrap; letter-spacing: -.02em; }
+.plabel .pr small { font-size: .45em; font-weight: 500; color: #6d6758; margin-left: 1px; letter-spacing: 0; }
+.poster .plabel .spud { filter: none; }
 
 /* phones: smaller pieces, more sky between them */
 @media (max-width: 599px) {
-  .top { width: min(318px, calc(100vw - 56px)); top: calc(58px + env(safe-area-inset-top, 0px)); }
-  .top .fc-frame { gap: 9px; padding: 6px 10px 6px 11px; }
-  .top .fc-label { font-size: 17px; }
-  .top p { font-size: 10.5px; }
-  .top .rate b { font-size: 18px; }
-  .top .rate small { font-size: 9.5px; }
-  .wall { padding-top: calc(162px + env(safe-area-inset-top, 0px)); padding-bottom: calc(134px + env(safe-area-inset-bottom, 0px)); }
+  .wall { padding-top: calc(76px + env(safe-area-inset-top, 0px)); padding-bottom: calc(134px + env(safe-area-inset-bottom, 0px)); }
   .pill { bottom: calc(22px + env(safe-area-inset-bottom, 0px)); }
   .pill .fc-frame { gap: 15px; padding: 5px 12px 6px; }
   .pill button { font-size: 15px; }
@@ -231,16 +221,8 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
 /* the paper roll when a poster is sent off */
 .roll { position: absolute; inset: 0; z-index: 50; pointer-events: none; }
 .roll .rframe { position: absolute; perspective: 1400px; transform-style: preserve-3d; }
-.roll .strip { position: absolute; left: 0; width: 100%; transform-style: preserve-3d; }
-.roll .sf, .roll .sb { position: absolute; left: 0; top: 0; width: 100%; height: 100%; display: block; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
-div.sf { overflow: hidden; }
-.roll .sb { transform: rotateX(180deg); }
-.roll .pc { position: absolute; }
-.roll .pc .face { box-shadow: none; border-radius: 0; }
-.roll .face::after { display: none; }
-/* fine film grain over every poster image (no blend modes: they break the 3D flip on iOS) */
-.mat > .face::after { content: ""; position: absolute; inset: 0; z-index: 3; pointer-events: none; background: var(--grain) 0 0 / 160px 160px repeat; opacity: 1; mix-blend-mode: normal !important; }
-.roll .mat > .face::after { display: block; }
+.roll .strip { position: absolute; left: 0; top: 0; width: 100%; }
+.roll .sf, .roll .sb { position: absolute; left: 0; top: 0; width: 100%; height: 100%; display: block; }
 .roll *, .roll *::after { mix-blend-mode: normal !important; }
 .roll .castclip { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
 .roll .cast { position: absolute; left: 0; right: 0; top: 0; opacity: 0; background: linear-gradient(rgba(0,0,0,.42), rgba(0,0,0,0)); }
@@ -285,7 +267,6 @@ body.gridview .wall, body.gridview .top { display: none; }
 <canvas id="twinkle" aria-hidden="true"></canvas>
 
 <h1 class="wordmark">baked<br>potatoes</h1>
-<header class="top fc-card" aria-live="polite"><div class="fc-frame"><div class="ti"><h2 class="fc-label" id="top-title">tonight</h2><p id="top-meta"></p></div><div class="rate"><b id="top-score"></b><small id="top-tier"></small></div></div></header>
 
 <div class="views" role="group" aria-label="View">
     <button type="button" id="view-one" aria-pressed="true" aria-label="One at a time"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="4" y="2" width="8" height="12" rx="1"/></svg></button>
@@ -483,19 +464,19 @@ body.gridview .wall, body.gridview .top { display: none; }
       '<p class="billing">' + credits + '</p></div>';
   }
   function back(t) {
-    var inStash = stash.indexOf(t.key) > -1, n = t.title.length, lab = n <= 12 ? 1 : n <= 20 ? .82 : .64;
+    var n = t.title.length, lab = n <= 12 ? 1 : n <= 20 ? .82 : .64;
     return '<div class="face back"><div class="fc-frame">' +
       '<div class="trailer" hidden></div>' +
       '<div class="head"><h3 class="fc-label" style="font-size:calc(var(--W) * ' + (.1 * lab).toFixed(3) + ')">' + esc(t.title) + '</h3><span class="pct" aria-label="Score ' + rating(t) + ' out of 10">' + SPUD + rating(t) + '<small>/10</small></span></div>' +
       '<p class="meta">' + t.year + ' · ' + esc(t.run) + ' · ' + esc(t.genre) + ' · ' + tier(t.score).toLowerCase() + '</p>' +
       '<p class="plot">' + esc(t.plot) + '</p>' +
       '<dl><dt>' + (t.kind === 'tv' ? 'made by' : 'directed by') + '</dt><dd>' + esc(t.dir.join(', ')) + '</dd><dt>starring</dt><dd>' + esc(t.cast.join(', ')) + '</dd><dt>category</dt><dd>' + esc(t.vibes.map(vibeName).join(', ').toLowerCase()) + '</dd><dt>watch on</dt><dd>coming soon</dd></dl>' +
-      '<div class="acts"><button type="button" data-act="pass">pass</button><button type="button" class="yes" data-act="stash">' + (inStash ? 'stashed' : 'stash it') + '</button></div></div></div>';
+      '</div></div>';
   }
 
   // ---------- stack ----------
   var stack = document.getElementById('stack'), kindF = 'all', vibeF = 'all', seen = {};
-  function sizes() { var w = Math.min(innerWidth * (innerWidth < 600 ? .7 : .84), (innerHeight - (innerWidth < 600 ? 312 : 310)) / 1.5, 380); document.documentElement.style.setProperty('--W', Math.round(w) + 'px'); }
+  function sizes() { var w = Math.min(innerWidth * (innerWidth < 600 ? .7 : .84), (innerHeight - 226) / 1.66, 380); document.documentElement.style.setProperty('--W', Math.round(w) + 'px'); }
   var view = 'one', pin = null, grid = document.getElementById('grid'), tiles = document.getElementById('tiles');
   try { view = localStorage.getItem('baked-potatoes-view') === 'grid' ? 'grid' : 'one'; } catch (e) {}
   function setView(v) {
@@ -544,20 +525,19 @@ body.gridview .wall, body.gridview .top { display: none; }
       var rot = ((t.i * 37) % 7 - 3) * (depth ? 1 : .35);
       el.dataset.rest = 'translate(' + depth * 6 + 'px,' + depth * -6 + 'px) rotate(' + rot + 'deg)';
       el.style.transform = el.dataset.rest;
-      el.innerHTML = '<div class="sheet"><div class="face mount"><div class="mat">' + front(t) + '</div></div>' + back(t) + '</div>';
+      el.innerHTML = '<div class="sheet"><div class="face mount labeled"><div class="mat">' + front(t) + plabel(t) + '</div></div>' + back(t) + '</div>';
       el._t = t; stack.appendChild(el);
     });
     bind();
     var top = topEl(), img = top && top.querySelector('.mount .p-real img');
-    function prep() { (window.requestIdleCallback || setTimeout)(function () { if (top === topEl()) snapshot(top); }); }
+    function prep() { (window.requestIdleCallback || setTimeout)(function () { if (top === topEl()) frontSnapshot(top); }); }
     if (img) { if (img.complete) prep(); else img.addEventListener('load', prep, { once: true }); }
   }
-  function showTop(t) {
-    document.getElementById('top-title').textContent = t ? t.title : 'that\'s all of them';
-    document.getElementById('top-meta').textContent = t ? t.year + ' · ' + t.run + ' · ' + t.genre : 'check your stash or pick another category';
-    document.getElementById('top-score').innerHTML = t ? SPUD + rating(t) + '<small>/10</small>' : '';
-    document.getElementById('top-tier').textContent = t ? tier(t.score).toLowerCase() : '';
+  // the flash-card label under the picture: title, the basics, and the score
+  function plabel(t) {
+    return '<div class="plabel"><p class="pt"' + (t.title.length > 26 ? ' style="font-size:calc(var(--W) * .05)"' : '') + '>' + esc(t.title) + '</p><p class="pm">' + t.year + ' · ' + esc(t.run) + ' · ' + esc(t.genre) + '</p><p class="pr" aria-label="Score ' + rating(t) + ' out of 10">' + SPUD + rating(t) + '<small>/10</small></p></div>';
   }
+  function showTop(t) { document.title = t ? t.title + ' · baked potatoes' : 'baked potatoes'; }
   function topEl() { return stack.querySelector('.poster:not(.behind)'); }
   function bind() {
     var el = topEl(); if (!el) return;
@@ -601,66 +581,110 @@ body.gridview .wall, body.gridview .top { display: none; }
   }
 
   // ---------- the peel: the poster rolls up from the top corner opposite the swipe ----------
-  // The sheet is cut into thin strips running across a diagonal (tilted so the roll starts at
-  // the top-left corner when you swipe right, top-right when you swipe left). The strips are
-  // chained from the bottom up, each hinged to the one below. Strips above the roll line bend by
-  // a fixed angle, so the peeled part wraps into a tube on the line; strips below stay flat.
-  // Fast path: a poster with an image is painted once into a canvas and each strip is a small
-  // canvas slice. Anything else (a flipped back, a placeholder) falls back to cloned markup.
+  // Whatever side is showing is painted once into a canvas (snapshot). The sheet is cut into thin
+  // strips running across a diagonal (tilted so the roll starts at the top-left corner when you
+  // swipe right, top-right when you swipe left). Each strip is its own flat element: the code walks
+  // up from the bottom, bends every strip above the roll line by a fixed angle, and places each
+  // one at the end of the last, so the peeled part wraps into a tube. Which side of a strip shows
+  // (poster or the cream back of the paper) is decided here too, not by backface-visibility,
+  // which iOS Safari gets wrong in deep 3D.
   var TILT = .46, PAPER = '#efe5d0', BACKPAPER = [228, 216, 189];
-  function snapshot(el) {
-    var img = el.querySelector('.mount .p-real img'); if (!img || !img.complete || !img.naturalWidth) return null;
+  function canvasFor(w, h) { var s = Math.min(devicePixelRatio || 1, 1.5), c = document.createElement('canvas'); c.width = Math.round(w * s); c.height = Math.round(h * s); var x = c.getContext('2d'); x.scale(s, s); return [c, x]; }
+  // where a node sits inside the poster, from layout (transforms ignored, so a flipped back reads true)
+  function offs(n, root) {
+    var x = 0, y = 0;
+    while (n && n !== root) { x += n.offsetLeft; y += n.offsetTop; n = n.offsetParent; if (n && n !== root) { x += n.clientLeft; y += n.clientTop; } }
+    return [x, y];
+  }
+  function wrap(x, text, max) {
+    var words = String(text).split(/\s+/), lines = [], cur = '';
+    words.forEach(function (wd) { var tr = cur ? cur + ' ' + wd : wd; if (cur && x.measureText(tr).width > max) { lines.push(cur); cur = wd; } else cur = tr; });
+    if (cur) lines.push(cur); return lines;
+  }
+  // paints a block of text where the page shows it, in the page's own font and colour
+  function paintText(x, n, root, opts) {
+    var o = offs(n, root), cs = getComputedStyle(n), fs = parseFloat(cs.fontSize), lh = parseFloat(cs.lineHeight) || fs * 1.2, txt = (opts && opts.text) || n.textContent;
+    if (cs.textTransform === 'lowercase') txt = txt.toLowerCase();
+    x.font = cs.fontWeight + ' ' + cs.fontSize + ' ' + cs.fontFamily; x.fillStyle = cs.color; x.textBaseline = 'middle';
+    if (opts && opts.right) { x.textAlign = 'right'; x.fillText(txt, opts.right, o[1] + n.offsetHeight / 2); x.textAlign = 'left'; return; }
+    x.textAlign = 'left';
+    var lines = wrap(x, txt, n.clientWidth + 1), max = Math.max(1, Math.round(n.clientHeight / lh));
+    if (lines.length > max) { lines = lines.slice(0, max); lines[max - 1] = lines[max - 1].replace(/\s*\S*$/, '') + '…'; }
+    lines.forEach(function (ln, i) { x.fillText(ln, o[0], o[1] + lh * i + lh / 2); });
+  }
+  function paintScore(x, n, root) {
+    var sp = n.querySelector('img'), sm = n.querySelector('small'), t = n.closest('.poster')._t;
+    if (sp && sp.complete && sp.naturalWidth) { var so = offs(sp, root); try { x.drawImage(sp, so[0], so[1], sp.offsetWidth, sp.offsetHeight); } catch (e) {} }
+    var mo = offs(sm, root); paintText(x, sm, root); paintText(x, n, root, { text: rating(t), right: mo[0] - 1 });
+  }
+  function paintFrame(x, mat, root) {
+    var o = offs(mat, root), b = mat.clientLeft;
+    x.lineWidth = b; x.strokeStyle = '#1b1a17'; x.strokeRect(o[0] + b / 2, o[1] + b / 2, mat.offsetWidth - b, mat.offsetHeight - b);
+  }
+  function frontSnapshot(el) {
     if (el._snap) return el._snap;
-    var w = el.offsetWidth, h = el.offsetHeight, s = Math.min(devicePixelRatio || 1, 1.5), c = document.createElement('canvas'), x = c.getContext('2d');
-    c.width = Math.round(w * s); c.height = Math.round(h * s); x.scale(s, s);
-    // the cream mount, the black frame line, then the poster inside (cover fit), like the CSS
-    x.fillStyle = PAPER; x.fillRect(0, 0, w, h);
-    var mx = w * .045, my = h * .045, mw = w - 2 * mx, mh = h - 2 * my;
-    x.lineWidth = 3; x.strokeStyle = '#1b1a17'; x.strokeRect(mx + 1.5, my + 1.5, mw - 3, mh - 3);
-    var ix = mx + 3 + (mw - 6) * .022, iy = my + 3 + (mh - 6) * .022, iw = (mw - 6) * .956, ih = (mh - 6) * .956;
-    var r = Math.max(iw / img.naturalWidth, ih / img.naturalHeight), sw = iw / r, sh = ih / r;
-    try { x.drawImage(img, (img.naturalWidth - sw) / 2, (img.naturalHeight - sh) / 2, sw, sh, ix, iy, iw, ih); } catch (e) { return null; }
-    x.fillStyle = x.createPattern(GRAIN, 'repeat'); x.fillRect(ix, iy, iw, ih);
-    el._snap = c; return c;
+    var w = el.offsetWidth, h = el.offsetHeight, cx = canvasFor(w, h), x = cx[1], mat = el.querySelector('.mount .mat'), pic = mat.querySelector('.face'), t = el._t;
+    x.fillStyle = PAPER; x.fillRect(0, 0, w, h); paintFrame(x, mat, el);
+    var po = offs(pic, el), pw = pic.offsetWidth, ph = pic.offsetHeight, img = pic.querySelector('.p-real img');
+    if (img && img.complete && img.naturalWidth) {
+      var r = Math.max(pw / img.naturalWidth, ph / img.naturalHeight), sw = pw / r, sh = ph / r;
+      try { x.drawImage(img, (img.naturalWidth - sw) / 2, (img.naturalHeight - sh) / 2, sw, sh, po[0], po[1], pw, ph); } catch (e) { img = null; }
+    } else img = null;
+    if (!img) {
+      // a placeholder poster: its main ink and its title, enough for a moment in motion
+      x.fillStyle = t.col[0]; x.fillRect(po[0], po[1], pw, ph);
+      x.fillStyle = PAPER; x.font = '400 ' + Math.round(w * .1) + 'px Anton, Impact, sans-serif'; x.textAlign = 'center'; x.textBaseline = 'middle';
+      wrap(x, t.title.toUpperCase(), pw * .84).forEach(function (ln, i, all) { x.fillText(ln, po[0] + pw / 2, po[1] + ph * .45 + (i - (all.length - 1) / 2) * w * .11); });
+    }
+    x.fillStyle = x.createPattern(GRAIN, 'repeat'); x.fillRect(po[0], po[1], pw, ph);
+    [].forEach.call(mat.querySelectorAll('.plabel .pt, .plabel .pm'), function (n) { paintText(x, n, el); });
+    var pr = mat.querySelector('.plabel .pr'); if (pr) paintScore(x, pr, el);
+    el._snap = cx[0]; return cx[0];
+  }
+  function backSnapshot(el) {
+    // the details side, drawn from the live layout: frame, trailer still, title, score, text
+    var back = el.querySelector('.back'), fr = back.querySelector('.fc-frame'), w = el.offsetWidth, h = el.offsetHeight, cx = canvasFor(w, h), x = cx[1];
+    x.fillStyle = PAPER; x.fillRect(0, 0, w, h); paintFrame(x, fr, el);
+    [].forEach.call(fr.querySelectorAll('.trailer:not([hidden]), h3, .pct, .meta, .plot, dt, dd'), function (n) {
+      if (n.classList.contains('trailer')) {
+        var o = offs(n, el); x.fillStyle = '#111'; x.fillRect(o[0], o[1], n.offsetWidth, n.offsetHeight);
+        var th = el._thumb; if (th && th.complete && th.naturalWidth) { try { x.drawImage(th, 0, th.naturalHeight * .125, th.naturalWidth, th.naturalHeight * .75, o[0], o[1], n.offsetWidth, n.offsetHeight); } catch (e) {} }
+      } else if (n.classList.contains('pct')) paintScore(x, n, el);
+      else paintText(x, n, el);
+    });
+    return cx[0];
   }
   function peel(el, dir) {
     var w = el.offsetWidth, h = el.offsetHeight, rho = -dir * TILT;
     var Dx = w * Math.abs(Math.cos(rho)) + h * Math.abs(Math.sin(rho)), Dy = w * Math.abs(Math.sin(rho)) + h * Math.abs(Math.cos(rho));
-    var N = Math.max(26, Math.round(Dy / 13)), sh = Dy / N, s = Math.min(devicePixelRatio || 1, 1.5);
-    var flipped = el.classList.contains('flipped'), snap = flipped ? null : snapshot(el);
-    var face = flipped ? el.querySelector('.back') : el.querySelector('.mount');
+    var N = Math.max(26, Math.round(Dy / 13)), sh = Dy / N, s = Math.min(devicePixelRatio || 1, 1.5), OV = 1.6;
+    var snap = el.classList.contains('flipped') ? backSnapshot(el) : frontSnapshot(el);
+    clearTrailer(el);
     var box = document.createElement('div'); box.className = 'roll';
     var rest = el.dataset.rest; box.style.transform = rest;
     var frame = document.createElement('div'); frame.className = 'rframe';
     frame.style.cssText = 'left:' + (w - Dx) / 2 + 'px;top:' + (h - Dy) / 2 + 'px;width:' + Dx + 'px;height:' + Dy + 'px;transform:rotate(' + rho + 'rad)';
-    // draws the poster's outline (or the poster) into a strip, in frame coordinates
+    // draws into a strip in frame coordinates (the back is pre-flipped, since it is seen from behind)
     function place(x, j, flip) {
       x.setTransform(s, 0, 0, s, 0, 0);
-      if (flip) { x.translate(0, sh + 1.6); x.scale(1, -1); }
+      if (flip) { x.translate(0, sh + OV); x.scale(1, -1); }
       x.translate(0, -j * sh); x.translate(Dx / 2, Dy / 2); x.rotate(-rho); x.translate(-w / 2, -h / 2);
     }
     function backPaint(st, level) {
       var x = st.bx; x.setTransform(1, 0, 0, 1, 0, 0); x.clearRect(0, 0, st.b.width, st.b.height); place(x, st.j, true);
-      var k = 1 - level * .5, hl = level < 0 ? -level : 0; k = level < 0 ? 1 : k;
+      var k = level < 0 ? 1 : 1 - level * .5, hl = level < 0 ? -level : 0;
       x.fillStyle = 'rgb(' + Math.round(BACKPAPER[0] * k + 255 * hl * .3) + ',' + Math.round(BACKPAPER[1] * k + 250 * hl * .3) + ',' + Math.round(BACKPAPER[2] * k + 240 * hl * .3) + ')';
       x.fillRect(0, 0, w, h);
     }
-    var parent = frame, strips = [];
-    for (var j = N - 1; j >= 0; j--) {
-      var st = { j: j, lv: null }, d = document.createElement('div'); d.className = 'strip';
-      d.style.height = (sh + 1.6) + 'px'; d.style.top = (j === N - 1 ? j * sh : -sh) + 'px'; d.style.transformOrigin = '50% ' + sh + 'px';
-      if (snap) {
-        var f = document.createElement('canvas'); f.className = 'sf'; f.width = Math.ceil(Dx * s); f.height = Math.ceil((sh + 1.6) * s);
-        var fx = f.getContext('2d'); place(fx, j, false); fx.drawImage(snap, 0, 0, w, h); d.appendChild(f);
-      } else {
-        var fw = document.createElement('div'); fw.className = 'sf';
-        var pc = document.createElement('div'); pc.className = 'pc';
-        pc.style.cssText = 'width:' + w + 'px;height:' + h + 'px;left:' + (Dx - w) / 2 + 'px;top:' + ((Dy - h) / 2 - j * sh) + 'px;transform:rotate(' + (-rho) + 'rad)';
-        var c = face.cloneNode(true); c.style.cssText = 'transform:none;visibility:visible;inset:0'; pc.appendChild(c); fw.appendChild(pc); d.appendChild(fw);
-      }
-      var b = document.createElement('canvas'); b.className = 'sb'; b.width = Math.ceil(Dx * s); b.height = Math.ceil((sh + 1.6) * s);
-      st.b = b; st.bx = b.getContext('2d'); d.appendChild(b);
-      parent.appendChild(d); parent = d; st.el = d; strips[j] = st;
+    var strips = [];
+    for (var j = 0; j < N; j++) {
+      var st = { j: j, lv: null, side: 1 }, d = document.createElement('div'); d.className = 'strip';
+      d.style.height = (sh + OV) + 'px'; d.style.transformOrigin = '50% ' + sh + 'px';
+      var f = document.createElement('canvas'); f.className = 'sf'; f.width = Math.ceil(Dx * s); f.height = Math.ceil((sh + OV) * s);
+      var fx = f.getContext('2d'); place(fx, j, false); fx.drawImage(snap, 0, 0, w, h);
+      var b = document.createElement('canvas'); b.className = 'sb'; b.width = f.width; b.height = f.height; b.style.visibility = 'hidden';
+      d.appendChild(f); d.appendChild(b); frame.appendChild(d);
+      st.el = d; st.f = f; st.b = b; st.bx = b.getContext('2d'); strips[j] = st;
     }
     box.appendChild(frame);
     // the roll's shadow on the flat paper below it, clipped to the poster
@@ -671,19 +695,24 @@ body.gridview .wall, body.gridview .top { display: none; }
     yes.className = 'tag yes'; yes.textContent = 'stash it'; no.className = 'tag no'; no.textContent = 'pass';
     box.appendChild(yes); box.appendChild(no);
     deck.appendChild(box); el.style.opacity = '0'; peeling++;
-    var cur = { p: 0, x: 0, y: 0, d: 0 }, raf = 0, last = '';
+    var cur = { p: 0, x: 0, y: 0, d: 0 }, raf = 0;
     function set(p, x, y, dd) {
       cur = { p: p, x: x, y: y, d: dd };
-      var line = p * Dy * .96, r = Math.max(9, w * .045) + line * .03, th = sh / r, cum = 0;
-      for (var j = N - 2; j >= 0; j--) {
-        var hinge = (j + 1) * sh, f = Math.max(0, Math.min(1, (line - hinge) / sh + 1)), a = th * f, st = strips[j];
-        cum += a;
-        var tr = a ? 'rotateX(' + (-a).toFixed(4) + 'rad)' : '';
+      var line = p * Dy * .96, r = Math.max(9, w * .045) + line * .03, th = sh / r, cum = 0, hy = Dy, hz = 0;
+      for (var j = N - 1; j >= 0; j--) {
+        var st = strips[j], hinge = (j + 1) * sh, f = j === N - 1 ? 0 : Math.max(0, Math.min(1, (line - hinge) / sh + 1));
+        cum += th * f;
+        // this strip hangs from the hinge at (hy, hz) with its bottom edge there, turned by cum
+        var tr = cum ? 'translate3d(0,' + (hy - sh).toFixed(2) + 'px,' + hz.toFixed(2) + 'px) rotateX(' + (-cum).toFixed(4) + 'rad)' : 'translate3d(0,' + (hy - sh).toFixed(2) + 'px,0)';
         if (st.tr !== tr) { st.el.style.transform = tr; st.tr = tr; }
-        // the back of the paper darkens as it turns edge-on, brightens where it faces you
-        var co = Math.cos(cum), si = Math.sin(cum), lv = co < -.985 ? -Math.pow(-co, 10) : Math.min(1, .8 * (1 - Math.abs(co)) + (si < 0 ? .3 * -si : 0));
-        lv = Math.round(lv * 16) / 16;
-        if (a && st.lv !== lv) { st.lv = lv; backPaint(st, lv); }
+        var co = Math.cos(cum), si = Math.sin(cum), side = co >= 0 ? 1 : -1;
+        if (st.side !== side) { st.side = side; st.f.style.visibility = side > 0 ? '' : 'hidden'; st.b.style.visibility = side > 0 ? 'hidden' : ''; }
+        if (side < 0) {
+          // the back of the paper darkens as it turns edge-on and brightens where it faces you
+          var lv = co < -.985 ? -Math.pow(-co, 10) : Math.min(1, .8 * (1 - Math.abs(co)) + (si < 0 ? .3 * -si : 0));
+          lv = Math.round(lv * 16) / 16; if (st.lv !== lv) { st.lv = lv; backPaint(st, lv); }
+        }
+        hy -= sh * co; hz += sh * si;
       }
       cast.style.top = line + 'px'; cast.style.height = (r * 2.2) + 'px'; cast.style.opacity = p > .01 ? Math.min(1, p * 6) : 0;
       box.style.transform = rest + ' translate(' + x + 'px,' + y + 'px) rotate(' + (x / 22) + 'deg)';
@@ -705,7 +734,7 @@ body.gridview .wall, body.gridview .top { display: none; }
     function remove() { if (gone) return; gone = true; cancelAnimationFrame(raf); box.remove(); peeling = Math.max(0, peeling - 1); }
     return {
       dir: dir, set: set, remove: remove,
-      cancel: function () { tween({ p: 0, x: 0, y: 0, d: 0 }, 320, function () { remove(); el.style.opacity = ''; }); },
+      cancel: function () { tween({ p: 0, x: 0, y: 0, d: 0 }, 320, function () { remove(); el.style.opacity = ''; if (el.classList.contains('flipped')) trailer(el); }); },
       leave: function (keep) { var dd = keep ? 1 : -1; tween({ p: 1, x: dd * innerWidth * .95, y: -40, d: dd * 100, fade: true }, 620, remove); },
       demo: function (steps, done) {
         var i = 0;
@@ -718,7 +747,7 @@ body.gridview .wall, body.gridview .top { display: none; }
   var TRAILER = {};
   function trailer(el) {
     var t = el._t, a = ART[t.key], slot = el.querySelector('.trailer'); if (!slot || !a || !a.id) return;
-    function show(key) { if (!key || !el.classList.contains('flipped')) return; slot.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + encodeURIComponent(key) + '?playsinline=1&rel=0&fs=1" title="' + esc(t.title) + ' trailer" allow="encrypted-media; picture-in-picture; fullscreen" allowfullscreen loading="lazy"></iframe><a class="big" href="https://www.youtube.com/watch?v=' + encodeURIComponent(key) + '" target="_blank" rel="noopener">full screen ↗</a>'; slot.hidden = false; }
+    function show(key) { if (!key || !el.classList.contains('flipped')) return; if (!el._thumb) { el._thumb = new Image(); el._thumb.crossOrigin = 'anonymous'; el._thumb.src = 'https://i.ytimg.com/vi/' + encodeURIComponent(key) + '/hqdefault.jpg'; } slot.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + encodeURIComponent(key) + '?playsinline=1&rel=0&fs=1" title="' + esc(t.title) + ' trailer" allow="encrypted-media; picture-in-picture; fullscreen" allowfullscreen loading="lazy"></iframe><a class="big" href="https://www.youtube.com/watch?v=' + encodeURIComponent(key) + '" target="_blank" rel="noopener">full screen ↗</a>'; slot.hidden = false; }
     if (TRAILER[t.key] !== undefined) return show(TRAILER[t.key]);
     fetch('/api/trailer?kind=' + t.kind + '&id=' + a.id).then(function (r) { return r.ok ? r.json() : {}; })
       .then(function (j) { TRAILER[t.key] = j.key || ''; show(TRAILER[t.key]); }).catch(function () {});

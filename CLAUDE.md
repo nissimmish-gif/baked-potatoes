@@ -29,10 +29,12 @@ carries a very light, even paper texture, not specks (a generated tile, `GRAIN`,
 modes; also painted into
 the peel snapshot). Drag a poster to peel it: it rolls up from the top corner opposite the swipe (top-left
 when you swipe right, top-right when you swipe left) like paper coming off a wall, and
-follows your finger the whole way (`peel()`: strips across a tilted axis, hinged from the
-bottom up; strips above the roll line wrap into a tube). For speed the poster is painted
-once into a canvas (`snapshot()`, prepared at idle) and each strip is a canvas slice;
-flipped backs fall back to cloned markup. The twinkle pauses while a poster is peeled. Let go far enough right to stash, left to
+follows your finger the whole way (`peel()`: strips across a tilted axis; strips above the
+roll line wrap into a tube). Whatever side is showing is painted once into a canvas
+(`frontSnapshot()`, prepared at idle; `backSnapshot()` draws the details side from the
+live layout, with the trailer's YouTube still, never the live player) and each strip is a
+canvas slice. Strips are flat siblings placed by code, and code decides which side of each
+strip shows: no nested 3D, no backface-visibility (iOS Safari gets both wrong). The twinkle pauses while a poster is peeled. Let go far enough right to stash, left to
 pass, and it rolls the rest of the way off; let go early and it lays back flat. The next
 poster is live underneath while the roll plays. Tap
 to flip it. Fronts are real TMDB posters once `TMDB_TOKEN` is set; until then, original
@@ -41,8 +43,10 @@ screen print). Inspired by real posters, never copies of them. Exception: the th
 posters in `public/posters/` (Ferris Bueller's Day Off, The Truman Show, Fight Club) are
 the owner's own reference images, used as stand-ins until TMDB is on; delete them then.
 
-The header is a flash card for the poster on top of the stack: its title, year, runtime,
-genre and score. It changes as posters are peeled.
+There is no header bar (owner: it took too much space). Each poster card carries its own
+flash-card label under the picture, inside the black frame: title (two lines at most),
+year · runtime · genre, and the potato score. The card is 1:1.66 so the poster keeps its
+2:3 shape above the label. The back has no buttons; the plot and credits use the room.
 
 Every poster sits in a cream mount with a black frame line. How to use it is said quietly:
 one line of small text under the poster ("← pass · tap for the plot · stash →", each a
