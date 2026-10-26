@@ -66,8 +66,8 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
 .fc-label { font-family: var(--f-card); font-weight: 500; text-transform: lowercase; letter-spacing: -.015em; line-height: 1; }
 
 /* ---------- header card ---------- */
-.wordmark { position: fixed; z-index: 6; top: calc(14px + env(safe-area-inset-top, 0px)); left: 50%; transform: translateX(-50%); margin: 0;
-  font-family: "Arimo", Arial, sans-serif; font-weight: 700; font-size: 16px; line-height: .9; letter-spacing: -.02em; text-transform: lowercase; color: var(--cream); text-align: left; }
+.wordmark { position: fixed; z-index: 6; top: calc(11px + env(safe-area-inset-top, 0px)); left: max(16px, env(safe-area-inset-left, 0px)); margin: 0; white-space: nowrap;
+  font-family: "Arimo", Arial, sans-serif; font-weight: 700; font-size: clamp(22px, calc(13.6vw - 20px), 34px); line-height: 1; letter-spacing: -.02em; text-transform: lowercase; color: var(--cream); text-align: left; }
 
 /* ---------- the stack ---------- */
 .wall { position: fixed; inset: 0; z-index: 3; display: grid; place-items: center; padding: calc(76px + env(safe-area-inset-top, 0px)) 0 calc(134px + env(safe-area-inset-bottom, 0px)); }
@@ -238,7 +238,7 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
 .views button[aria-pressed="true"] { background: rgba(255, 255, 255, .2); color: var(--cream); }
 @media (hover: hover) { .views button:hover { color: var(--cream); } }
 body.gridview .grid { padding-top: calc(72px + env(safe-area-inset-top, 0px)); }
-.undo { position: fixed; z-index: 11; left: max(16px, env(safe-area-inset-left, 0px)); top: calc(14px + env(safe-area-inset-top, 0px)); display: grid; place-items: center; width: 32px; height: 28px; border-radius: 8px; color: var(--cream);
+.undo { position: fixed; z-index: 11; right: calc(max(16px, env(safe-area-inset-right, 0px)) + 70px); top: calc(14px + env(safe-area-inset-top, 0px)); display: grid; place-items: center; width: 32px; height: 28px; border-radius: 8px; color: var(--cream);
   background: rgba(255, 255, 255, .1); border: 1px solid rgba(255, 255, 255, .22); box-shadow: 0 8px 24px rgba(0, 0, 0, .35), inset 0 1px 0 rgba(255, 255, 255, .18);
   -webkit-backdrop-filter: blur(14px) saturate(1.4); backdrop-filter: blur(14px) saturate(1.4); }
 .undo svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
@@ -272,7 +272,7 @@ body.gridview .wall, body.gridview .top { display: none; }
 <canvas id="scene" aria-hidden="true"></canvas>
 <canvas id="twinkle" aria-hidden="true"></canvas>
 
-<h1 class="wordmark">baked<br>potatoes</h1>
+<h1 class="wordmark">baked potatoes</h1>
 
 <button type="button" class="undo" id="undo" hidden aria-label="Bring back the last poster"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3 2.5 6.5 6 10"/><path d="M3 6.5h6.5a4 4 0 0 1 0 8H7"/></svg></button>
 <div class="views" role="group" aria-label="View">
@@ -285,7 +285,7 @@ body.gridview .wall, body.gridview .top { display: none; }
     <div class="stack" id="stack" aria-label="Poster stack. Drag right to stash, left to pass, tap to flip. Arrow keys work too." tabindex="0"></div>
     <div class="howto">
       <button type="button" class="side pass" id="side-pass">← pass</button>
-      <button type="button" class="caption" id="caption"><span id="cap-text">tap for the plot</span></button>
+      <button type="button" class="caption" id="caption"><span id="cap-text">tap for more</span></button>
       <button type="button" class="side keep" id="side-keep">stash →</button>
     </div>
   </div>
@@ -777,7 +777,7 @@ body.gridview .wall, body.gridview .top { display: none; }
   try { knows = localStorage.getItem(HKEY) === '1'; } catch (e) {}
   function learned() { busy = true; if (!knows) { knows = true; try { localStorage.setItem(HKEY, '1'); } catch (e) {} } }
   function pull(k, p) { deck.style.setProperty('--pk', k); deck.style.setProperty('--pp', p); deck.classList.toggle('lean-k', k > .4); deck.classList.toggle('lean-p', p > .4); }
-  function capText(back) { cap.textContent = back ? 'tap to flip back' : 'tap for the plot'; }
+  function capText(back) { cap.textContent = back ? 'tap to flip back' : 'tap for more'; }
   document.getElementById('side-pass').addEventListener('click', function () { decide(false); });
   document.getElementById('side-keep').addEventListener('click', function () { decide(true); });
   document.getElementById('caption').addEventListener('click', function () { var el = topEl(); if (el) flip(el); });

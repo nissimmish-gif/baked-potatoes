@@ -34,8 +34,8 @@ roll line wrap into a tube). Whatever side is showing is painted once into a can
 (`frontSnapshot()`, prepared at idle; `backSnapshot()` draws the details side from the
 live layout, with the trailer's YouTube still, never the live player) and each strip is a
 canvas slice. The roll is one light cream curl: paper past half a turn is hidden, never
-drawn as layers (owner: "light, simple and cream"). A glass back button top left
-(`undo()`) brings back the last poster passed or stashed. Strips are flat siblings placed by code, and code decides which side of each
+drawn as layers (owner: "light, simple and cream"). A glass back button top right, beside the
+view toggle (`undo()`) brings back the last poster passed or stashed. Strips are flat siblings placed by code, and code decides which side of each
 strip shows: no nested 3D, no backface-visibility (iOS Safari gets both wrong). The twinkle pauses while a poster is peeled. Let go far enough right to stash, left to
 pass, and it rolls the rest of the way off; let go early and it lays back flat. The next
 poster is live underneath while the roll plays. Tap
@@ -53,7 +53,7 @@ year · runtime · genre, and the potato score. The card is 1:1.66 so the poster
 Every poster sits in a cream mount with a black frame line, with one even gap (`--gap`,
 2.8% of the card width) from the card edge to the line and from the line to the poster;
 the back uses the same frame. How to use it is said quietly:
-one line of small text under the poster ("← pass · tap for the plot · stash →", each a
+one line of small text under the poster ("← pass · tap for more · stash →", each a
 button), and on a first visit the top poster peels a little to the right, then to the
 left, to show the gesture, until someone peels or flips. Owner wants these low key, not flash cards. The
 filters are called **categories** (not vibes) on the page. The stash list shows a mini
@@ -68,8 +68,8 @@ drawings (owner removed them, 2026-10-26). The top of each poster back is the **
 slot**: once TMDB is connected, flipping a poster loads its YouTube trailer there
 (`/api/trailer`, youtube-nocookie embed, removed again on flip back), with a "full screen"
 button that opens it on YouTube (iPhone can't full-screen an embed inside the 3D card).
-The wordmark sits at the top centre of every page: "baked potatoes", Arimo Bold,
-lowercase, stacked, cream (owner's call, 2026-10-26; the name is back on).
+The wordmark sits top left on every page: "baked potatoes", Arimo Bold, lowercase, on one
+line, cream, sized to fill the space up to the buttons on the right (owner's call, 2026-10-26; the name is back on).
 Rejected so far: space gradients, texture everywhere, typewriter/handwriting fonts,
 stickers/VHS, the 70s eyeball broadcast, the A24 disc library.
 
