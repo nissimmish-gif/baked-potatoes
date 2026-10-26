@@ -15,21 +15,24 @@ added to the same Worker (see README).
 - **Logo:** the traced fingerling potato (from a public-domain USDA photo), 30% chunkier,
   mostly upright leaning right, flipped and mirrored, next to "baked potatoes" in
   **Arimo Bold, lowercase, stacked**. Files in `brand/logo/`. No faces on the potato.
-- **Look:** superseded on 2026-10-26 by the A24-style direction below (light page,
-  discs, editorial serif). The earlier night-blue/glass/70s-print rules no longer apply.
+- **Look:** superseded on 2026-10-26 by the poster wall below.
 - **No pot leaves, rasta colours or 420 jokes.** The brand is about the feeling, and
   leaf-free branding is easier to advertise.
 
 ## Feel of the site (owner's call, 2026-10-26)
 
-Modelled on the A24 disc library (a24.raviklaassens.com): a quiet light-grey page, a
-credits table with hairline rules, one big tilted disc in the middle with neighbours
-peeking in, a pencil scribble on drag, a floating pill nav, "Spooling" on open, and a
-film page with a wavy-edged image rising over scattered huge serif words. Bodoni Moda +
-Inter Tight. The owner still likes their first Pinterest board as mood. The name is on
-hold ("forget the name"), so the page carries no brand name for now. Rejected before
-this: space gradients, texture everywhere, typewriter/handwriting fonts, stickers/VHS,
-the 70s eyeball broadcast.
+A wall of movie posters on a grainy black starfield (dense speckled stars, a few bright
+glints, paper-grain noise). Drag a poster to peel it off: right stashes, left passes. Tap
+to flip it. Fronts are real TMDB posters once `TMDB_TOKEN` is set; until then, original
+placeholder posters in three print styles (torn-paper photo, 80s one-sheet, halftone
+screen print). Inspired by real posters, never copies of them.
+
+The back of each poster, the header, the nav and the drawers are **vintage flash cards**:
+cream paper, a heavy black rounded frame, a flat ink picture (red, violet, pink, sage) with
+rough edges and a yellow plate slipped out of register, and a lowercase grotesque label
+underneath (Inter Tight). The name is on hold, so the page carries no brand name.
+Rejected so far: space gradients, texture everywhere, typewriter/handwriting fonts,
+stickers/VHS, the 70s eyeball broadcast, the A24 disc library.
 
 ## Copy
 
@@ -40,4 +43,4 @@ Plain, deadpan, kind. Specific beats clever. Errors say what happened and what t
 - Test at 375px wide and on desktop; the body must never scroll sideways.
 - Wrap every `localStorage` access in try/catch.
 - Don't hardcode streaming availability; it comes from live data.
-- Respect `prefers-reduced-motion` (the smoke and card animations already do).
+- Respect `prefers-reduced-motion` (the peel and flip animations already do).

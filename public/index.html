@@ -7,436 +7,460 @@
 <meta name="description" content="What to watch when you're baked.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500&family=Inter+Tight:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo+Black&family=Oswald:wght@400;600&family=Rubik:wght@800&family=Inter+Tight:wght@400;500;600&display=swap">
 <style>
-/* Layout follows the A24 disc library: a quiet grey page, a credits table up top, one big disc
-   in the middle with neighbours peeking in from the edges, a floating pill nav at the bottom.
-   Tapping a disc "spools" into a film page with a rising wavy image and huge scattered words. */
+/* Layout: a grainy black starfield fills the screen. A stack of movie posters sits on it:
+   drag one to peel it off (right stashes, left passes), tap it to flip. The back of each
+   poster, the header, the nav and the drawers are vintage flash cards: cream paper, a heavy
+   black frame, a flat misprinted ink picture and a lowercase label. */
 :root {
-  --page: #ebe9e4;
+  --night: #040509;
+  --fc-paper: #efe5d0;
+  --fc-line: #1b1a17;
+  --ink-red: #e8472b;
+  --ink-violet: #4a3f97;
+  --ink-pink: #ec93ad;
+  --ink-sage: #9aa597;
+  --ink-yellow: #f0c64a;
+  --cream: #efe4cc;
+  --paper: #ece2c8;
   --ink: #141414;
-  --soft: #6b6863;
-  --rule: rgba(20, 20, 20, .22);
-  --pill: #fbfaf7;
-  --f-serif: "Bodoni Moda", "Didot", "Bodoni 72", Georgia, serif;
-  --f-sans: "Inter Tight", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  color-scheme: light;
+  --red: #e2402b;
+  --gold: #edc755;
+  --soft: rgba(239, 228, 204, .62);
+  --f-cond: "Anton", "Oswald", "Impact", sans-serif;
+  --f-black: "Archivo Black", "Arial Black", sans-serif;
+  --f-small: "Oswald", "Arial Narrow", sans-serif;
+  --f-round: "Rubik", "Arial Rounded MT Bold", sans-serif;
+  --f-ui: "Inter Tight", "Helvetica Neue", Arial, sans-serif;
+  --f-card: "Inter Tight", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color-scheme: dark;
 }
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
-html { background: var(--page); overflow-x: clip; }
-body { margin: 0; background: var(--page); color: var(--ink); font-family: var(--f-sans); font-size: 13px; line-height: 1.35; overflow-x: clip; -webkit-font-smoothing: antialiased; }
-body::after { content: ""; position: fixed; inset: 0; z-index: 90; pointer-events: none; opacity: .5; mix-blend-mode: multiply;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .5  0 0 0 0 .5  0 0 0 0 .5  0 0 0 .09 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); }
+html { background: var(--night); overflow-x: clip; }
+body { margin: 0; min-height: 100vh; min-height: 100svh; background: var(--night); color: var(--cream); font-family: var(--f-ui); font-size: 13px; overflow: hidden; -webkit-font-smoothing: antialiased; }
 button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
-:focus-visible { outline: 1px solid var(--ink); outline-offset: 3px; }
-p, h1, h2 { margin: 0; font-weight: 400; }
-.cap { font-size: 8.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink); }
-.serif { font-family: var(--f-serif); }
+:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+p, h1, h2, h3 { margin: 0; font-weight: 400; }
 
-/* ---------- credits table ---------- */
-.credits { position: fixed; z-index: 5; top: calc(14px + env(safe-area-inset-top, 0px)); left: max(14px, env(safe-area-inset-left, 0px)); right: max(14px, env(safe-area-inset-right, 0px)); max-width: 380px; }
-.credits h1 { font-family: var(--f-serif); font-size: 22px; line-height: 1; text-transform: uppercase; letter-spacing: -.01em; padding-bottom: 7px; border-bottom: 1px solid var(--ink); }
-.row { display: grid; grid-template-columns: 90px minmax(0, 1fr); gap: 10px; align-items: baseline; padding: 5px 0 4px; border-bottom: 1px solid var(--rule); }
-.row .v { text-align: right; font-size: 12px; }
-.row .v span { display: block; }
-.swap { animation: swap .5s cubic-bezier(.2, .7, .2, 1) both; animation-delay: calc(var(--i, 0) * 45ms); }
-@keyframes swap { from { opacity: 0; transform: translateY(6px); filter: blur(3px); } }
-.side-l, .side-r { position: fixed; z-index: 5; top: 50%; transform: translateY(-50%); font-size: 11px; }
-.side-l { left: max(14px, env(safe-area-inset-left, 0px)); }
-.side-r { right: max(14px, env(safe-area-inset-right, 0px)); }
-.counter { position: fixed; z-index: 5; font-family: var(--f-serif); font-size: clamp(40px, 6vw, 72px); line-height: 1; left: 22vw; top: 42vh; font-variant-numeric: tabular-nums; }
+/* ---------- night scene ---------- */
+#scene { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
+.grain { position: fixed; inset: 0; pointer-events: none; z-index: 1; opacity: .35; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='.6'/></svg>"); }
 
-/* ---------- disc stage ---------- */
-.stage { position: fixed; inset: 0; z-index: 2; touch-action: pan-y; perspective: 1100px; user-select: none; -webkit-user-select: none; }
-.disc { position: absolute; left: 50%; top: 52%; width: var(--D); aspect-ratio: 1; margin: calc(var(--D) / -2) 0 0 calc(var(--D) / -2); transform-style: preserve-3d; will-change: transform; }
-.disc .face { position: absolute; inset: 0; border-radius: 50%; overflow: hidden; background: var(--c); box-shadow: 0 0 0 1px rgba(0, 0, 0, .12), 0 24px 40px -18px rgba(0, 0, 0, .45); }
-.disc .face img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity .6s ease; }
-.disc .face img.ok { opacity: 1; }
-.disc .label { position: absolute; inset: 0; width: 100%; height: 100%; }
-.disc .label text { font-family: var(--f-serif); fill: var(--t); }
-.disc .sheen { position: absolute; inset: 0; border-radius: 50%; mix-blend-mode: soft-light; opacity: .75;
-  background: conic-gradient(from var(--sh, 0deg), rgba(255,255,255,.0), rgba(255,255,255,.55) 8%, rgba(255,255,255,0) 18%, rgba(160,200,255,.35) 32%, rgba(255,255,255,0) 45%, rgba(255,210,160,.4) 60%, rgba(255,255,255,0) 72%, rgba(255,255,255,.5) 86%, rgba(255,255,255,0)); }
-.disc .hub { position: absolute; left: 50%; top: 50%; width: 30%; aspect-ratio: 1; transform: translate(-50%, -50%); border-radius: 50%;
-  background: radial-gradient(circle, var(--page) 0 30%, #c9ccd0 31% 38%, rgba(235,238,242,.92) 39% 60%, #b7bbc1 61% 64%, rgba(225,229,234,.85) 65% 100%);
-  box-shadow: inset 0 0 0 1px rgba(0,0,0,.18), 0 0 0 1px rgba(255,255,255,.4); }
-.disc .rim { position: absolute; inset: 0; border-radius: 50%; box-shadow: inset 0 0 0 2px rgba(255,255,255,.35), inset 0 0 18px rgba(0,0,0,.25); }
-.scribble { position: absolute; left: 50%; top: 52%; width: calc(var(--D) * 1.28); aspect-ratio: 1; transform: translate(-50%, -50%) rotate(var(--sr, 0deg)); pointer-events: none; z-index: 3; opacity: 0; transition: opacity .35s ease; }
-.scribble.on { opacity: 1; }
-.scribble path { fill: none; stroke: var(--ink); stroke-width: 1.4; stroke-linecap: round; stroke-dasharray: 2600; stroke-dashoffset: 2600; }
-.scribble.on path { animation: draw 1.1s ease forwards; }
-@keyframes draw { to { stroke-dashoffset: 0; } }
+/* ---------- top line ---------- */
+/* ---------- flash card parts (shared) ---------- */
+.fc-card { background: var(--fc-paper); color: var(--fc-line); padding: 5px; border-radius: 2px; position: relative; box-shadow: 0 14px 30px -12px rgba(0,0,0,.8); }
+.fc-card::after, .back::after { content: ""; position: absolute; inset: 0; pointer-events: none; mix-blend-mode: multiply; opacity: .5;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='p'><feTurbulence type='fractalNoise' baseFrequency='.7' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .55  0 0 0 0 .48  0 0 0 0 .36  0 0 0 .45 0'/></filter><rect width='100%' height='100%' filter='url(%23p)'/></svg>"); }
+.fc-frame { border: 3px solid var(--fc-line); border-radius: 3px; }
+.fc-panel { position: relative; overflow: hidden; }
+.fc-panel svg { display: block; width: 100%; height: 100%; }
+.fc-panel::after { content: ""; position: absolute; inset: 0; pointer-events: none; mix-blend-mode: screen; opacity: .35;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='s'><feTurbulence type='fractalNoise' baseFrequency='1.4' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 .95  0 0 0 0 .85  0 0 0 -2.2 1.25'/></filter><rect width='100%' height='100%' filter='url(%23s)'/></svg>"); }
+.fc-label { font-family: var(--f-card); font-weight: 500; text-transform: lowercase; letter-spacing: -.015em; line-height: 1; }
 
-/* ---------- pill nav ---------- */
-.pill { position: fixed; z-index: 30; left: 50%; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); background: var(--pill); display: flex; align-items: center; gap: 16px;
-  padding: 9px 16px; box-shadow: 0 1px 0 rgba(0,0,0,.04), 0 10px 30px rgba(0,0,0,.08); font-size: 11.5px; white-space: nowrap; min-width: 250px; justify-content: space-between; }
-.pill .mark { width: 16px; height: 16px; border-radius: 50%; background: radial-gradient(circle, var(--pill) 0 22%, var(--ink) 23% 100%); animation: spin 6s linear infinite; }
-@keyframes spin { to { transform: rotate(360deg); } }
-.pill button { position: relative; color: var(--soft); }
-.pill button[aria-pressed="true"] { color: var(--ink); }
-.pill button[aria-pressed="true"]::after { content: ""; position: absolute; left: 50%; bottom: -6px; width: 3px; height: 3px; border-radius: 50%; background: var(--ink); transform: translateX(-50%); }
-.pill .stash b { font-weight: 500; color: var(--ink); }
-.pill .spool { color: var(--ink); display: flex; gap: 6px; align-items: center; }
-.pill .spool i { width: 9px; height: 9px; border: 1px solid var(--ink); border-right-color: transparent; border-radius: 50%; animation: spin .7s linear infinite; }
+/* ---------- header card ---------- */
+.top { position: fixed; z-index: 5; top: calc(12px + env(safe-area-inset-top, 0px)); left: 50%; transform: translateX(-50%) rotate(-1deg); width: min(360px, calc(100vw - 32px)); }
+.top .fc-frame { display: grid; grid-template-columns: 58px 1fr auto; align-items: center; gap: 10px; padding: 4px 10px 4px 4px; }
+.top .fc-panel { height: 38px; }
+.top .fc-label { font-size: 25px; }
+.top small { font-family: var(--f-card); font-size: 12px; font-weight: 500; text-transform: lowercase; }
 
-/* ---------- index + stash sheets ---------- */
-.sheet { position: fixed; z-index: 25; left: 50%; bottom: calc(62px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); width: min(380px, calc(100vw - 28px)); max-height: 60vh; overflow-y: auto;
-  background: var(--pill); padding: 14px 16px; box-shadow: 0 20px 50px rgba(0,0,0,.14); animation: up .35s cubic-bezier(.2,.7,.2,1); }
-@keyframes up { from { opacity: 0; transform: translate(-50%, 10px); } }
-.sheet h2 { font-family: var(--f-serif); font-size: 20px; margin-bottom: 6px; }
-.sheet .row { width: 100%; text-align: left; grid-template-columns: minmax(0, 1fr) auto; }
-.sheet .row[aria-pressed="true"] .k { text-decoration: underline; text-underline-offset: 3px; }
-.sheet .k { font-family: var(--f-serif); font-size: 16px; }
-.sheet .empty { color: var(--soft); padding: 8px 0; }
+/* ---------- the stack ---------- */
+.wall { position: fixed; inset: 0; z-index: 3; display: grid; place-items: center; padding: calc(70px + env(safe-area-inset-top, 0px)) 0 calc(84px + env(safe-area-inset-bottom, 0px)); }
+.stack { position: relative; width: var(--W); height: calc(var(--W) * 1.5); }
+.poster { position: absolute; inset: 0; perspective: 1400px; touch-action: none; user-select: none; -webkit-user-select: none; }
+.poster.behind { pointer-events: none; }
+.sheet { position: absolute; inset: 0; transform-style: preserve-3d; transition: transform .7s cubic-bezier(.3, 1.2, .4, 1); will-change: transform; }
+.poster.flipped .sheet { transform: rotateY(180deg); }
+.face { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; overflow: hidden; border-radius: 3px;
+  box-shadow: 0 2px 0 rgba(255,255,255,.08) inset, 0 30px 60px -20px rgba(0,0,0,.75), 0 0 0 1px rgba(0,0,0,.25); }
+.face::after { content: ""; position: absolute; inset: 0; pointer-events: none; mix-blend-mode: multiply; opacity: .55;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='p'><feTurbulence type='fractalNoise' baseFrequency='.6' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .55  0 0 0 0 .5  0 0 0 0 .42  0 0 0 .5 0'/></filter><rect width='100%' height='100%' filter='url(%23p)'/></svg>"),
+    linear-gradient(180deg, rgba(255,255,255,0) 48%, rgba(0,0,0,.08) 50%, rgba(255,255,255,0) 52%),
+    linear-gradient(90deg, rgba(255,255,255,0) 48%, rgba(0,0,0,.07) 50%, rgba(255,255,255,0) 52%); }
+.back { transform: rotateY(180deg); }
+.lift { position: absolute; inset: 0; pointer-events: none; z-index: 4; opacity: 0;
+  background: linear-gradient(var(--la, 120deg), rgba(0,0,0,0) 40%, rgba(0,0,0,.25) 70%, rgba(255,255,255,.35) 86%, rgba(0,0,0,.35)); }
+.curl { position: absolute; bottom: 0; width: 0; height: 0; z-index: 5; pointer-events: none;
+  background: linear-gradient(var(--ca, 135deg), #fbf6e9 0%, #d8cdb2 45%, rgba(0,0,0,.35) 50%, transparent 51%); filter: drop-shadow(-4px -4px 6px rgba(0,0,0,.35)); }
+.tag { position: absolute; top: 18%; z-index: 6; padding: 4px 12px 2px; font-family: var(--f-cond); font-size: 30px; letter-spacing: .04em; text-transform: uppercase; opacity: 0;
+  background: var(--gold); color: var(--ink); box-shadow: 3px 3px 0 rgba(0,0,0,.4); }
+.tag.yes { left: 14px; transform: rotate(-9deg); }
+.tag.no { right: 14px; transform: rotate(9deg); background: var(--cream); }
 
-/* ---------- film page ---------- */
-.film { position: fixed; inset: 0; z-index: 20; overflow-y: auto; background: var(--page); animation: fade .5s ease; }
-@keyframes fade { from { opacity: 0; } }
-.film .back { position: fixed; z-index: 2; top: calc(14px + env(safe-area-inset-top, 0px)); left: max(14px, env(safe-area-inset-left, 0px)); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; }
-.f-head { max-width: 520px; margin: 0 auto; padding: calc(58px + env(safe-area-inset-top, 0px)) 16px 0; text-align: center; }
-.f-head h2 { font-family: var(--f-serif); font-size: clamp(40px, 11vw, 84px); line-height: .9; text-transform: uppercase; letter-spacing: -.02em; }
-.f-head .by { margin-top: 14px; font-size: 12.5px; line-height: 1.45; }
-.f-head .by .cap { margin: 0 4px; font-size: 8px; }
-.f-table { max-width: 520px; margin: 26vh auto 0; padding: 0 16px; }
-.f-table .row { position: relative; border: 0; }
-.f-table .row::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: var(--rule); transform-origin: left; animation: rule .9s cubic-bezier(.2,.7,.2,1) both; animation-delay: calc(var(--i) * 90ms + .2s); }
-@keyframes rule { from { transform: scaleX(0); } }
-.rise { position: relative; margin-top: 14vh; min-height: 150vh; }
-.rise .img { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; background: var(--c);
-  -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'><path d='M0 14 C 18 4, 30 20, 50 9 S 82 0, 100 12 L100 100 L0 100Z'/></svg>") top / 100% 100% no-repeat;
-  mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'><path d='M0 14 C 18 4, 30 20, 50 9 S 82 0, 100 12 L100 100 L0 100Z'/></svg>") top / 100% 100% no-repeat; }
-.rise .img .bg { position: absolute; inset: -6%; background: var(--bgfill); filter: blur(var(--blur, 0px)); transform: scale(1.06); }
-.rise .img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity .8s ease; filter: blur(2px) saturate(.9); transform: scale(1.08); }
-.rise .img img.ok { opacity: 1; }
-.rise .img::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,.15)); }
-.words { position: absolute; inset: 0; z-index: 2; color: #f3efe8; }
-.words .w { position: absolute; font-family: var(--f-serif); font-size: clamp(30px, 8vw, 72px); line-height: 1; text-transform: uppercase; letter-spacing: -.01em; }
-.words .ln { position: absolute; left: 0; right: 0; height: 1px; background: rgba(243, 239, 232, .55); }
-.watch { position: absolute; left: 50%; top: 30%; transform: translateX(-50%); z-index: 3; color: #f3efe8; font-family: var(--f-serif); font-size: 15px; text-transform: uppercase; border-bottom: 1px solid currentColor; padding: 0 2px 2px; }
-.f-foot { position: relative; z-index: 3; background: #d9d6cf; padding: 20px 16px calc(110px + env(safe-area-inset-bottom, 0px)); }
-.f-foot .syn { max-width: 620px; margin: 0 auto; font-size: clamp(20px, 5.4vw, 30px); line-height: 1.15; letter-spacing: -.015em; }
-.f-foot .acts { max-width: 620px; margin: 22px auto 0; display: flex; gap: 22px; flex-wrap: wrap; }
-.f-foot .acts button, .f-foot .acts span { font-family: var(--f-serif); font-size: 15px; text-transform: uppercase; border-bottom: 1px solid var(--ink); padding-bottom: 2px; }
-.f-foot .acts span { color: var(--soft); border-color: var(--soft); }
-.f-foot .src { max-width: 620px; margin: 26px auto 0; color: var(--soft); font-size: 11px; }
+/* poster type: torn */
+.p-torn { background: var(--paper); color: var(--ink); }
+.p-torn .low { position: absolute; left: 4.5%; right: 4.5%; top: 63%; bottom: 9%; }
+.p-torn .tl { font-family: var(--f-black); text-align: center; font-size: calc(var(--W) * .042); padding: 0 8%; letter-spacing: .03em; color: var(--paper); position: absolute; top: 6.5%; left: 0; right: 0; z-index: 2; text-transform: uppercase; }
+.p-torn .panel { position: absolute; left: 4.5%; right: 4.5%; top: 4.5%; height: 57%; border-radius: 10px; overflow: hidden; background: var(--a); }
+.p-torn .names { display: flex; justify-content: space-between; font-family: var(--f-small); font-weight: 600; font-size: calc(var(--W) * .043); line-height: .95; text-transform: uppercase; padding: 3.5% 3% 0; position: relative; z-index: 1; }
+.p-torn .names span { max-width: 30%; }
+.p-torn .names span:nth-child(2) { text-align: center; } .p-torn .names span:nth-child(3) { text-align: right; }
+.p-torn .rules { position: absolute; inset: 0; font-family: var(--f-small); font-size: calc(var(--W) * .036); line-height: 1.25; text-transform: uppercase; color: rgba(20,20,20,.13); overflow: hidden; word-break: break-all; padding: 0 2%; }
+.p-torn .title { position: relative; z-index: 1; font-family: var(--f-cond); color: var(--red); text-align: center; text-transform: uppercase; line-height: .92; letter-spacing: .28em; padding-left: .28em; margin-top: 4%; white-space: nowrap; }
+.p-torn .by { position: absolute; left: 0; right: 0; bottom: 3%; text-align: center; font-family: var(--f-black); font-size: calc(var(--W) * .038); text-transform: uppercase; letter-spacing: .03em; }
 
-@media (min-width: 900px) {
-  .credits { left: 50%; transform: translateX(-50%); width: 360px; }
-  .counter { left: 14vw; }
-  .disc { top: 54%; }
-  .scribble { top: 54%; }
-}
-@media (max-width: 899px) { .side-l, .side-r, .counter { display: none; } }
-@media (prefers-reduced-motion: reduce) {
-  .swap, .scribble.on path, .pill .mark, .f-table .row::after, .sheet, .film { animation: none !important; }
-}
+/* poster type: one-sheet */
+.p-sheet { background: #e9e6dd; color: var(--ink); }
+.p-sheet .bar { position: absolute; left: 0; right: 0; top: 0; height: 11%; background: #111; color: #f4f1ea; display: grid; grid-template-columns: 1.2fr 1fr 1.2fr; align-items: center; padding: 0 3%; gap: 2%; font-family: var(--f-black); text-transform: uppercase; }
+.p-sheet .bar span { font-size: calc(var(--W) * .026); line-height: 1.05; text-align: center; }
+.p-sheet .bar span:first-child { font-size: calc(var(--W) * .05); text-align: left; letter-spacing: .02em; }
+.p-sheet .bar span:last-child { font-size: calc(var(--W) * .042); text-align: right; }
+.p-sheet .art { position: absolute; left: 0; right: 0; top: 11%; height: 62%; overflow: hidden; background: var(--a); }
+.p-sheet .quip { position: absolute; z-index: 2; right: 5%; top: 30%; width: 48%; font-family: var(--f-black); font-size: calc(var(--W) * .052); line-height: 1.05; text-transform: uppercase; text-align: center; color: #111; }
+.p-sheet .rule { position: absolute; left: 4%; right: 4%; height: 2px; background: var(--red); }
+.p-sheet .star { position: absolute; left: 0; right: 0; top: 75.5%; text-align: center; font-family: var(--f-black); font-size: calc(var(--W) * .03); color: var(--red); text-transform: uppercase; }
+.p-sheet .title { position: absolute; left: 3%; right: 3%; top: 79%; font-family: var(--f-black); text-transform: uppercase; line-height: .88; text-align: center; letter-spacing: -.02em; }
+.p-sheet .billing { position: absolute; left: 4%; right: 4%; bottom: 3.5%; font-family: var(--f-small); font-weight: 600; font-size: calc(var(--W) * .027); line-height: 1.15; text-align: center; text-transform: uppercase; }
+
+/* poster type: screen print */
+.p-print { background: var(--a); color: var(--cream); }
+.p-print .title { position: absolute; left: 6%; right: 6%; top: 5%; font-family: var(--f-round); text-transform: lowercase; line-height: .82; letter-spacing: -.045em; color: var(--paper); }
+.p-print .title small { display: block; text-align: right; font-size: .5em; }
+.p-print .art { position: absolute; left: 12%; right: 12%; top: 38%; height: 44%; }
+.p-print .billing { position: absolute; left: 8%; right: 8%; bottom: 4%; font-family: var(--f-small); font-weight: 600; font-size: calc(var(--W) * .026); line-height: 1.2; text-align: center; text-transform: uppercase; color: rgba(20,20,20,.75); }
+
+/* a real poster from TMDB fills the front */
+.p-real { background: var(--a); }
+.p-real h2 { position: absolute; left: 8%; right: 8%; top: 40%; text-align: center; font-family: var(--f-cond); font-size: calc(var(--W) * .11); line-height: .95; text-transform: uppercase; color: var(--paper); }
+.p-real img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+
+/* image or generated art inside panels */
+.pic { position: absolute; inset: 0; }
+.pic img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity .6s ease; }
+.pic img.ok { opacity: 1; }
+.duo img { filter: grayscale(1) contrast(1.15) brightness(1.05); mix-blend-mode: multiply; }
+.dots { -webkit-mask: radial-gradient(circle, #000 42%, transparent 46%) 0 0 / 5px 5px; mask: radial-gradient(circle, #000 42%, transparent 46%) 0 0 / 5px 5px; }
+.gen { position: absolute; inset: 0; }
+.gen i { position: absolute; border-radius: 50%; }
+.tears { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; }
+
+/* back of the poster: a flash card */
+.back { background: var(--fc-paper); color: var(--fc-line); padding: 4%; border-radius: 3px; }
+.back .fc-frame { position: absolute; inset: 4%; display: flex; flex-direction: column; padding: 4%; gap: calc(var(--W) * .022); }
+.back .fc-panel { flex: 0 0 auto; height: calc(var(--W) * .4); }
+.back .head { display: flex; justify-content: space-between; align-items: flex-end; gap: 10px; }
+.back .fc-label { font-size: calc(var(--W) * .1); }
+.back .pct { font-family: var(--f-card); font-weight: 600; font-size: calc(var(--W) * .075); line-height: 1; color: var(--ink-red); white-space: nowrap; }
+.back .meta { font-size: calc(var(--W) * .036); font-weight: 500; text-transform: lowercase; color: #5f584b; margin-top: -2px; }
+.back .plot { font-size: calc(var(--W) * .043); line-height: 1.32; }
+.back dl { margin: 0; display: grid; grid-template-columns: auto 1fr; column-gap: 12px; font-size: calc(var(--W) * .035); line-height: 1.3; }
+.back dt { font-weight: 600; text-transform: lowercase; }
+.back dd { margin: 0; }
+.back .acts { margin-top: auto; display: flex; gap: 8px; }
+.back .acts button { flex: 1; padding: 7px 0 8px; font-family: var(--f-card); font-weight: 500; font-size: calc(var(--W) * .058); text-transform: lowercase; letter-spacing: -.01em; border: 3px solid var(--fc-line); border-radius: 3px; background: var(--fc-paper); }
+.back .acts .yes { background: var(--ink-red); color: var(--fc-paper); }
+
+/* ---------- controls + pill ---------- */
+.hint-row { position: fixed; z-index: 4; left: 0; right: 0; bottom: calc(68px + env(safe-area-inset-bottom, 0px)); text-align: center; font-size: 11px; text-transform: lowercase; color: var(--soft); }
+.pill { position: fixed; z-index: 10; left: 50%; bottom: calc(14px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); white-space: nowrap; }
+.pill .fc-frame { display: flex; gap: 18px; align-items: center; padding: 6px 14px 7px; }
+.pill button { font-family: var(--f-card); font-weight: 500; font-size: 17px; text-transform: lowercase; letter-spacing: -.01em; color: #77705f; }
+.pill button[aria-pressed="true"], .pill button[aria-expanded="true"] { color: var(--fc-line); text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 4px; }
+.pill b { font-weight: 600; color: var(--ink-red); }
+.drawer { position: fixed; z-index: 9; left: 50%; bottom: calc(70px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); width: min(360px, calc(100vw - 28px)); }
+.drawer .fc-frame { padding: 10px 14px 8px; max-height: 58vh; overflow-y: auto; }
+.drawer h2 { font-size: 30px; margin-bottom: 6px; }
+.drawer .r { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; align-items: baseline; width: 100%; text-align: left; padding: 7px 0; border-top: 2px solid var(--fc-line); }
+.drawer .r .k { font-family: var(--f-card); font-weight: 500; font-size: 17px; text-transform: lowercase; letter-spacing: -.01em; }
+.drawer .r[aria-pressed="true"] .k { color: var(--ink-red); }
+.drawer .r small { font-size: 12px; text-transform: lowercase; color: #6d6758; }
+.drawer .empty { color: #6d6758; padding: 6px 0; }
+.done { position: absolute; inset: 0; }
+.done .fc-frame { position: absolute; inset: 5%; display: flex; flex-direction: column; padding: 5%; gap: 12px; }
+.done .fc-panel { height: 45%; }
+.done .fc-label { font-size: calc(var(--W) * .1); }
+.done button { margin-top: auto; padding: 8px 0; font-family: var(--f-card); font-weight: 500; font-size: 19px; text-transform: lowercase; border: 3px solid var(--fc-line); border-radius: 3px; }
+
+@media (prefers-reduced-motion: reduce) { .sheet { transition: none; } }
 </style>
 </head>
 <body>
+<canvas id="scene" aria-hidden="true"></canvas>
+<div class="grain" aria-hidden="true"></div>
 
-<header class="credits" id="credits" aria-live="polite"></header>
-<p class="side-l cap">Movies &amp; TV</p>
-<p class="side-r cap">For the couch</p>
-<p class="counter" id="counter" aria-hidden="true">1</p>
+<header class="top fc-card"><div class="fc-frame"><div class="fc-panel" id="top-art"></div><span class="fc-label">tonight</span><small id="count"></small></div></header>
 
-<div class="stage" id="stage" aria-roledescription="carousel" aria-label="Disc library. Drag sideways or use the arrow keys; tap the middle disc to open it." tabindex="0">
-  <svg class="scribble" id="scribble" viewBox="0 0 200 200" aria-hidden="true"><path id="scr-path"/></svg>
-</div>
+<main class="wall">
+  <div class="stack" id="stack" aria-label="Poster stack. Drag right to stash, left to pass, tap to flip. Arrow keys work too." tabindex="0"></div>
+</main>
+<p class="hint-row">peel right to stash · left to pass · tap to flip</p>
 
-<nav class="pill" id="pill" aria-label="Library">
-  <span class="mark" aria-hidden="true"></span>
-  <span class="links" id="links" style="display:flex;gap:16px">
-    <button type="button" data-k="movie" aria-pressed="false">Films</button>
-    <button type="button" data-k="tv" aria-pressed="false">TV</button>
-    <button type="button" id="index-btn" aria-expanded="false">Index ⌃</button>
-    <button type="button" class="stash" id="stash-btn" aria-expanded="false">Stash <b id="stash-n">0</b></button>
-  </span>
-  <span class="spool" id="spool" hidden><i></i>Spooling</span>
-</nav>
-
-<div class="sheet" id="index-sheet" hidden>
-  <h2>Index</h2>
-  <div id="vibe-list"></div>
-</div>
-<div class="sheet" id="stash-sheet" hidden>
-  <h2>Your stash</h2>
-  <div id="stash-list"></div>
-  <p class="empty" id="stash-empty">Nothing yet. Open a disc and stash it.</p>
-</div>
-
-<article class="film" id="film" hidden aria-modal="true" role="dialog" aria-labelledby="f-title">
-  <button class="back" id="back" type="button">← Back</button>
-  <div class="f-head"><h2 id="f-title"></h2><p class="by" id="f-by"></p></div>
-  <div class="f-table" id="f-table"></div>
-  <section class="rise" id="rise">
-    <div class="img" id="f-img"><div class="bg"></div><img id="f-backdrop" alt=""><div class="words" id="f-words"></div>
-      <span class="watch" id="f-watch">Where to watch · soon</span></div>
-  </section>
-  <div class="f-foot">
-    <p class="syn" id="f-syn"></p>
-    <div class="acts"><button type="button" id="f-stash">Stash it</button><button type="button" id="f-pass">Next disc</button><span>Where to watch: soon</span></div>
-    <p class="src" id="f-src">Scores are placeholders. Film data from memory for this prototype; artwork from TMDB once the API key is added.</p>
-  </div>
-</article>
+<nav class="pill fc-card" aria-label="Library"><div class="fc-frame">
+  <button type="button" data-k="movie" aria-pressed="false">films</button>
+  <button type="button" data-k="tv" aria-pressed="false">tv</button>
+  <button type="button" id="vibe-btn" aria-expanded="false">vibes</button>
+  <button type="button" id="stash-btn" aria-expanded="false">stash <b id="stash-n">0</b></button>
+</div></nav>
+<div class="drawer fc-card" id="vibe-drawer" hidden><div class="fc-frame"><h2 class="fc-label">vibes</h2><div id="vibe-list"></div></div></div>
+<div class="drawer fc-card" id="stash-drawer" hidden><div class="fc-frame"><h2 class="fc-label">your stash</h2><div id="stash-list"></div><p class="empty" id="stash-empty">Nothing yet. Peel one to the right.</p></div></div>
 
 <script>
 (function () {
   'use strict';
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // kind, title, year, director(s), cast, runtime, genres, vibes, score, words (scattered on the film page), synopsis, disc colour, label ink
+  // ---------- night sky: grainy black with a dense field of stars ----------
+  var cv = document.getElementById('scene'), cx = cv.getContext('2d'), H = 0;
+  function rng(s) { return function () { s = (s * 16807) % 2147483647; return s / 2147483647; }; }
+  function paint() {
+    var dpr = Math.min(devicePixelRatio || 1, 2), w = innerWidth, h = innerHeight, r = rng(11), i;
+    H = h; cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
+    // grain: every pixel gets a little blue-black noise, like ink on rough paper
+    var img = cx.createImageData(cv.width, cv.height), d = img.data;
+    for (i = 0; i < d.length; i += 4) { var n = r(), k = n * n * 22; d[i] = 3 + k * .7; d[i + 1] = 4 + k * .75; d[i + 2] = 8 + k; d[i + 3] = 255; }
+    cx.putImageData(img, 0, 0); cx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    // faint blotches so the black isn't flat
+    for (i = 0; i < 6; i++) { var bx = r() * w, by = r() * h, br = 120 + r() * 260, g = cx.createRadialGradient(bx, by, 0, bx, by, br);
+      g.addColorStop(0, 'rgba(40,52,96,.10)'); g.addColorStop(1, 'rgba(40,52,96,0)'); cx.fillStyle = g; cx.fillRect(bx - br, by - br, br * 2, br * 2); }
+    // dust: lots of tiny dim stars
+    for (i = 0; i < w * h / 140; i++) { var a = .12 + r() * r() * .85, sz = r() < .9 ? .8 : 1.4; cx.fillStyle = r() < .3 ? 'rgba(190,205,255,' + a + ')' : 'rgba(245,240,228,' + a + ')'; cx.fillRect(r() * w, r() * h, sz, sz); }
+    // soft mid stars
+    for (i = 0; i < w * h / 9000; i++) { var sx = r() * w, sy = r() * h, sr = .6 + r() * r() * 1.4, sg = cx.createRadialGradient(sx, sy, 0, sx, sy, sr * 2.2);
+      sg.addColorStop(0, 'rgba(255,252,240,.95)'); sg.addColorStop(.4, 'rgba(230,236,255,.5)'); sg.addColorStop(1, 'rgba(230,236,255,0)'); cx.fillStyle = sg; cx.beginPath(); cx.arc(sx, sy, sr * 2.2, 0, 6.283); cx.fill(); }
+    // a few bright ones with a glint
+    for (i = 0; i < Math.max(3, w * h / 90000); i++) { var gx = r() * w, gy = r() * h, gl = 5 + r() * 7;
+      cx.strokeStyle = 'rgba(255,250,235,.55)'; cx.lineWidth = .8; cx.beginPath(); cx.moveTo(gx - gl, gy); cx.lineTo(gx + gl, gy); cx.moveTo(gx, gy - gl); cx.lineTo(gx, gy + gl); cx.stroke();
+      var gg = cx.createRadialGradient(gx, gy, 0, gx, gy, 4); gg.addColorStop(0, '#fffdf4'); gg.addColorStop(1, 'rgba(255,253,244,0)'); cx.fillStyle = gg; cx.beginPath(); cx.arc(gx, gy, 4, 0, 6.283); cx.fill(); }
+  }
+  paint();
+  var lastW = innerWidth; addEventListener('resize', function () { if (innerWidth !== lastW || Math.abs(innerHeight - H) > 120) { lastW = innerWidth; paint(); } sizes(); });
+
+  // ---------- data (credits from memory; scores are placeholders) ----------
+  // kind, title, year, dir, cast, runtime, genre, vibes, score, tagline, plot, style, colours [a, b, c]
   var T = [
-    ['movie', 'Fantastic Planet', 1973, ['René Laloux'], ['Jennifer Drake', 'Eric Baugin', 'Jean Topart'], '72 min', 'Animation, Science Fiction', ['plot', 'eye'], 94, 'tiny humans / giant blue aliens', 'A French cartoon about tiny humans kept as pets by giant blue aliens. You won\'t follow it. You don\'t need to.', '#2f6f8f', '#f4e7c8'],
-    ['movie', 'Into the Spider-Verse', 2018, ['Bob Persichetti', 'Peter Ramsey', 'Rodney Rothman'], ['Shameik Moore', 'Hailee Steinfeld', 'Jake Johnson'], '117 min', 'Animation, Action', ['eye', 'couch'], 96, 'anyone can wear the mask', 'Every frame looks like a comic book that came to life and had three espressos.', '#d8263c', '#111'],
-    ['movie', 'Paddington 2', 2017, ['Paul King'], ['Ben Whishaw', 'Hugh Grant', 'Brendan Gleeson', 'Sally Hawkins'], '103 min', 'Comedy, Family', ['couch', 'giggle'], 92, 'marmalade / prison / kindness', 'A bear in a duffle coat makes prison nicer. Impossible to feel bad during this.', '#1f3f8a', '#f2c94c'],
-    ['movie', 'Koyaanisqatsi', 1982, ['Godfrey Reggio'], ['Philip Glass (music)'], '86 min', 'Documentary', ['plot'], 90, 'life out of balance', 'No dialogue. Just time-lapse cities, clouds and a Philip Glass score.', '#e2551f', '#111'],
-    ['movie', 'Pineapple Express', 2008, ['David Gordon Green'], ['Seth Rogen', 'James Franco', 'Danny McBride'], '111 min', 'Comedy, Action', ['giggle'], 88, 'two guys / one witness / run', 'Two stoners, one witness, a lot of running. Made for exactly this.', '#e9c23a', '#1b3d2a'],
-    ['movie', 'Hot Rod', 2007, ['Akiva Schaffer'], ['Andy Samberg', 'Isla Fisher', 'Bill Hader'], '88 min', 'Comedy', ['giggle'], 85, 'cool beans', 'A wannabe stuntman and his very dumb friends. Pure nonsense, in the best way.', '#e94f39', '#fff4d8'],
-    ['movie', 'The Big Lebowski', 1998, ['Joel Coen'], ['Jeff Bridges', 'John Goodman', 'Julianne Moore', 'Steve Buscemi'], '117 min', 'Comedy, Crime', ['couch', 'giggle'], 95, 'the dude abides', 'A man wants his rug back. That\'s the movie. It\'s perfect.', '#3a2a5c', '#f0c75e'],
-    ['tv', 'Planet Earth II', 2016, ['BBC Natural History Unit'], ['David Attenborough (narrator)'], '6 episodes', 'Documentary', ['plot', 'eye'], 93, 'the iguana runs', 'Baby iguanas versus a swarm of snakes. You will scream at a lizard.', '#3f6b3a', '#eef0e6'],
-    ['tv', 'How To with John Wilson', 2020, ['John Wilson'], ['John Wilson'], '3 seasons', 'Documentary, Comedy', ['brain', 'short'], 91, 'how to / everything', 'A man films New York and somehow it becomes about everything.', '#d9d4c3', '#1d1d1d'],
-    ['tv', 'The Joy of Painting', 1983, ['Bob Ross'], ['Bob Ross'], '31 seasons', 'Instruction', ['short', 'couch'], 89, 'happy little trees', 'Bob Ross paints a cabin in under half an hour. Happy little trees, no stress.', '#7a4a2a', '#f5e6c8'],
-    ['tv', 'Chef\'s Table', 2015, ['David Gelb'], ['Various chefs'], '7 seasons', 'Documentary', ['munch', 'plot'], 84, 'slow motion / sauce', 'Slow-motion food and orchestral music. Snacks within reach before you press play.', '#151515', '#e9dcc0'],
-    ['movie', 'Harold & Kumar Go to White Castle', 2004, ['Danny Leiner'], ['John Cho', 'Kal Penn', 'Neil Patrick Harris'], '88 min', 'Comedy', ['munch', 'giggle'], 82, 'one craving / all night', 'Two guys, one craving, a very long night. The original munchies road trip.', '#2b55a8', '#f5d33e'],
-    ['movie', 'Everything Everywhere All at Once', 2022, ['Daniel Kwan', 'Daniel Scheinert'], ['Michelle Yeoh', 'Ke Huy Quan', 'Stephanie Hsu', 'Jamie Lee Curtis'], '139 min', 'Action, Comedy, Science Fiction', ['brain', 'eye'], 87, 'everything / everywhere / bagel', 'Multiverse kung fu, hot dog fingers and a lot of feelings.', '#f3f0ea', '#151515'],
-    ['movie', 'Mad Max: Fury Road', 2015, ['George Miller'], ['Tom Hardy', 'Charlize Theron', 'Nicholas Hoult'], '120 min', 'Action, Science Fiction', ['eye'], 80, 'chrome / sand / fire', 'Two hours of chrome, sand and a guitar that shoots fire. Barely any talking.', '#d86a2a', '#1c1208'],
-    ['movie', 'Spirited Away', 2001, ['Hayao Miyazaki'], ['Rumi Hiiragi', 'Miyu Irino', 'Mari Natsuki'], '125 min', 'Animation, Fantasy', ['eye', 'munch'], 91, 'don\'t eat the food', 'A girl, a bathhouse for spirits and a lot of very strange food. Gorgeous throughout.', '#9fc2c4', '#7a1d1d'],
-    ['tv', 'Adventure Time', 2010, ['Pendleton Ward'], ['Jeremy Shada', 'John DiMaggio'], '11-min episodes', 'Animation', ['short', 'eye'], 88, 'what time is it', 'A boy and his stretchy dog in a candy kingdom. Eleven minutes at a time.', '#7ac7e8', '#f7f2e4'],
-    ['tv', 'Nathan for You', 2013, ['Nathan Fielder', 'Michael Koman'], ['Nathan Fielder'], '4 seasons', 'Comedy, Reality', ['giggle', 'short'], 90, 'business advice', 'A business consultant gives terrible advice with a completely straight face.', '#f5f2ec', '#c0322b'],
-    ['movie', 'The Mitchells vs. the Machines', 2021, ['Mike Rianda'], ['Abbi Jacobson', 'Danny McBride', 'Maya Rudolph'], '114 min', 'Animation, Comedy', ['eye', 'couch'], 86, 'family / road trip / robots', 'A family road trip during a robot apocalypse. Loud, colourful and sweet.', '#ff6f91', '#1b1b3a'],
-    ['movie', 'Dazed and Confused', 1993, ['Richard Linklater'], ['Jason London', 'Wiley Wiggins', 'Matthew McConaughey'], '102 min', 'Comedy', ['couch'], 89, 'last day / 1976', 'The last day of school, 1976. Nothing much happens, beautifully.', '#e8b04a', '#3b1f12'],
-    ['movie', 'Uncut Gems', 2019, ['Josh Safdie', 'Benny Safdie'], ['Adam Sandler', 'Julia Fox', 'LaKeith Stanfield'], '135 min', 'Crime, Thriller', ['sober'], 28, 'this is how I win', 'A gambler makes every wrong choice at full volume for two hours. Great film. Not tonight.', '#6b2fa3', '#f0e2ff'],
-    ['movie', 'Midsommar', 2019, ['Ari Aster'], ['Florence Pugh', 'Jack Reynor', 'Will Poulter'], '148 min', 'Horror, Drama', ['sober'], 22, 'let the festivities begin', 'A sunny Swedish festival that goes very, very wrong. Save it for a clear head.', '#f1e9d0', '#3b5b2c']
-  ].map(function (r, i) { return { i: i, kind: r[0], title: r[1], year: r[2], dir: r[3], cast: r[4], run: r[5], genre: r[6], vibes: r[7], score: r[8], words: r[9], syn: r[10], c: r[11], t: r[12], key: r[0] + ':' + r[1] + ':' + r[2] }; });
-  var VIBES = [['couch', 'Couch-locked'], ['eye', 'Eye candy'], ['plot', 'Plot optional'], ['giggle', 'Giggle fits'], ['brain', '2 a.m. big brain'], ['munch', 'Munchie bait'], ['short', 'Short trips'], ['sober', 'Save for sober']];
+    ['movie', 'Fantastic Planet', 1973, ['René Laloux'], ['Jennifer Drake', 'Eric Baugin', 'Jean Topart'], '72 min', 'Animation, Sci-fi', ['plot', 'eye'], 94, 'Tiny humans. Giant blue aliens.', 'Humans the size of a thumbnail are kept as pets by enormous blue aliens on a strange planet. A French cartoon that drifts more than it explains. You won\'t follow it. You don\'t need to.', 'print', ['#2f6f8f', '#e2402b', '#edc755']],
+    ['movie', 'Into the Spider-Verse', 2018, ['Bob Persichetti', 'Peter Ramsey', 'Rodney Rothman'], ['Shameik Moore', 'Hailee Steinfeld', 'Jake Johnson'], '117 min', 'Animation, Action', ['eye', 'couch'], 96, 'Anyone can wear the mask.', 'A Brooklyn teenager gets bitten, and then meets five other Spider-People from other dimensions. Every frame looks like a comic book that came to life and had three espressos.', 'sheet', ['#d8263c', '#1f3f8a', '#edc755']],
+    ['movie', 'Paddington 2', 2017, ['Paul King'], ['Ben Whishaw', 'Hugh Grant', 'Brendan Gleeson'], '103 min', 'Comedy, Family', ['couch', 'giggle'], 92, 'Marmalade. Prison. Kindness.', 'A bear in a duffle coat is framed for theft and makes prison a nicer place to be. Hugh Grant is having the time of his life. Impossible to feel bad during this.', 'print', ['#1f3f8a', '#edc755', '#e2402b']],
+    ['movie', 'Koyaanisqatsi', 1982, ['Godfrey Reggio'], ['Philip Glass (music)'], '86 min', 'Documentary', ['plot'], 90, 'Life out of balance.', 'No dialogue and no story. Clouds roll, cities rush, crowds pour through stations in time-lapse, all to a hypnotic Philip Glass score. Pure looking.', 'torn', ['#e2551f', '#1a375f', '#edc755']],
+    ['movie', 'Pineapple Express', 2008, ['David Gordon Green'], ['Seth Rogen', 'James Franco', 'Danny McBride'], '111 min', 'Comedy, Action', ['giggle'], 88, 'Put this in your pipe.', 'A process server witnesses a murder and drops a rare strain at the scene. He and his dealer spend the rest of the movie running. Made for exactly this.', 'sheet', ['#e9c23a', '#2f6b3a', '#e2402b']],
+    ['movie', 'Hot Rod', 2007, ['Akiva Schaffer'], ['Andy Samberg', 'Isla Fisher', 'Bill Hader'], '88 min', 'Comedy', ['giggle'], 85, 'Cool beans.', 'A wannabe stuntman plans one giant jump to raise money for his stepdad\'s heart surgery, so he can then fight him. Pure nonsense, in the best way.', 'torn', ['#e94f39', '#1a375f', '#edc755']],
+    ['movie', 'The Big Lebowski', 1998, ['Joel Coen'], ['Jeff Bridges', 'John Goodman', 'Julianne Moore'], '117 min', 'Comedy, Crime', ['couch', 'giggle'], 95, 'The Dude abides.', 'A laid-back bowler is mistaken for a millionaire with the same name, and all he wants is his rug back. That\'s the movie. It\'s perfect.', 'print', ['#3a2a5c', '#edc755', '#e2402b']],
+    ['tv', 'Planet Earth II', 2016, ['BBC Natural History Unit'], ['David Attenborough (narrator)'], '6 episodes', 'Nature documentary', ['plot', 'eye'], 93, 'The iguana runs.', 'Islands, mountains, jungles, deserts, grasslands and cities, shot like nobody had shot them before. Baby iguanas versus a swarm of snakes. You will scream at a lizard.', 'torn', ['#2f6b3a', '#1a375f', '#edc755']],
+    ['tv', 'How To with John Wilson', 2020, ['John Wilson'], ['John Wilson'], '3 seasons', 'Documentary, Comedy', ['brain', 'short'], 91, 'How to do everything.', 'A nervous New Yorker films strangers while trying to explain how to do simple things, like make small talk or put up scaffolding. Somehow it becomes about everything.', 'sheet', ['#d9d4c3', '#e2402b', '#1f3f8a']],
+    ['tv', 'The Joy of Painting', 1983, ['Bob Ross'], ['Bob Ross'], '31 seasons', 'Instruction', ['short', 'couch'], 89, 'Happy little trees.', 'A soft-spoken man paints a whole mountain cabin in under half an hour and never once makes a mistake, only happy accidents. No stress at all.', 'print', ['#7a4a2a', '#edc755', '#2f6b3a']],
+    ['tv', 'Chef\'s Table', 2015, ['David Gelb'], ['Various chefs'], '7 seasons', 'Food documentary', ['munch', 'plot'], 84, 'Snacks first.', 'Each episode follows one chef, shot in slow motion with an orchestra swelling behind every sauce. Have snacks within reach before you press play.', 'torn', ['#2a2420', '#e2402b', '#edc755']],
+    ['movie', 'Harold & Kumar Go to White Castle', 2004, ['Danny Leiner'], ['John Cho', 'Kal Penn', 'Neil Patrick Harris'], '88 min', 'Comedy', ['munch', 'giggle'], 82, 'One craving. All night.', 'Two roommates get the munchies and set out for a specific burger. It takes the entire night and involves a cheetah. The original munchies road trip.', 'sheet', ['#2b55a8', '#edc755', '#e2402b']],
+    ['movie', 'Everything Everywhere All at Once', 2022, ['Daniel Kwan', 'Daniel Scheinert'], ['Michelle Yeoh', 'Ke Huy Quan', 'Stephanie Hsu'], '139 min', 'Action, Comedy, Sci-fi', ['brain', 'eye'], 87, 'Everything. Everywhere.', 'A laundromat owner being audited discovers she can jump between every version of her life. Multiverse kung fu, hot dog fingers and a lot of feelings.', 'print', ['#e94f39', '#1f3f8a', '#edc755']],
+    ['movie', 'Mad Max: Fury Road', 2015, ['George Miller'], ['Tom Hardy', 'Charlize Theron', 'Nicholas Hoult'], '120 min', 'Action', ['eye'], 80, 'Chrome. Sand. Fire.', 'A long chase across a desert in vehicles built from scrap. Two hours of chrome, sand and a guitar that shoots fire, with barely any talking.', 'torn', ['#d86a2a', '#1a375f', '#edc755']],
+    ['movie', 'Spirited Away', 2001, ['Hayao Miyazaki'], ['Rumi Hiiragi', 'Miyu Irino', 'Mari Natsuki'], '125 min', 'Animation, Fantasy', ['eye', 'munch'], 91, 'Don\'t eat the food.', 'A girl wanders into a bathhouse for spirits and has to work there to save her parents, who have been turned into pigs. Gorgeous throughout.', 'sheet', ['#7aa9ab', '#e2402b', '#edc755']],
+    ['tv', 'Adventure Time', 2010, ['Pendleton Ward'], ['Jeremy Shada', 'John DiMaggio'], '11-min episodes', 'Animation', ['short', 'eye'], 88, 'What time is it?', 'A boy and his stretchy dog go on adventures in a candy kingdom that slowly turns out to be something much stranger. Eleven minutes at a time.', 'print', ['#3aa0c9', '#edc755', '#e2402b']],
+    ['tv', 'Nathan for You', 2013, ['Nathan Fielder', 'Michael Koman'], ['Nathan Fielder'], '4 seasons', 'Comedy', ['giggle', 'short'], 90, 'Business advice.', 'A consultant with a business degree gives small businesses terrible ideas and follows through on them with a completely straight face.', 'sheet', ['#f2efe8', '#e2402b', '#1f3f8a']],
+    ['movie', 'The Mitchells vs. the Machines', 2021, ['Mike Rianda'], ['Abbi Jacobson', 'Danny McBride', 'Maya Rudolph'], '114 min', 'Animation, Comedy', ['eye', 'couch'], 86, 'Family. Road trip. Robots.', 'An awkward family is on a road trip when the robot apocalypse starts, and they turn out to be humanity\'s best chance. Loud, colourful and sweet.', 'torn', ['#ff6f91', '#1f3f8a', '#edc755']],
+    ['movie', 'Dazed and Confused', 1993, ['Richard Linklater'], ['Jason London', 'Wiley Wiggins', 'Matthew McConaughey'], '102 min', 'Comedy', ['couch'], 89, 'The last day of school, 1976.', 'Texas teenagers drift through the last day of school and the night that follows. Nothing much happens, beautifully.', 'print', ['#e8b04a', '#2f6b3a', '#e2402b']],
+    ['movie', 'Uncut Gems', 2019, ['Josh Safdie', 'Benny Safdie'], ['Adam Sandler', 'Julia Fox', 'LaKeith Stanfield'], '135 min', 'Crime, Thriller', ['sober'], 28, 'This is how I win.', 'A jeweller with a gambling problem makes every wrong choice at full volume for two hours. A great film. Not tonight.', 'torn', ['#6b2fa3', '#e2402b', '#edc755']],
+    ['movie', 'Midsommar', 2019, ['Ari Aster'], ['Florence Pugh', 'Jack Reynor', 'Will Poulter'], '148 min', 'Horror, Drama', ['sober'], 22, 'Let the festivities begin.', 'A grieving woman joins her boyfriend on a trip to a Swedish midsummer festival that goes very, very wrong. Save it for a clear head.', 'sheet', ['#9cbf6a', '#e2402b', '#edc755']]
+  ].map(function (r, i) { return { i: i, kind: r[0], title: r[1], year: r[2], dir: r[3], cast: r[4], run: r[5], genre: r[6], vibes: r[7], score: r[8], tag: r[9], plot: r[10], style: r[11], col: r[12], key: r[0] + ':' + r[1] + ':' + r[2] }; });
+  var VIBES = [['all', 'Everything'], ['couch', 'Couch-locked'], ['eye', 'Eye candy'], ['plot', 'Plot optional'], ['giggle', 'Giggle fits'], ['brain', '2 a.m. big brain'], ['munch', 'Munchie bait'], ['short', 'Short trips'], ['sober', 'Save for sober']];
   function vibeName(id) { for (var i = 0; i < VIBES.length; i++) if (VIBES[i][0] === id) return VIBES[i][1]; return id; }
   function tier(s) { return s >= 75 ? 'Fully loaded' : s >= 50 ? 'Half baked' : 'Cold'; }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
 
   var KEY = 'baked-potatoes-stash', stash = [];
   try { stash = JSON.parse(localStorage.getItem(KEY) || '[]').filter(function (k) { return T.some(function (t) { return t.key === k; }); }); } catch (e) { stash = []; }
   function save() { try { localStorage.setItem(KEY, JSON.stringify(stash)); } catch (e) {} }
+  var ART = {}, IMG = 'https://image.tmdb.org/t/p/';
 
-  var ART = {};
-  var IMG = 'https://image.tmdb.org/t/p/';
-
-  // ---------- filtering ----------
-  var kindF = 'all', vibeF = 'all', list = [];
-  function rebuild() {
-    list = T.filter(function (t) {
-      return (kindF === 'all' || t.kind === kindF) && (vibeF === 'all' ? t.vibes.indexOf('sober') < 0 : t.vibes.indexOf(vibeF) > -1);
+  // ---------- poster art ----------
+  function tearsSVG(seed) {
+    var r = rng(seed * 97 + 3), out = '';
+    [.28, .5, .66, .82].forEach(function (y0, k) {
+      var pts = [], x = -5, y = y0 * 100 + (r() - .5) * 6, slope = (r() - .5) * 10;
+      while (x < 105) { pts.push(x.toFixed(1) + ',' + (y + slope * x / 100 + (r() - .5) * 2.2).toFixed(1)); x += 1.5 + r() * 2.5; }
+      var top = pts.join(' '), h = 2.2 + r() * 2.5;
+      var bot = pts.slice().reverse().map(function (p) { var q = p.split(','); return q[0] + ',' + (+q[1] + h + (r() - .5) * 1.6).toFixed(1); }).join(' ');
+      out += '<polygon points="' + top + ' ' + bot + '" fill="#f6f0e2"/><polyline points="' + top + '" fill="none" stroke="rgba(0,0,0,.25)" stroke-width=".4"/>';
     });
-    build(); pos = 0; target = 0; idx = -1; layout(); showCredits(0, true);
+    return '<svg class="tears" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">' + out + '</svg>';
   }
-
-  // ---------- discs ----------
-  var stage = document.getElementById('stage'), scribble = document.getElementById('scribble'), discs = [];
-  function labelSVG(t) {
-    var ttl = t.title.length > 22 ? t.title.slice(0, 21) + '…' : t.title;
-    return '<svg class="label" viewBox="0 0 200 200" aria-hidden="true"><defs><path id="arc' + t.i + '" d="M 32 100 A 68 68 0 0 1 168 100"/><path id="arcb' + t.i + '" d="M 26 104 A 74 74 0 0 0 174 104"/></defs>' +
-      '<text font-size="' + (ttl.length > 16 ? 13 : 17) + '" letter-spacing="1.5"><textPath href="#arc' + t.i + '" startOffset="50%" text-anchor="middle">' + esc(ttl.toUpperCase()) + '</textPath></text>' +
-      '<text font-size="7.5" letter-spacing="3"><textPath href="#arcb' + t.i + '" startOffset="50%" text-anchor="middle">★ ' + t.year + ' · ' + esc(t.dir[0].toUpperCase()) + ' ★</textPath></text></svg>';
-  }
-  function esc(s) { return s.replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
-  function build() {
-    discs.forEach(function (d) { d.el.remove(); }); discs = [];
-    list.forEach(function (t, k) {
-      var el = document.createElement('div'); el.className = 'disc'; el.style.setProperty('--c', t.c); el.style.setProperty('--t', t.t);
-      el.innerHTML = '<div class="face">' + labelSVG(t) + '<img alt="" draggable="false"></div><div class="sheen"></div><div class="rim"></div><div class="hub"></div>';
-      var img = el.querySelector('img');
-      img.addEventListener('load', function () { img.classList.add('ok'); });
-      if (ART[t.key] && ART[t.key].poster) img.src = IMG + 'w500' + ART[t.key].poster;
-      stage.appendChild(el); discs.push({ el: el, t: t, k: k });
-    });
-  }
-
-  // ---------- carousel physics ----------
-  var pos = 0, target = 0, vel = 0, tilt = 0, dragging = false, startX = 0, startPos = 0, lastX = 0, lastT = 0, moved = 0, idx = -1, D = 0;
-  function sizes() { D = Math.min(innerWidth * (innerWidth < 700 ? .72 : .36), innerHeight * .5, 560); document.documentElement.style.setProperty('--D', D + 'px'); }
-  function layout() {
-    var gap = D * .82;
-    discs.forEach(function (d) {
-      var off = d.k - pos, a = Math.abs(off);
-      if (a > 3) { d.el.style.visibility = 'hidden'; return; }
-      d.el.style.visibility = 'visible';
-      var s = 1 - Math.min(a, 1) * .55, x = Math.sign(off) * (Math.min(a, 1) * gap + Math.max(0, a - 1) * D * .5);
-      var ry = -18 + off * -22 + tilt, rx = 14 + (a < .5 ? tilt * .1 : 0);
-      d.el.style.transform = 'translateX(' + x.toFixed(1) + 'px) scale(' + s.toFixed(3) + ') rotateX(' + rx.toFixed(1) + 'deg) rotateY(' + ry.toFixed(1) + 'deg) rotateZ(' + (off * 8).toFixed(1) + 'deg)';
-      d.el.style.zIndex = String(100 - Math.round(a * 10));
-      d.el.style.setProperty('--sh', (pos * 90 + tilt * 3).toFixed(0) + 'deg');
-    });
-    var n = Math.round(pos); n = Math.max(0, Math.min(list.length - 1, n));
-    if (n !== idx) { idx = n; showCredits(n); }
-  }
-  function tick() {
-    if (!dragging) {
-      var f = reduce ? 1 : .14;
-      pos += (target - pos) * f; tilt += (0 - tilt) * .1;
-      if (Math.abs(target - pos) < .0005 && Math.abs(tilt) < .05) { pos = target; tilt = 0; layout(); running = false; return; }
+  function genArt(t, mode) {
+    // until real stills arrive: blurred colour fields and a sun, printed in the poster's inks
+    var r = rng(t.i * 31 + 7), c = t.col, html = '';
+    if (mode === 'print') {
+      for (var k = 0; k < 3; k++) html += '<i style="left:' + (r() * 60) + '%;top:' + (r() * 50) + '%;width:' + (40 + r() * 40) + '%;aspect-ratio:1;background:' + (k ? '#141414' : '#efe4cc') + ';opacity:' + (k ? .85 : 1) + '"></i>';
+      return '<div class="gen dots">' + html + '</div>';
     }
-    layout(); requestAnimationFrame(tick);
+    html += '<i style="left:-10%;top:-20%;width:90%;aspect-ratio:1;background:' + c[1] + ';filter:blur(26px)"></i>';
+    html += '<i style="right:-15%;bottom:-25%;width:80%;aspect-ratio:1;background:' + c[2] + ';filter:blur(30px);opacity:.8"></i>';
+    html += '<i style="left:30%;top:22%;width:38%;aspect-ratio:1;background:rgba(239,228,204,.85);filter:blur(2px)"></i>';
+    return '<div class="gen">' + html + '</div>';
   }
-  var running = false;
-  function kick() { if (!running) { running = true; requestAnimationFrame(tick); } }
-  function go(n) { target = Math.max(0, Math.min(list.length - 1, n)); kick(); }
-
-  stage.addEventListener('pointerdown', function (e) {
-    if (e.button && e.button !== 0) return;
-    dragging = true; moved = 0; startX = lastX = e.clientX; startPos = pos; lastT = performance.now(); vel = 0;
-    stage.setPointerCapture(e.pointerId); scribbleOn(); kick();
-  });
-  stage.addEventListener('pointermove', function (e) {
-    if (!dragging) return;
-    var now = performance.now(), dx = e.clientX - startX; moved = Math.max(moved, Math.abs(dx));
-    pos = Math.max(-.4, Math.min(list.length - .6, startPos - dx / (D * .82)));
-    vel = (e.clientX - lastX) / Math.max(1, now - lastT); lastX = e.clientX; lastT = now;
-    tilt = Math.max(-35, Math.min(35, vel * 28));
-    scribble.style.setProperty('--sr', (pos * 140) + 'deg');
-  });
-  function release(e) {
-    if (!dragging) return; dragging = false;
-    if (moved < 6) {
-      var hit = discAt(e.clientX, e.clientY);
-      if (hit && hit.k === Math.round(pos)) { target = hit.k; open(hit.t); }
-      else if (hit) go(hit.k);
-      else go(Math.round(pos));
-    } else go(Math.round(pos - vel * 2.2));
-    setTimeout(function () { scribble.classList.remove('on'); }, 500);
-  }
-  stage.addEventListener('pointerup', release); stage.addEventListener('pointercancel', release);
-  function discAt(x, y) {
-    var best = null;
-    discs.forEach(function (d) { if (d.el.style.visibility === 'hidden') return; var r = d.el.getBoundingClientRect(); if (x >= r.left && x <= r.right && y >= r.top && y <= r.bottom && (!best || +d.el.style.zIndex > +best.el.style.zIndex)) best = d; });
-    return best;
-  }
-  stage.addEventListener('keydown', function (e) {
-    if (e.key === 'ArrowRight') { e.preventDefault(); go(target + 1); }
-    if (e.key === 'ArrowLeft') { e.preventDefault(); go(target - 1); }
-    if (e.key === 'Enter' && list[target]) open(list[target]);
-  });
-  addEventListener('wheel', function (e) { if (!film.hidden || Math.abs(e.deltaX) + Math.abs(e.deltaY) < 30) return; if (wheelLock) return; wheelLock = true; setTimeout(function () { wheelLock = false; }, 380); go(target + Math.sign(e.deltaY || e.deltaX)); }, { passive: true });
-  var wheelLock = false;
-
-  // a loose pencil loop, regenerated each grab
-  var sp = document.getElementById('scr-path');
-  function scribbleOn() {
-    var d = '', turns = 2.3, n = 120, ph = Math.random() * 6;
-    for (var i = 0; i <= n; i++) {
-      var a = ph + i / n * Math.PI * 2 * turns, r = 86 + Math.sin(a * 1.7 + ph) * 6 + (Math.random() - .5) * 3;
-      var x = 100 + Math.cos(a) * r * (1 + .05 * Math.sin(a * 2)), y = 100 + Math.sin(a) * r * .97;
-      d += (i ? ' L' : 'M') + x.toFixed(1) + ' ' + y.toFixed(1);
+  function imgTag(t, which) { var a = ART[t.key]; var p = a && (which === 'backdrop' ? (a.backdrop || a.poster) : (a.poster || a.backdrop)); return p ? '<img alt="" draggable="false" src="' + IMG + 'w780' + p + '" onload="this.classList.add(\'ok\')">' : ''; }
+  function fit(title, base) { var n = title.length; return base * (n <= 8 ? 1 : n <= 14 ? .78 : n <= 22 ? .6 : .48); }
+  function front(t) {
+    var real = ART[t.key] && ART[t.key].poster;
+    if (real) return '<div class="face p-real" style="--a:' + t.col[0] + '"><h2>' + esc(t.title) + '</h2><img alt="' + esc(t.title) + ' poster" draggable="false" src="' + IMG + 'w780' + real + '" onerror="this.remove()"></div>';
+    var Wv = 'var(--W)', names = t.cast.slice(0, 3), credits = esc((t.kind === 'tv' ? 'Created by ' : 'Directed by ') + t.dir.join(' & ') + ' · starring ' + t.cast.join(', ') + ' · ' + t.year + ' · ' + t.run);
+    if (t.style === 'torn') {
+      var words = t.title.toUpperCase().split(' '), half = Math.ceil(words.length / 2);
+      var rules = ''; for (var k = 0; k < 14; k++) rules += 'Rule number ' + (k + 1) + ': ' + esc(t.tag) + ' ';
+      var l1 = words.slice(0, half).join(' '), l2 = words.slice(half).join(' '), longest = Math.max(l1.length, l2.length), size = Math.min(.2, .9 / (longest * .78 + .3));
+      return '<div class="face p-torn" style="--a:' + t.col[0] + '"><p class="tl">' + esc(t.tag) + '</p>' +
+        '<div class="panel"><div class="pic duo" style="background:' + t.col[0] + '">' + genArt(t, 'torn') + imgTag(t, 'backdrop') + '</div>' + tearsSVG(t.i) + '</div>' +
+        '<div class="low"><div class="rules">' + rules + '</div><div class="names">' + names.map(function (n) { return '<span>' + esc(n) + '</span>'; }).join('') + '</div>' +
+        '<h2 class="title" style="font-size:calc(' + Wv + ' * ' + size.toFixed(3) + ')">' + esc(l1) + (l2 ? '<br>' + esc(l2) : '') + '</h2></div>' +
+        '<p class="by">A ' + esc(t.dir[0]) + ' ' + (t.kind === 'tv' ? 'series' : 'film') + '</p></div>';
     }
-    sp.setAttribute('d', d); scribble.classList.remove('on'); void scribble.getBoundingClientRect(); scribble.classList.add('on');
+    if (t.style === 'sheet') {
+      return '<div class="face p-sheet" style="--a:' + t.col[0] + '"><div class="bar"><span>Tonight</span><span>On the couch<br>· all night ·</span><span>And across the sofa</span></div>' +
+        '<div class="art"><div class="pic">' + genArt(t, 'sheet') + imgTag(t, 'backdrop') + '</div></div>' +
+        '<p class="quip">' + esc(t.tag) + '</p>' +
+        '<span class="rule" style="top:74.5%"></span><p class="star">' + esc(t.cast[0]) + '</p>' +
+        '<h2 class="title" style="font-size:calc(' + Wv + ' * ' + fit(t.title, .13).toFixed(3) + ')">' + esc(t.title) + '</h2>' +
+        '<p class="billing">' + credits + '</p><span class="rule" style="bottom:2%"></span></div>';
+    }
+    var tw = t.title.split(' '), first = tw.length > 2 ? tw.slice(0, -1).join(' ') : tw[0], last = tw.length > 2 ? tw[tw.length - 1] : (tw[1] || '');
+    return '<div class="face p-print" style="--a:' + t.col[0] + '">' +
+      '<h2 class="title" style="font-size:calc(' + Wv + ' * ' + fit(first, .2).toFixed(3) + ')">' + esc(first) + (last ? '<small>' + esc(last) + '</small>' : '') + '</h2>' +
+      '<div class="art"><div class="pic dots">' + genArt(t, 'print') + imgTag(t, 'poster') + '</div></div>' +
+      '<p class="billing">' + credits + '</p></div>';
+  }
+  // flash card pictures: flat inks, rough edges, a yellow plate slipped out of register
+  var INK = { red: '#e8472b', violet: '#4a3f97', pink: '#ec93ad', sage: '#9aa597', yellow: '#f0c64a', paper: '#efe5d0', cream: '#f6efe0', post: '#2c5a4f', blue: '#2f4fa0' };
+  var PICS = ['moon', 'explosion', 'alley', 'candle', 'bucket', 'pink'];
+  function burst(cx0, cy0, r1, r2, n, seed, col) {
+    var r = rng(seed), pts = [];
+    for (var k = 0; k <= n; k++) { var a = Math.PI + Math.PI * k / n, rr = k % 2 ? r1 + r() * (r2 - r1) : r1 * (.5 + r() * .3); pts.push((cx0 + Math.cos(a) * rr * 1.6).toFixed(1) + ',' + (cy0 + Math.sin(a) * rr).toFixed(1)); }
+    return '<polygon fill="' + col + '" points="' + cx0 + ',' + (cy0 + 2) + ' ' + pts.join(' ') + '"/>';
+  }
+  function picture(kind, seed) {
+    var bg = INK.paper, shapes = '';
+    if (kind === 'alley') shapes = '<polygon fill="' + INK.red + '" points="2,3 10,3 10,24 42,27 42,44 2,58"/><polygon fill="' + INK.red + '" points="58,3 98,3 98,58 58,44"/><polygon fill="' + INK.sage + '" points="2,58 98,58 58,42 42,42"/><rect fill="' + INK.post + '" x="48.6" y="24" width="2.6" height="18"/>';
+    else if (kind === 'candle') { bg = INK.violet; shapes = '<rect fill="' + INK.cream + '" x="42" y="30" width="16" height="30"/><polygon fill="' + INK.red + '" points="50,5 53.5,17 50,27 46.5,17"/>'; }
+    else if (kind === 'explosion') { bg = INK.violet; shapes = burst(50, 56, 26, 46, 34, seed, INK.cream) + burst(50, 56, 12, 28, 26, seed + 3, INK.red); }
+    else if (kind === 'bucket') shapes = '<polygon fill="' + INK.red + '" points="31,7 69,7 78,57 22,57"/>';
+    else if (kind === 'pink') { bg = INK.pink; }
+    else if (kind === 'moon') { bg = INK.blue; shapes = '<circle fill="' + INK.cream + '" cx="62" cy="26" r="13"/><polygon fill="' + INK.red + '" points="0,62 0,48 30,40 62,47 100,42 100,62"/>'; }
+    else if (kind === 'white') shapes = '<rect x="4" y="4" width="92" height="52" fill="none" stroke="#1b1a17" stroke-width=".8"/>';
+    var f = 'rf' + kind + seed, plate = kind === 'white' || kind === 'pink' ? '' : '<g transform="translate(-1,.6)" opacity=".9">' + shapes.replace(/fill="#[0-9a-f]+"/g, 'fill="' + INK.yellow + '"') + '</g>';
+    var field = bg === INK.paper ? '' : '<rect x="2" y="2" width="96" height="56" fill="' + bg + '"/>';
+    if (bg !== INK.paper) plate = '<rect x="1" y="2.6" width="96" height="56" fill="' + INK.yellow + '" opacity=".75"/>' + plate;
+    return '<svg viewBox="0 0 100 60" preserveAspectRatio="none" aria-hidden="true"><defs><filter id="' + f + '" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency="1.3" numOctaves="2" seed="' + seed + '"/><feDisplacementMap in="SourceGraphic" scale="1.3" xChannelSelector="R" yChannelSelector="G"/></filter></defs>' +
+      '<g filter="url(#' + f + ')">' + plate + field + shapes + '</g></svg>';
+  }
+  function back(t) {
+    var inStash = stash.indexOf(t.key) > -1, n = t.title.length, lab = n <= 12 ? 1 : n <= 20 ? .82 : .64;
+    return '<div class="face back"><div class="fc-frame">' +
+      '<div class="fc-panel">' + picture(t.vibes[0] === 'sober' ? 'white' : PICS[t.i % PICS.length], t.i + 1) + '</div>' +
+      '<div class="head"><h3 class="fc-label" style="font-size:calc(var(--W) * ' + (.1 * lab).toFixed(3) + ')">' + esc(t.title) + '</h3><span class="pct" title="Score: ' + tier(t.score) + '">' + t.score + '%</span></div>' +
+      '<p class="meta">' + t.year + ' · ' + esc(t.run) + ' · ' + esc(t.genre) + ' · ' + tier(t.score).toLowerCase() + '</p>' +
+      '<p class="plot">' + esc(t.plot) + '</p>' +
+      '<dl><dt>' + (t.kind === 'tv' ? 'made by' : 'directed by') + '</dt><dd>' + esc(t.dir.join(', ')) + '</dd><dt>starring</dt><dd>' + esc(t.cast.join(', ')) + '</dd><dt>vibe</dt><dd>' + esc(t.vibes.map(vibeName).join(', ').toLowerCase()) + '</dd><dt>watch on</dt><dd>coming soon</dd></dl>' +
+      '<div class="acts"><button type="button" data-act="pass">pass</button><button type="button" class="yes" data-act="stash">' + (inStash ? 'stashed' : 'stash it') + '</button></div></div></div>';
   }
 
-  // ---------- credits table ----------
-  var credits = document.getElementById('credits'), counter = document.getElementById('counter');
-  function showCredits(n, first) {
-    var t = list[n];
-    if (!t) { credits.innerHTML = '<h1 class="swap">Nothing here</h1><div class="row swap" style="--i:1"><span class="cap">Try</span><span class="v">another vibe in the Index</span></div>'; return; }
-    var rows = [[t.kind === 'tv' ? 'Created by' : 'Directed by', t.dir.join(', ')], ['Year', String(t.year)], ['Starring', t.cast]];
-    credits.innerHTML = '<h1 class="swap"></h1>' + rows.map(function (r, i) {
-      return '<div class="row swap" style="--i:' + (i + 1) + '"><span class="cap">' + r[0] + '</span><span class="v">' +
-        (Array.isArray(r[1]) ? r[1].map(function (c) { return '<span>' + esc(c) + '</span>'; }).join('') : esc(r[1])) + '</span></div>';
-    }).join('');
-    credits.querySelector('h1').textContent = t.title;
-    counter.textContent = String(n + 1).padStart(2, '0');
+  // ---------- stack ----------
+  var stack = document.getElementById('stack'), kindF = 'all', vibeF = 'all', seen = {};
+  function sizes() { var w = Math.min(innerWidth * .84, (innerHeight - 190) / 1.5, 380); document.documentElement.style.setProperty('--W', Math.round(w) + 'px'); }
+  function queue() { return T.filter(function (t) { return !seen[t.key] && stash.indexOf(t.key) < 0 && (kindF === 'all' || t.kind === kindF) && (vibeF === 'all' ? t.vibes.indexOf('sober') < 0 : t.vibes.indexOf(vibeF) > -1); }); }
+  function render() {
+    stack.innerHTML = '';
+    var q = queue();
+    document.getElementById('count').textContent = q.length + ' left' + (vibeF !== 'all' ? ' · ' + vibeName(vibeF).toLowerCase() : '');
+    if (!q.length) {
+      var d = document.createElement('div'); d.className = 'done fc-card';
+      d.innerHTML = '<div class="fc-frame"><div class="fc-panel">' + picture('white', 1) + '</div><h3 class="fc-label">that\'s all of them</h3><p>Check your stash or pick another vibe.</p></div>';
+      var b = document.createElement('button'); b.type = 'button'; b.textContent = 'start over'; b.addEventListener('click', function () { seen = {}; render(); });
+      d.querySelector('.fc-frame').appendChild(b); stack.appendChild(d); return;
+    }
+    q.slice(0, 3).reverse().forEach(function (t, k, arr) {
+      var depth = arr.length - 1 - k, el = document.createElement('div');
+      el.className = 'poster' + (depth ? ' behind' : ''); el.style.zIndex = String(10 - depth);
+      var rot = ((t.i * 37) % 7 - 3) * (depth ? 1 : .35);
+      el.dataset.rest = 'translate(' + depth * 6 + 'px,' + depth * -6 + 'px) rotate(' + rot + 'deg)';
+      el.style.transform = el.dataset.rest;
+      el.innerHTML = '<div class="sheet">' + front(t) + back(t) + '</div><div class="lift"></div><div class="curl"></div><span class="tag yes">Stash</span><span class="tag no">Pass</span>';
+      el._t = t; stack.appendChild(el);
+    });
+    bind();
   }
-
-  // ---------- pill + sheets ----------
-  var pill = document.getElementById('pill'), links = document.getElementById('links'), spool = document.getElementById('spool');
-  var idxSheet = document.getElementById('index-sheet'), stSheet = document.getElementById('stash-sheet'), idxBtn = document.getElementById('index-btn'), stBtn = document.getElementById('stash-btn');
-  [].forEach.call(links.querySelectorAll('[data-k]'), function (b) {
-    b.addEventListener('click', function () { kindF = kindF === b.dataset.k ? 'all' : b.dataset.k; syncPill(); closeSheets(); rebuild(); });
+  function topEl() { return stack.querySelector('.poster:not(.behind)'); }
+  function bind() {
+    var el = topEl(); if (!el) return;
+    var lift = el.querySelector('.lift'), curl = el.querySelector('.curl'), yes = el.querySelector('.tag.yes'), no = el.querySelector('.tag.no');
+    var x0 = 0, y0 = 0, dx = 0, dy = 0, down = false, t0 = 0, moved = false;
+    el.addEventListener('pointerdown', function (e) {
+      if (e.target.closest('[data-act]')) return;
+      down = true; moved = false; x0 = e.clientX; y0 = e.clientY; t0 = Date.now(); dx = dy = 0; el.setPointerCapture(e.pointerId); el.style.transition = 'none';
+    });
+    el.addEventListener('pointermove', function (e) {
+      if (!down) return; dx = e.clientX - x0; dy = e.clientY - y0; if (Math.abs(dx) + Math.abs(dy) > 6) moved = true;
+      var a = Math.min(1, Math.abs(dx) / 160), s = dx < 0 ? -1 : 1;
+      // peel: the poster swings off the wall from the far edge, with a curling corner
+      el.style.transformOrigin = (s > 0 ? '0%' : '100%') + ' 100%';
+      el.style.transform = 'translate(' + dx * .6 + 'px,' + (dy * .2 - a * 20) + 'px) rotate(' + dx / 14 + 'deg) rotateY(' + (-s * a * 18) + 'deg)';
+      lift.style.opacity = a * .9; lift.style.setProperty('--la', s > 0 ? '300deg' : '60deg');
+      var cs = a * 90; curl.style.width = cs + 'px'; curl.style.height = cs + 'px';
+      curl.style.left = s > 0 ? 'auto' : '0'; curl.style.right = s > 0 ? '0' : 'auto'; curl.style.setProperty('--ca', s > 0 ? '315deg' : '45deg');
+      yes.style.opacity = s > 0 ? a * 1.4 : 0; no.style.opacity = s < 0 ? a * 1.4 : 0;
+    });
+    function end() {
+      if (!down) return; down = false;
+      var fast = Math.abs(dx) / Math.max(1, Date.now() - t0) > .6;
+      if (!moved) { flip(el); return; }
+      if (Math.abs(dx) > 110 || (fast && Math.abs(dx) > 40)) { decide(dx > 0); return; }
+      el.style.transition = 'transform .35s ease'; el.style.transform = el.dataset.rest; lift.style.opacity = 0; curl.style.width = curl.style.height = '0'; yes.style.opacity = no.style.opacity = 0;
+    }
+    el.addEventListener('pointerup', end); el.addEventListener('pointercancel', end);
+    el.addEventListener('click', function (e) { var b = e.target.closest('[data-act]'); if (b) { e.stopPropagation(); decide(b.dataset.act === 'stash'); } });
+  }
+  function flip(el) { el.classList.toggle('flipped'); }
+  function decide(keep) {
+    var el = topEl(); if (!el) return; var t = el._t;
+    el.querySelector(keep ? '.tag.yes' : '.tag.no').style.opacity = 1;
+    el.style.transition = reduce ? 'none' : 'transform .5s cubic-bezier(.4,0,.6,1), opacity .5s ease';
+    el.style.transformOrigin = (keep ? '0%' : '100%') + ' 100%';
+    el.style.transform = 'translate(' + (keep ? 1 : -1) * innerWidth * .9 + 'px,-80px) rotate(' + (keep ? 38 : -38) + 'deg) rotateY(' + (keep ? -30 : 30) + 'deg)';
+    el.style.opacity = 0;
+    if (keep) { if (stash.indexOf(t.key) < 0) stash.push(t.key); save(); updateCount(); } else seen[t.key] = true;
+    setTimeout(render, reduce ? 0 : 380);
+  }
+  stack.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowRight') { e.preventDefault(); decide(true); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); decide(false); }
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); var el = topEl(); if (el) flip(el); }
   });
-  function syncPill() { [].forEach.call(links.querySelectorAll('[data-k]'), function (b) { b.setAttribute('aria-pressed', String(kindF === b.dataset.k)); }); }
-  function closeSheets() { idxSheet.hidden = true; stSheet.hidden = true; idxBtn.setAttribute('aria-expanded', 'false'); stBtn.setAttribute('aria-expanded', 'false'); }
-  idxBtn.addEventListener('click', function () { var o = idxSheet.hidden; closeSheets(); if (o) { drawIndex(); idxSheet.hidden = false; idxBtn.setAttribute('aria-expanded', 'true'); } });
-  stBtn.addEventListener('click', function () { var o = stSheet.hidden; closeSheets(); if (o) { drawStash(); stSheet.hidden = false; stBtn.setAttribute('aria-expanded', 'true'); } });
-  function drawIndex() {
+
+  // ---------- pill + drawers ----------
+  var vd = document.getElementById('vibe-drawer'), sd = document.getElementById('stash-drawer'), vb = document.getElementById('vibe-btn'), sb = document.getElementById('stash-btn');
+  function closeAll() { vd.hidden = sd.hidden = true; vb.setAttribute('aria-expanded', 'false'); sb.setAttribute('aria-expanded', 'false'); }
+  [].forEach.call(document.querySelectorAll('.pill [data-k]'), function (b) {
+    b.addEventListener('click', function () { kindF = kindF === b.dataset.k ? 'all' : b.dataset.k; [].forEach.call(document.querySelectorAll('.pill [data-k]'), function (x) { x.setAttribute('aria-pressed', String(kindF === x.dataset.k)); }); closeAll(); render(); });
+  });
+  vb.addEventListener('click', function () { var o = vd.hidden; closeAll(); if (o) { drawVibes(); vd.hidden = false; vb.setAttribute('aria-expanded', 'true'); } });
+  sb.addEventListener('click', function () { var o = sd.hidden; closeAll(); if (o) { drawStash(); sd.hidden = false; sb.setAttribute('aria-expanded', 'true'); } });
+  function drawVibes() {
     var box = document.getElementById('vibe-list'); box.innerHTML = '';
-    [['all', 'Everything']].concat(VIBES).forEach(function (v) {
+    VIBES.forEach(function (v) {
       var n = T.filter(function (t) { return v[0] === 'all' ? t.vibes.indexOf('sober') < 0 : t.vibes.indexOf(v[0]) > -1; }).length;
-      var b = document.createElement('button'); b.type = 'button'; b.className = 'row'; b.setAttribute('aria-pressed', String(vibeF === v[0]));
-      b.innerHTML = '<span class="k"></span><span class="cap">' + n + ' discs</span>'; b.querySelector('.k').textContent = v[1];
-      b.addEventListener('click', function () { vibeF = v[0]; closeSheets(); rebuild(); });
-      box.appendChild(b);
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'r'; b.setAttribute('aria-pressed', String(vibeF === v[0]));
+      b.innerHTML = '<span class="k"></span><small>' + n + ' posters</small>'; b.querySelector('.k').textContent = v[1];
+      b.addEventListener('click', function () { vibeF = v[0]; closeAll(); render(); }); box.appendChild(b);
     });
   }
   function drawStash() {
     var box = document.getElementById('stash-list'); box.innerHTML = '';
     document.getElementById('stash-empty').hidden = stash.length > 0;
     stash.slice().reverse().forEach(function (k) {
-      var t = T.filter(function (x) { return x.key === k; })[0];
-      var r = document.createElement('div'); r.className = 'row';
-      r.innerHTML = '<button type="button" class="k" style="text-align:left"></button><button type="button" class="cap">Remove</button>';
-      r.children[0].textContent = t.title;
-      r.children[0].addEventListener('click', function () { closeSheets(); open(t); });
-      r.children[1].addEventListener('click', function () { stash = stash.filter(function (x) { return x !== k; }); save(); updateCount(); drawStash(); });
+      var t = T.filter(function (x) { return x.key === k; })[0], r = document.createElement('div'); r.className = 'r';
+      r.innerHTML = '<span class="k"></span><button type="button"><small>Remove</small></button>'; r.querySelector('.k').textContent = t.title + ' · ' + t.year;
+      r.querySelector('button').addEventListener('click', function () { stash = stash.filter(function (x) { return x !== k; }); save(); updateCount(); drawStash(); render(); });
       box.appendChild(r);
     });
   }
   function updateCount() { document.getElementById('stash-n').textContent = stash.length; }
-  document.addEventListener('pointerdown', function (e) { if (!pill.contains(e.target) && !idxSheet.contains(e.target) && !stSheet.contains(e.target)) closeSheets(); });
+  document.addEventListener('pointerdown', function (e) { if (!e.target.closest('.pill') && !e.target.closest('.drawer')) closeAll(); });
+  addEventListener('keydown', function (e) { if (e.key === 'Escape') closeAll(); });
 
-  // ---------- film page ----------
-  var film = document.getElementById('film'), current = null;
-  function open(t) {
-    closeSheets(); current = t;
-    links.hidden = true; spool.hidden = false;
-    setTimeout(function () {
-      fillFilm(t); film.hidden = false; film.scrollTop = 0; links.hidden = false; spool.hidden = true;
-      document.getElementById('back').focus();
-    }, reduce ? 0 : 900);
-  }
-  function fillFilm(t) {
-    document.getElementById('f-title').textContent = t.title;
-    var by = document.getElementById('f-by'); by.innerHTML = '';
-    function add(lbl, val) { var c = document.createElement('span'); c.className = 'cap'; c.textContent = lbl; by.appendChild(c); by.appendChild(document.createTextNode(val + ' ')); }
-    add(t.kind === 'tv' ? 'Created by' : 'Directed by', t.dir.join(', ') + ','); add('Starring', t.cast.join(', '));
-    var rows = [['Year', t.year], ['Genre', t.genre], ['Runtime', t.run], ['Score', t.score + '% · ' + tier(t.score)], ['Vibe', t.vibes.map(vibeName).join(', ')]];
-    document.getElementById('f-table').innerHTML = rows.map(function (r, i) { return '<div class="row" style="--i:' + i + '"><span class="cap">' + r[0] + '</span><span class="v">' + esc(String(r[1])) + '</span></div>'; }).join('');
-    var img = document.getElementById('f-img');
-    img.style.setProperty('--c', t.c);
-    img.style.setProperty('--bgfill', 'radial-gradient(60% 50% at 30% 40%, ' + t.t + '55, transparent 70%), radial-gradient(70% 60% at 75% 70%, ' + t.c + ', transparent 75%), ' + t.c);
-    img.style.setProperty('--blur', '20px');
-    var bd = document.getElementById('f-backdrop'); bd.classList.remove('ok'); bd.removeAttribute('src');
-    bd.onload = function () { bd.classList.add('ok'); };
-    var a = ART[t.key]; if (a && (a.backdrop || a.poster)) bd.src = IMG + (a.backdrop ? 'w1280' + a.backdrop : 'w780' + a.poster);
-    var words = t.words.split(/\s*\/\s*|\s+/).filter(Boolean);
-    var W = document.getElementById('f-words'); W.innerHTML = '';
-    words.forEach(function (w, i) {
-      var y = 18 + i * (64 / Math.max(1, words.length - 1 || 1)), x = [8, 58, 22, 64, 12, 48][i % 6];
-      var s = document.createElement('span'); s.className = 'w'; s.style.left = x + '%'; s.style.top = y + '%'; s.textContent = w; W.appendChild(s);
-      var l = document.createElement('span'); l.className = 'ln'; l.style.top = 'calc(' + y + '% + 1.05em)'; l.style.fontSize = 'clamp(30px, 8vw, 72px)'; W.appendChild(l);
-    });
-    document.getElementById('f-syn').textContent = t.syn;
-    var sb = document.getElementById('f-stash'), on = stash.indexOf(t.key) > -1;
-    sb.textContent = on ? 'In your stash' : 'Stash it';
-  }
-  document.getElementById('f-stash').addEventListener('click', function () {
-    if (!current) return;
-    if (stash.indexOf(current.key) < 0) { stash.push(current.key); save(); updateCount(); }
-    this.textContent = 'In your stash';
-  });
-  document.getElementById('f-pass').addEventListener('click', function () { closeFilm(); go(target + 1); });
-  function closeFilm() { film.hidden = true; stage.focus(); }
-  document.getElementById('back').addEventListener('click', closeFilm);
-  addEventListener('keydown', function (e) { if (e.key === 'Escape') { if (!film.hidden) closeFilm(); else closeSheets(); } });
+  // ---------- real stills and posters from TMDB, via the Worker, once the key is set ----------
+  fetch('/api/art?q=' + encodeURIComponent(T.map(function (t) { return t.key; }).join(','))).then(function (r) { return r.ok ? r.json() : {}; })
+    .then(function (j) { if (j && !j.error) { ART = j; render(); } }).catch(function () {});
 
-  // ---------- artwork from TMDB (via the Worker) ----------
-  function loadArt() {
-    fetch('/api/art?q=' + encodeURIComponent(T.map(function (t) { return t.key; }).join(','))).then(function (r) { return r.ok ? r.json() : {}; }).then(function (j) {
-      if (!j || j.error) return;
-      ART = j;
-      discs.forEach(function (d) { var a = ART[d.t.key], img = d.el.querySelector('img'); if (a && a.poster && !img.src) img.src = IMG + 'w500' + a.poster; });
-      document.getElementById('f-src').textContent = 'Scores are placeholders. Artwork from TMDB. This product uses the TMDB API but is not endorsed or certified by TMDB.';
-    }).catch(function () {});
-  }
-
-  addEventListener('resize', function () { sizes(); layout(); });
-  sizes(); updateCount(); syncPill(); rebuild(); loadArt();
-  // idle sway so the centre disc never sits dead still
-  if (!reduce) (function sway(t) { if (!dragging && !running) { tilt = Math.sin(t / 1400) * 4; layout(); } requestAnimationFrame(sway); })(0);
+  document.getElementById('top-art').innerHTML = picture('candle', 7);
+  sizes(); updateCount(); render();
 })();
 </script>
 </body>

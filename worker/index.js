@@ -2,7 +2,7 @@
 //   GET /api/art?q=<kind>:<title>:<year>,...   -> { "<kind>:<title>:<year>": { poster, backdrop } }
 // Posters and stills come from the TMDB API using the TMDB_TOKEN secret
 // (Worker → Settings → Variables and Secrets). Without the secret the route
-// answers { error: "no-token" } and the page keeps its printed disc labels.
+// answers { error: "no-token" } and the page keeps its placeholder posters.
 
 const TMDB = 'https://api.themoviedb.org/3';
 const DAY = 60 * 60 * 24;

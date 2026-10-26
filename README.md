@@ -3,8 +3,9 @@
 What to watch when you're baked. Movie and TV picks rated with the **Potato Score**,
 sorted by vibe, and swiped into **your stash**.
 
-This is the homepage prototype, modelled on the A24 disc library: films as discs you drag
-through, a credits table, and a film page that rises in with a wavy image.
+This is the homepage prototype: a wall of movie posters on a starry night sky. Peel a poster
+right to stash it, left to pass, and tap to flip it over for the plot and details, printed
+like an old flash card.
 
 ## What's here
 
@@ -18,7 +19,7 @@ brand/logo/         Logo files from the earlier brand round (PNG)
 
 Add a **Secret** named `TMDB_TOKEN` to the Worker (Cloudflare dashboard → baked-potatoes →
 Settings → Variables and Secrets) with your TMDB "API Read Access Token". Until then the
-discs show printed labels; with it, posters and stills appear without a code change.
+wall shows placeholder posters; with it, the real posters appear without a code change.
 
 ## Run it locally
 
@@ -74,6 +75,5 @@ The Worker (`worker/index.js`) already proxies TMDB for artwork:
 
 - Potato traced from a public-domain photo by Scott Bauer, USDA Agricultural Research
   Service ([File:Patates.jpg](https://commons.wikimedia.org/wiki/File:Patates.jpg)).
-- Fonts: [Arimo](https://fonts.google.com/specimen/Arimo) and
-  [IBM Plex Mono](https://fonts.google.com/specimen/IBM+Plex+Mono), open licence,
-  served from Google Fonts.
+- Fonts: Anton, Archivo Black, Oswald, Rubik and Inter Tight, open licence, served from
+  Google Fonts.
