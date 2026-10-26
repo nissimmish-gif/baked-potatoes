@@ -213,7 +213,8 @@ body.gridview .grid { padding-top: calc(72px + env(safe-area-inset-top, 0px)); }
   -webkit-backdrop-filter: blur(14px) saturate(1.4); backdrop-filter: blur(14px) saturate(1.4); }
 .undo svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
 @media (hover: hover) { .undo:hover { background: rgba(255, 255, 255, .18); } }
-.catwrap { position: absolute; left: -2px; bottom: 100%; margin-bottom: 22px; z-index: 40; }
+/* lined up with the wordmark at the page's left edge (the deck is centred, --W wide) */
+.catwrap { position: absolute; left: calc(max(16px, env(safe-area-inset-left, 0px)) - (100vw - var(--W)) / 2 - 2px); bottom: 100%; margin-bottom: 22px; z-index: 40; }
 .cat { display: inline-flex; align-items: center; gap: 6px; padding: 6px 2px; font-family: var(--f-card); font-weight: 600; font-size: 17px; letter-spacing: -.015em; text-transform: lowercase; color: var(--cream); white-space: nowrap; }
 .cat svg { width: 13px; height: 13px; margin-top: 2px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: transform .2s ease; }
 .cat[aria-expanded="true"] svg { transform: rotate(180deg); }

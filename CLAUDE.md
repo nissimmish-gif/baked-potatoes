@@ -61,7 +61,7 @@ filters are called **categories** (not vibes) on the page. The categories (owner
 2026-10-26): **highest rated** (default; score 5.0 and up), **new** (2015 on, newest
 first), **comedy**, **trippy as balls**, **scary AF**, **what did I just watch?** (the last
 three are hand-picked title lists in `CATS`). Ordered by score unless said otherwise. The
-current category sits over the poster's top left as plain text with a small arrow, no
+current category sits above the poster, lined up with the wordmark at the page's left edge, as plain text with a small arrow, no
 button shape; tapping it opens a small flash-card menu right there. The bottom nav keeps a
 categories entry too. The stash is a panel that slides
 in from the right (full height, flash-card style, dimmed page behind; close with ×, a tap
