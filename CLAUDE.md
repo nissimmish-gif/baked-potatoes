@@ -15,11 +15,8 @@ added to the same Worker (see README).
 - **Logo:** the traced fingerling potato (from a public-domain USDA photo), 30% chunkier,
   mostly upright leaning right, flipped and mirrored, next to "baked potatoes" in
   **Arimo Bold, lowercase, stacked**. Files in `brand/logo/`. No faces on the potato.
-- **Look:** dark night-blue pages (most of the space), cream text, small glowing pops
-  (sodium gold, tail-light red, CRT blue). 1970s offset-print feel: flat inks, print
-  grain, a second colour slipped slightly out of register. No crisp vector gloss.
-- **Movie cards are glass** (blurred, see-through) over the night background; the
-  homepage background is never a flat colour.
+- **Look:** superseded on 2026-10-26 by the A24-style direction below (light page,
+  discs, editorial serif). The earlier night-blue/glass/70s-print rules no longer apply.
 - **No pot leaves, rasta colours or 420 jokes.** The brand is about the feeling, and
   leaf-free branding is easier to advertise.
 
