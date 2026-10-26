@@ -317,13 +317,16 @@ body.gridview .wall, body.gridview .top { display: none; }
   'use strict';
   // film grain for the posters: a small tile of fine dark and light specks, made once
   var GRAIN = (function () {
-    var c = document.createElement('canvas'); c.width = c.height = 160; var x = c.getContext('2d'), im = x.createImageData(160, 160), d = im.data, s = 7;
-    for (var i = 0; i < d.length; i += 4) {
-      s = (s * 16807) % 2147483647; var v = s / 2147483647, a = Math.pow(Math.abs(v - .5) * 2, 2.8) * (v < .5 ? 34 : 22);
-      if (v < .5) { d[i] = 20; d[i + 1] = 16; d[i + 2] = 10; } else { d[i] = 255; d[i + 1] = 248; d[i + 2] = 232; }
-      d[i + 3] = a;
+    // an even, very light paper texture: soft low-contrast noise on every pixel, no specks
+    var seed = 7; function rnd() { seed = (seed * 16807) % 2147483647; return seed / 2147483647; }
+    function layer(n, max) {
+      var c = document.createElement('canvas'); c.width = c.height = n; var x = c.getContext('2d'), im = x.createImageData(n, n), d = im.data;
+      for (var i = 0; i < d.length; i += 4) { var v = rnd(), dark = v < .5; d[i] = dark ? 30 : 255; d[i + 1] = dark ? 24 : 249; d[i + 2] = dark ? 16 : 236; d[i + 3] = Math.abs(v - .5) * 2 * max; }
+      x.putImageData(im, 0, 0); return c;
     }
-    x.putImageData(im, 0, 0);
+    var c = document.createElement('canvas'); c.width = c.height = 160; var x = c.getContext('2d');
+    x.imageSmoothingEnabled = true; x.drawImage(layer(80, 22), 0, 0, 160, 160); // soft, two-pixel grain
+    x.drawImage(layer(160, 10), 0, 0);                                         // a finer layer on top
     try { document.documentElement.style.setProperty('--grain', 'url(' + c.toDataURL('image/png') + ')'); } catch (e) {}
     return c;
   })();

@@ -25,7 +25,8 @@ added to the same Worker (see README).
 
 A wall of movie posters on a grainy black starfield (dense speckled stars, a few bright
 glints, paper-grain noise), with a layer of stars that slowly twinkle. Every poster image
-carries a subtle film grain (a generated tile, `GRAIN`, no blend modes; also painted into
+carries a very light, even paper texture, not specks (a generated tile, `GRAIN`, no blend
+modes; also painted into
 the peel snapshot). Drag a poster to peel it: it rolls up from the top corner opposite the swipe (top-left
 when you swipe right, top-right when you swipe left) like paper coming off a wall, and
 follows your finger the whole way (`peel()`: strips across a tilted axis, hinged from the
