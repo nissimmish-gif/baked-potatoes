@@ -1,0 +1,546 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Baked Potatoes</title>
+<meta name="description" content="What to watch when you're baked.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Arimo:wght@400;700&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<link rel="icon" href="potato-small.webp" type="image/webp">
+<style>
+[hidden] { display: none !important; }
+img { max-width: 100%; }
+body { margin: 0; }
+/* Layout: one long night sky. Hero words, a pinned potato that bakes as you scroll,
+   category tiles, then a swipe deck of glass movie cards. Single deliberate dark look. */
+:root {
+  --night: #1c2856;
+  --night-deep: #0e1430;
+  --cream: #edd4b7;
+  --cream-dim: #b9b2c4;
+  --spud: #dea65a;
+  --sodium: #edc755;
+  --tail: #e24a35;
+  --frost: #9fb3e0;
+  --glass: rgba(237, 212, 183, .10);
+  --glass-edge: rgba(237, 212, 183, .32);
+  --f-brand: "Arimo", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --f-data: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { background: var(--night-deep); }
+body {
+  background: var(--night); color: var(--cream);
+  font-family: var(--f-brand); font-size: 17px; line-height: 1.5;
+  overflow-x: hidden;
+}
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: var(--night); }
+#sky { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+.grain { position: fixed; inset: 0; z-index: 1; pointer-events: none; background: url("grain.png"); opacity: .55; }
+main, header, footer { position: relative; z-index: 2; }
+.wrap { max-width: 1100px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.data { font-family: var(--f-data); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--cream-dim); }
+h1, h2, h3 { font-weight: 700; margin: 0; text-wrap: balance; }
+p { margin: 0; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 3px solid var(--sodium); outline-offset: 3px; }
+
+/* glass */
+.glass {
+  background: linear-gradient(140deg, rgba(237, 212, 183, .16), rgba(237, 212, 183, .05));
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
+  backdrop-filter: blur(16px) saturate(150%);
+  border: 1px solid var(--glass-edge);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .22), 0 18px 40px rgba(5, 8, 24, .45);
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .glass { background: rgba(28, 40, 86, .92); }
+}
+
+/* header */
+.top {
+  position: fixed; top: env(safe-area-inset-top, 0px); left: 0; right: 0; z-index: 20;
+  padding-block: 12px;
+}
+.top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--cream); }
+.brand img { width: 26px; height: auto; }
+.brand span { font-weight: 700; font-size: 17px; line-height: 1; letter-spacing: -.01em; }
+.stash-btn { border-radius: 999px; padding: 10px 16px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-weight: 700; }
+.stash-btn b { font-family: var(--f-data); font-size: 13px; background: var(--sodium); color: var(--night-deep); border-radius: 99px; padding: 1px 8px; min-width: 24px; text-align: center; }
+
+/* hero */
+.hero { padding-block: 150px 40px; }
+.hero .wrap { display: grid; gap: 20px; }
+.hero h1 { font-size: clamp(64px, 14vw, 168px); line-height: .9; letter-spacing: -.035em; text-transform: lowercase; }
+.hero h1 span { display: block; }
+.hero .tag { font-size: clamp(19px, 2.4vw, 24px); max-width: 30ch; color: var(--cream); }
+.scroll-cue { display: flex; align-items: center; gap: 10px; }
+.scroll-cue i { display: block; width: 1px; height: 40px; background: linear-gradient(var(--cream), transparent); }
+
+/* bake */
+.bake { height: 320vh; position: relative; }
+.bake-stick { position: sticky; top: 0; height: 100vh; height: 100svh; display: grid; place-items: center; overflow: hidden; }
+#smoke { position: absolute; inset: 0; width: 100%; height: 100%; }
+.oven { position: relative; display: grid; place-items: center; --p: 0; }
+.oven .heat {
+  position: absolute; width: 140%; aspect-ratio: 1; border-radius: 50%;
+  background: radial-gradient(circle, rgba(237, 199, 85, .55), rgba(226, 74, 53, .18) 40%, transparent 68%);
+  opacity: var(--p); filter: blur(10px);
+}
+.oven img {
+  position: relative; width: min(46vw, 230px); max-height: 52vh; object-fit: contain;
+  filter: saturate(calc(.25 + .95 * var(--p))) brightness(calc(1.22 - .3 * var(--p))) contrast(calc(.9 + .15 * var(--p)));
+  transform: scale(calc(.94 + .1 * var(--p)));
+}
+.readout { position: absolute; left: 0; right: 0; bottom: max(28px, 7vh); display: grid; justify-items: center; gap: 6px; text-align: center; }
+.readout .pct { font-size: clamp(44px, 8vw, 72px); font-weight: 700; letter-spacing: -.03em; line-height: 1; font-variant-numeric: tabular-nums; }
+.readout .stage { font-family: var(--f-data); font-size: 13px; letter-spacing: .14em; text-transform: uppercase; color: var(--sodium); }
+.meter { width: min(260px, 70vw); height: 6px; border-radius: 99px; background: rgba(237, 212, 183, .15); overflow: hidden; }
+.meter i { display: block; height: 100%; width: calc(var(--p) * 100%); background: linear-gradient(90deg, var(--frost), var(--sodium) 60%, var(--tail)); }
+
+/* sections */
+.section { padding-block: 90px; }
+.section .wrap { display: grid; gap: 28px; }
+.section h2 { font-size: clamp(36px, 6vw, 60px); line-height: .98; letter-spacing: -.03em; text-transform: lowercase; }
+.lede { color: var(--cream-dim); max-width: 52ch; }
+
+/* categories */
+.cats { display: grid; gap: 14px; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); }
+.cat {
+  border-radius: 22px; padding: 20px; text-align: left; cursor: pointer; display: grid; gap: 10px; align-content: start;
+  transition: transform .15s ease, border-color .15s ease;
+}
+.cat:hover { transform: translateY(-3px); border-color: var(--sodium); }
+.cat .dot { width: 34px; height: 34px; border-radius: 50%; background: var(--c); box-shadow: 0 0 22px var(--c); }
+.cat h3 { font-size: 22px; letter-spacing: -.01em; text-transform: lowercase; }
+.cat p { color: var(--cream-dim); font-size: 15px; }
+.cat .count { font-family: var(--f-data); font-size: 12px; color: var(--cream-dim); }
+
+/* swipe */
+.chips { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 6px; scrollbar-width: none; }
+.chips::-webkit-scrollbar { display: none; }
+.chip { flex: none; border-radius: 999px; padding: 9px 15px; cursor: pointer; font-size: 14px; font-weight: 700; text-transform: lowercase; }
+.chip[aria-pressed="true"] { background: var(--cream); color: var(--night-deep); border-color: var(--cream); }
+.deck-area { display: grid; justify-items: center; gap: 22px; }
+.deck { position: relative; width: min(350px, 88vw); height: 540px; touch-action: pan-y; outline: none; }
+.card {
+  position: absolute; inset: 0; border-radius: 26px; padding: 14px; display: grid; grid-template-rows: auto 1fr; gap: 14px;
+  user-select: none; -webkit-user-select: none; cursor: grab; will-change: transform;
+}
+.card.dragging { cursor: grabbing; }
+.card.behind { pointer-events: none; }
+.poster {
+  position: relative; border-radius: 16px; height: 270px; overflow: hidden; padding: 18px; display: flex; flex-direction: column; justify-content: space-between;
+  background: var(--ink); color: var(--txt);
+}
+.poster::after { content: ""; position: absolute; inset: 0; background: url("grain.png"); opacity: .7; mix-blend-mode: overlay; pointer-events: none; }
+.poster .pt { font-size: 34px; line-height: .95; letter-spacing: -.03em; font-weight: 700; text-transform: lowercase; position: relative; z-index: 1; }
+.poster .py { position: relative; z-index: 1; font-family: var(--f-data); font-size: 12px; letter-spacing: .1em; }
+.poster .slip { position: absolute; z-index: 0; right: -36px; top: -46px; width: 150px; aspect-ratio: 1; border-radius: 50%; background: var(--slip); opacity: .9; }
+.body { display: grid; gap: 10px; align-content: start; }
+.score { display: flex; align-items: center; gap: 10px; }
+.score img { width: 30px; height: auto; }
+.score .num { font-size: 30px; font-weight: 700; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+.score .tier { font-family: var(--f-data); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--cream-dim); line-height: 1.25; }
+.tier-cold img { filter: grayscale(1) brightness(1.15) sepia(.3) hue-rotate(180deg); }
+.tier-half img { filter: saturate(.45) brightness(1.08); }
+.meta { font-family: var(--f-data); font-size: 12px; color: var(--cream-dim); letter-spacing: .04em; }
+.blurb { font-size: 15px; line-height: 1.45; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.tags span { font-size: 12px; border: 1px solid var(--glass-edge); border-radius: 99px; padding: 2px 9px; color: var(--cream-dim); text-transform: lowercase; }
+.stamp {
+  position: absolute; top: 28px; padding: 6px 14px; border-radius: 10px; font-weight: 700; font-size: 26px; letter-spacing: .02em;
+  border: 3px solid currentColor; opacity: 0; text-transform: lowercase; z-index: 3; background: rgba(14, 20, 48, .55);
+}
+.stamp.yes { left: 22px; color: var(--sodium); transform: rotate(-10deg); }
+.stamp.no { right: 22px; color: var(--frost); transform: rotate(10deg); }
+.controls { display: flex; gap: 14px; }
+.ctl { border-radius: 999px; padding: 14px 24px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+.ctl.yes { background: var(--sodium); color: var(--night-deep); border: 0; box-shadow: 0 10px 30px rgba(237, 199, 85, .25); }
+.hint { font-family: var(--f-data); font-size: 12px; color: var(--cream-dim); text-align: center; }
+.empty { position: absolute; inset: 0; border-radius: 26px; display: grid; place-content: center; justify-items: center; gap: 14px; padding: 28px; text-align: center; }
+.empty img { width: 70px; }
+.empty h3 { font-size: 26px; text-transform: lowercase; letter-spacing: -.02em; }
+.empty p { color: var(--cream-dim); font-size: 15px; }
+
+/* stash drawer */
+.veil { position: fixed; inset: 0; background: rgba(5, 8, 24, .55); z-index: 40; }
+.drawer {
+  position: fixed; top: 0; right: 0; bottom: 0; width: min(420px, 100%); z-index: 41; overflow-y: auto;
+  padding: calc(22px + env(safe-area-inset-top, 0px)) max(20px, env(safe-area-inset-right, 0px)) calc(22px + env(safe-area-inset-bottom, 0px)) 20px;
+  display: grid; gap: 18px; align-content: start; border-radius: 26px 0 0 26px;
+  background: linear-gradient(160deg, rgba(40, 54, 110, .92), rgba(20, 28, 64, .96));
+}
+.drawer header { display: flex; justify-content: space-between; align-items: center; }
+.drawer h2 { font-size: 34px; letter-spacing: -.03em; text-transform: lowercase; }
+.x { border-radius: 99px; padding: 8px 14px; cursor: pointer; }
+.stash-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.stash-list li { border-radius: 16px; padding: 12px; display: grid; grid-template-columns: 48px minmax(0, 1fr) auto; gap: 12px; align-items: center; }
+.sw { width: 48px; height: 48px; border-radius: 10px; background: var(--ink); }
+.stash-list b { display: block; font-size: 16px; text-transform: lowercase; }
+.stash-list .meta { font-size: 11px; }
+.rm { border-radius: 99px; padding: 6px 12px; cursor: pointer; font-size: 13px; }
+.drawer .none { color: var(--cream-dim); }
+
+.toast { position: fixed; left: 50%; bottom: calc(22px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); z-index: 50; border-radius: 99px; padding: 10px 18px; font-weight: 700; font-size: 14px; }
+
+footer { padding-block: 40px 70px; }
+footer .wrap { display: grid; gap: 8px; color: var(--cream-dim); font-size: 13px; max-width: 1100px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .cat, .card { transition: none !important; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="sky" aria-hidden="true"></canvas>
+<div class="grain" aria-hidden="true"></div>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Baked Potatoes, back to top"><img src="potato-small.webp" alt=""><span>baked<br>potatoes</span></a>
+    <button class="stash-btn glass" id="open-stash" type="button" aria-haspopup="dialog">Your stash <b id="stash-count">0</b></button>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap">
+      <span class="data">Movies and TV, rated for the couch</span>
+      <h1><span>baked</span><span>potatoes</span></h1>
+      <p class="tag">What to watch when you're baked. Scroll to put one in the oven.</p>
+      <div class="scroll-cue data"><i></i>scroll</div>
+    </div>
+  </section>
+
+  <section class="bake" aria-label="Baking the potato">
+    <div class="bake-stick">
+      <canvas id="smoke" aria-hidden="true"></canvas>
+      <div class="oven" id="oven">
+        <div class="heat"></div>
+        <img src="potato.webp" alt="A potato, baking as you scroll">
+      </div>
+      <div class="readout" aria-live="off">
+        <div class="pct" id="pct">0%</div>
+        <div class="meter" id="meter"><i></i></div>
+        <div class="stage" id="stage">raw</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="vibes">
+    <div class="wrap">
+      <span class="data">Fully loaded. Now pick a vibe.</span>
+      <h2>what kind of night is it</h2>
+      <div class="cats" id="cats"></div>
+    </div>
+  </section>
+
+  <section class="section" id="swipe">
+    <div class="wrap">
+      <span class="data">Swipe right to stash it. Left to pass.</span>
+      <h2 id="swipe-title">tonight's picks</h2>
+      <div class="chips" id="chips" role="group" aria-label="Filter by vibe"></div>
+      <div class="deck-area">
+        <div class="deck" id="deck" tabindex="0" aria-label="Movie cards. Use the left and right arrow keys to pass or stash."></div>
+        <div class="controls">
+          <button class="ctl glass" id="pass" type="button">Pass</button>
+          <button class="ctl yes" id="keep" type="button">Stash it</button>
+        </div>
+        <p class="hint">Drag the card, tap the buttons, or use ← →</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Prototype. Potato Scores and picks are placeholders, and where-to-watch info will come from live streaming data.</p>
+    <p>Potato traced from a public-domain USDA photo by Scott Bauer.</p>
+  </div>
+</footer>
+
+<div class="veil" id="veil" hidden></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="stash-h" hidden>
+  <header><h2 id="stash-h">your stash</h2><button class="x glass" id="close-stash" type="button">Close</button></header>
+  <ul class="stash-list" id="stash-list"></ul>
+  <p class="none" id="stash-none">Nothing stashed yet. Swipe right on something that looks good.</p>
+</aside>
+<div class="toast glass" id="toast" role="status" aria-live="polite" hidden></div>
+
+<script>
+(function () {
+  'use strict';
+
+  // ---------- data (placeholder picks and scores for the prototype) ----------
+  var CATS = [
+    { id: 'couch', name: 'Couch-Locked', blurb: 'Comfort watches. Zero effort, zero risk.', c: '#edc755' },
+    { id: 'plot', name: 'Plot Optional', blurb: 'Look at it. That\'s the whole job.', c: '#7faedb' },
+    { id: 'eye', name: 'Eye Candy', blurb: 'Colour and motion turned all the way up.', c: '#e24a35' },
+    { id: 'giggle', name: 'Giggle Fits', blurb: 'You will laugh at things that aren\'t jokes.', c: '#f0a0b4' },
+    { id: 'brain', name: '2 a.m. Big Brain', blurb: 'The kind that makes you say "wait, what" out loud.', c: '#a99be0' },
+    { id: 'munch', name: 'Munchie Bait', blurb: 'Food on screen. Have snacks ready first.', c: '#dea65a' },
+    { id: 'short', name: 'Short Trips', blurb: 'Under 30 minutes. For when you might fall asleep.', c: '#8fd0a0' },
+    { id: 'sober', name: 'Save for Sober', blurb: 'Brilliant, and a bad idea tonight.', c: '#9fb3e0' }
+  ];
+  var INK = [['#e94f39', '#edd4b7', '#edc755'], ['#604575', '#edd4b7', '#e94f39'], ['#344a96', '#edd4b7', '#edc755'],
+    ['#edc755', '#1c2856', '#e94f39'], ['#ec9897', '#1c2856', '#344a96'], ['#dea65a', '#1c2856', '#604575']];
+  var MOVIES = [
+    ['fp', 'Fantastic Planet', 1973, '1h 12m', ['plot', 'eye'], 94, 'A French cartoon about tiny humans kept as pets by giant blue aliens. You won\'t follow it. You don\'t need to.'],
+    ['sv', 'Spider-Man: Into the Spider-Verse', 2018, '1h 57m', ['eye', 'couch'], 96, 'Every frame looks like a comic book that came to life and had three espressos.'],
+    ['p2', 'Paddington 2', 2017, '1h 43m', ['couch', 'giggle'], 92, 'A bear in a duffle coat makes prison nicer. Impossible to feel bad during this.'],
+    ['ko', 'Koyaanisqatsi', 1982, '1h 26m', ['plot'], 90, 'No dialogue. Just time-lapse cities, clouds and a Philip Glass score.'],
+    ['pe', 'Pineapple Express', 2008, '1h 51m', ['giggle'], 88, 'Two stoners, one witness, a lot of running. Made for exactly this.'],
+    ['hr', 'Hot Rod', 2007, '1h 28m', ['giggle'], 85, 'A wannabe stuntman and his very dumb friends. Pure nonsense, in the best way.'],
+    ['bl', 'The Big Lebowski', 1998, '1h 57m', ['couch', 'giggle'], 95, 'A man wants his rug back. That\'s the movie. It\'s perfect.'],
+    ['pe2', 'Planet Earth II', 2016, 'Series · 6 episodes', ['plot', 'eye'], 93, 'Baby iguanas versus a swarm of snakes. You will scream at a lizard.'],
+    ['jw', 'How To with John Wilson', 2020, 'Series · 3 seasons', ['brain', 'short'], 91, 'A man films New York and somehow it becomes about everything.'],
+    ['br', 'The Joy of Painting', 1983, 'Series · 31 seasons', ['short', 'couch'], 89, 'Bob Ross paints a cabin in under half an hour. Happy little trees, no stress.'],
+    ['ct', 'Chef\'s Table', 2015, 'Series', ['munch', 'plot'], 84, 'Slow-motion food and orchestral music. Snacks within arm\'s reach before you press play.'],
+    ['hk', 'Harold & Kumar Go to White Castle', 2004, '1h 28m', ['munch', 'giggle'], 82, 'Two guys, one craving, a very long night. The original munchies road trip.'],
+    ['ee', 'Everything Everywhere All at Once', 2022, '2h 19m', ['brain', 'eye'], 87, 'Multiverse kung fu, hot dog fingers and a lot of feelings.'],
+    ['mm', 'Mad Max: Fury Road', 2015, '2h', ['eye'], 80, 'Two hours of chrome, sand and a guitar that shoots fire. Barely any talking.'],
+    ['sa', 'Spirited Away', 2001, '2h 5m', ['eye', 'munch'], 91, 'A girl, a bathhouse for spirits and a lot of very strange food. Gorgeous throughout.'],
+    ['at', 'Adventure Time', 2010, 'Series · 11-min episodes', ['short', 'eye'], 88, 'A boy and his stretchy dog in a candy kingdom. Eleven minutes at a time.'],
+    ['nf', 'Nathan for You', 2013, 'Series · 4 seasons', ['giggle', 'short'], 90, 'A business consultant gives terrible advice with a completely straight face.'],
+    ['mv', 'The Mitchells vs. the Machines', 2021, '1h 54m', ['eye', 'couch'], 86, 'A family road trip during a robot apocalypse. Loud, colourful and sweet.'],
+    ['dc', 'Dazed and Confused', 1993, '1h 42m', ['couch'], 89, 'The last day of school, 1976. Nothing much happens, beautifully.'],
+    ['ug', 'Uncut Gems', 2019, '2h 15m', ['sober'], 28, 'A gambler makes every wrong choice at full volume for two hours. Great film. Not tonight.'],
+    ['ms', 'Midsommar', 2019, '2h 28m', ['sober'], 22, 'A sunny Swedish festival that goes very, very wrong. Save it for a clear head.']
+  ].map(function (m, i) {
+    var ink = INK[i % INK.length];
+    return { id: m[0], title: m[1], year: m[2], length: m[3], cats: m[4], score: m[5], blurb: m[6], ink: ink[0], txt: ink[1], slip: ink[2] };
+  });
+  var byId = {}; MOVIES.forEach(function (m) { byId[m.id] = m; });
+  function catName(id) { for (var i = 0; i < CATS.length; i++) if (CATS[i].id === id) return CATS[i].name; return id; }
+  function tier(s) { return s >= 75 ? ['Fully Loaded', 'tier-full'] : s >= 50 ? ['Half Baked', 'tier-half'] : ['Cold Potato', 'tier-cold']; }
+
+  // ---------- storage (best effort) ----------
+  var KEY = 'baked-potatoes-stash';
+  var stash = [];
+  try { stash = JSON.parse(localStorage.getItem(KEY) || '[]').filter(function (id) { return byId[id]; }); } catch (e) { stash = []; }
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(stash)); } catch (e) {} }
+
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ---------- night sky ----------
+  var sky = document.getElementById('sky'), sx = sky.getContext('2d');
+  function drawSky() {
+    var dpr = Math.min(window.devicePixelRatio || 1, 2), w = innerWidth, h = innerHeight;
+    sky.width = w * dpr; sky.height = h * dpr; sx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    var g = sx.createLinearGradient(0, 0, 0, h); g.addColorStop(0, '#141d44'); g.addColorStop(1, '#1f2c5c');
+    sx.fillStyle = g; sx.fillRect(0, 0, w, h);
+    [[.12, .3, '237,199,85', .10], [.88, .72, '226,74,53', .08], [.6, .1, '127,174,219', .07]].forEach(function (b) {
+      var r = Math.max(w, h) * .45, rg = sx.createRadialGradient(w * b[0], h * b[1], 0, w * b[0], h * b[1], r);
+      rg.addColorStop(0, 'rgba(' + b[2] + ',' + b[3] + ')'); rg.addColorStop(1, 'rgba(' + b[2] + ',0)');
+      sx.fillStyle = rg; sx.fillRect(0, 0, w, h);
+    });
+    var s = 7;
+    function rnd() { s = (s * 16807) % 2147483647; return s / 2147483647; }
+    for (var i = 0; i < w * h / 2600; i++) {
+      var big = rnd() > .93; sx.fillStyle = big ? 'rgba(237,212,183,.9)' : 'rgba(237,212,183,' + (.25 + rnd() * .45) + ')';
+      sx.fillRect(rnd() * w, rnd() * h, big ? 2 : 1, big ? 2 : 1);
+    }
+  }
+  drawSky();
+  var lastW = innerWidth;
+  addEventListener('resize', function () { if (innerWidth !== lastW) { lastW = innerWidth; drawSky(); sizeSmoke(); } });
+
+  // ---------- bake on scroll ----------
+  var bake = document.querySelector('.bake'), oven = document.getElementById('oven');
+  var pctEl = document.getElementById('pct'), stageEl = document.getElementById('stage'), meter = document.getElementById('meter');
+  var P = 0;
+  var STAGES = [[0, 'raw'], [.2, 'warming up'], [.45, 'half baked'], [.75, 'almost there'], [1, 'fully loaded']];
+  function onScroll() {
+    var r = bake.getBoundingClientRect(), span = bake.offsetHeight - innerHeight;
+    P = Math.min(1, Math.max(0, -r.top / (span * .85)));
+    oven.style.setProperty('--p', P.toFixed(3)); meter.style.setProperty('--p', P.toFixed(3));
+    pctEl.textContent = Math.round(P * 100) + '%';
+    var st = 'raw'; STAGES.forEach(function (x) { if (P >= x[0]) st = x[1]; });
+    stageEl.textContent = st;
+  }
+  addEventListener('scroll', onScroll, { passive: true }); onScroll();
+
+  // ---------- smoke ----------
+  var smoke = document.getElementById('smoke'), mx = smoke.getContext('2d'), parts = [], running = false, inView = false;
+  function sizeSmoke() {
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    smoke.width = smoke.clientWidth * dpr; smoke.height = smoke.clientHeight * dpr; mx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  sizeSmoke();
+  function spawn() {
+    var img = oven.querySelector('img').getBoundingClientRect(), box = smoke.getBoundingClientRect();
+    var x = img.left - box.left + img.width * (.2 + Math.random() * .6), y = img.top - box.top + img.height * (.12 + Math.random() * .2);
+    parts.push({ x: x, y: y, r: 3 + Math.random() * 6, a: 0, life: 0, max: 200 + Math.random() * 160, sway: Math.random() * 6.28, vy: .6 + Math.random() * .9, amp: .5 + Math.random() * 1.2 });
+  }
+  function frame() {
+    if (!inView) { running = false; return; }
+    var w = smoke.clientWidth, h = smoke.clientHeight;
+    mx.clearRect(0, 0, w, h);
+    var rate = P * P * 3.2;
+    for (var k = 0; k < Math.floor(rate) + (Math.random() < rate % 1 ? 1 : 0); k++) spawn();
+    for (var i = parts.length - 1; i >= 0; i--) {
+      var p = parts[i]; p.life++;
+      p.y -= p.vy; p.x += Math.sin(p.sway + p.life * .025) * p.amp; p.r += .14;
+      var t = p.life / p.max; p.a = t < .15 ? t / .15 : 1 - (t - .15) / .85;
+      if (p.life > p.max) { parts.splice(i, 1); continue; }
+      var g = mx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r);
+      g.addColorStop(0, 'rgba(226,220,236,' + (p.a * .11 * (.4 + P * .6)) + ')'); g.addColorStop(1, 'rgba(226,220,236,0)');
+      mx.fillStyle = g; mx.beginPath(); mx.arc(p.x, p.y, p.r, 0, 6.283); mx.fill();
+    }
+    requestAnimationFrame(frame);
+  }
+  if (!reduce && 'IntersectionObserver' in window) {
+    new IntersectionObserver(function (es) {
+      inView = es[0].isIntersecting;
+      if (inView && !running) { running = true; requestAnimationFrame(frame); }
+    }).observe(bake);
+  }
+
+  // ---------- categories + chips ----------
+  var catsEl = document.getElementById('cats'), chipsEl = document.getElementById('chips');
+  var filter = 'all';
+  CATS.forEach(function (c) {
+    var n = MOVIES.filter(function (m) { return m.cats.indexOf(c.id) > -1; }).length;
+    var b = document.createElement('button');
+    b.type = 'button'; b.className = 'cat glass'; b.style.setProperty('--c', c.c);
+    b.innerHTML = '<span class="dot"></span><h3></h3><p></p><span class="count"></span>';
+    b.querySelector('h3').textContent = c.name; b.querySelector('p').textContent = c.blurb;
+    b.querySelector('.count').textContent = n + ' picks';
+    b.addEventListener('click', function () { setFilter(c.id); document.getElementById('swipe').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' }); });
+    catsEl.appendChild(b);
+  });
+  function chip(id, label) {
+    var b = document.createElement('button'); b.type = 'button'; b.className = 'chip glass'; b.dataset.id = id; b.textContent = label;
+    b.addEventListener('click', function () { setFilter(id); }); chipsEl.appendChild(b);
+  }
+  chip('all', 'Everything'); CATS.forEach(function (c) { chip(c.id, c.name); });
+
+  // ---------- deck ----------
+  var deck = document.getElementById('deck'), seen = {};
+  function queue() {
+    return MOVIES.filter(function (m) {
+      return !seen[m.id] && stash.indexOf(m.id) < 0 && (filter === 'all' ? m.cats.indexOf('sober') < 0 : m.cats.indexOf(filter) > -1);
+    });
+  }
+  function setFilter(id) {
+    filter = id;
+    [].forEach.call(chipsEl.children, function (b) { b.setAttribute('aria-pressed', String(b.dataset.id === id)); });
+    document.getElementById('swipe-title').textContent = id === 'all' ? 'tonight\'s picks' : catName(id).toLowerCase();
+    render();
+  }
+  function cardEl(m, depth) {
+    var t = tier(m.score), el = document.createElement('article');
+    el.className = 'card glass' + (depth ? ' behind' : '');
+    el.style.zIndex = String(10 - depth);
+    el.style.transform = 'translateY(' + depth * 12 + 'px) scale(' + (1 - depth * .045) + ')';
+    el.style.setProperty('--ink', m.ink); el.style.setProperty('--txt', m.txt); el.style.setProperty('--slip', m.slip);
+    el.innerHTML =
+      '<span class="stamp yes">stash</span><span class="stamp no">pass</span>' +
+      '<div class="poster"><span class="slip"></span><span class="py"></span><span class="pt"></span></div>' +
+      '<div class="body"><div class="score ' + t[1] + '"><img src="potato-small.webp" alt=""><span class="num"></span><span class="tier"></span></div>' +
+      '<div class="meta"></div><p class="blurb"></p><div class="tags"></div></div>';
+    el.querySelector('.py').textContent = m.year;
+    el.querySelector('.pt').textContent = m.title;
+    el.querySelector('.num').textContent = m.score + '%';
+    el.querySelector('.tier').innerHTML = 'Potato Score<br>';
+    el.querySelector('.tier').appendChild(document.createTextNode(t[0]));
+    el.querySelector('.meta').textContent = m.length + ' · Where to watch: coming soon';
+    el.querySelector('.blurb').textContent = m.blurb;
+    var tags = el.querySelector('.tags');
+    m.cats.forEach(function (c) { var s = document.createElement('span'); s.textContent = catName(c); tags.appendChild(s); });
+    el.setAttribute('aria-label', m.title + ', ' + m.year + ', Potato Score ' + m.score + ' percent');
+    return el;
+  }
+  function render() {
+    deck.innerHTML = '';
+    var q = queue();
+    if (!q.length) {
+      var e = document.createElement('div'); e.className = 'empty glass';
+      e.innerHTML = '<img src="potato-small.webp" alt=""><h3>that\'s the whole bag</h3><p>You\'ve been through every pick here. Check your stash, try another vibe, or start over.</p>';
+      var again = document.createElement('button'); again.type = 'button'; again.className = 'ctl glass'; again.textContent = 'Start over';
+      again.addEventListener('click', function () { seen = {}; render(); });
+      e.appendChild(again); deck.appendChild(e); return;
+    }
+    q.slice(0, 3).reverse().forEach(function (m, i, arr) { deck.appendChild(cardEl(m, arr.length - 1 - i)); });
+    bindTop();
+  }
+  function top() { return deck.querySelector('.card:not(.behind)'); }
+  function bindTop() {
+    var el = top(); if (!el) return;
+    var sx0 = 0, sy0 = 0, dx = 0, dy = 0, down = false, t0 = 0;
+    var yes = el.querySelector('.stamp.yes'), no = el.querySelector('.stamp.no');
+    el.addEventListener('pointerdown', function (e) {
+      down = true; sx0 = e.clientX; sy0 = e.clientY; t0 = Date.now(); el.setPointerCapture(e.pointerId);
+      el.classList.add('dragging'); el.style.transition = 'none';
+    });
+    el.addEventListener('pointermove', function (e) {
+      if (!down) return;
+      dx = e.clientX - sx0; dy = e.clientY - sy0;
+      el.style.transform = 'translate(' + dx + 'px,' + dy * .25 + 'px) rotate(' + dx / 16 + 'deg)';
+      yes.style.opacity = Math.max(0, Math.min(1, dx / 110)); no.style.opacity = Math.max(0, Math.min(1, -dx / 110));
+    });
+    function end() {
+      if (!down) return; down = false; el.classList.remove('dragging');
+      var fast = Math.abs(dx) / Math.max(1, Date.now() - t0) > .6;
+      if (Math.abs(dx) > 110 || (fast && Math.abs(dx) > 40)) decide(dx > 0);
+      else { el.style.transition = 'transform .25s ease'; el.style.transform = ''; yes.style.opacity = 0; no.style.opacity = 0; }
+      dx = dy = 0;
+    }
+    el.addEventListener('pointerup', end); el.addEventListener('pointercancel', end);
+  }
+  function decide(keep) {
+    var el = top(); if (!el) return;
+    var q = queue(); var m = q[0]; if (!m) return;
+    el.querySelector(keep ? '.stamp.yes' : '.stamp.no').style.opacity = 1;
+    el.style.transition = reduce ? 'none' : 'transform .32s ease, opacity .32s ease';
+    el.style.transform = 'translate(' + (keep ? 1 : -1) * (innerWidth * .9) + 'px, -30px) rotate(' + (keep ? 24 : -24) + 'deg)';
+    el.style.opacity = 0;
+    if (keep) { stash.push(m.id); save(); updateStash(); toast('Stashed: ' + m.title); }
+    else seen[m.id] = true;
+    setTimeout(render, reduce ? 0 : 280);
+  }
+  document.getElementById('keep').addEventListener('click', function () { decide(true); });
+  document.getElementById('pass').addEventListener('click', function () { decide(false); });
+  deck.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowRight') { e.preventDefault(); decide(true); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); decide(false); }
+  });
+
+  // ---------- stash ----------
+  var drawer = document.getElementById('drawer'), veil = document.getElementById('veil'), list = document.getElementById('stash-list');
+  var countEl = document.getElementById('stash-count'), noneEl = document.getElementById('stash-none'), opener = document.getElementById('open-stash');
+  function updateStash() {
+    countEl.textContent = stash.length;
+    list.innerHTML = ''; noneEl.hidden = stash.length > 0;
+    stash.slice().reverse().forEach(function (id) {
+      var m = byId[id], li = document.createElement('li'); li.className = 'glass';
+      li.innerHTML = '<span class="sw"></span><div><b></b><span class="meta"></span></div>';
+      li.querySelector('.sw').style.setProperty('--ink', m.ink);
+      li.querySelector('b').textContent = m.title;
+      li.querySelector('.meta').textContent = m.year + ' · ' + m.score + '% · ' + tier(m.score)[0];
+      var rm = document.createElement('button'); rm.type = 'button'; rm.className = 'rm glass'; rm.textContent = 'Remove';
+      rm.addEventListener('click', function () { stash = stash.filter(function (x) { return x !== id; }); save(); updateStash(); render(); });
+      li.appendChild(rm); list.appendChild(li);
+    });
+  }
+  function openStash() { drawer.hidden = false; veil.hidden = false; document.getElementById('close-stash').focus(); }
+  function closeStash() { drawer.hidden = true; veil.hidden = true; opener.focus(); }
+  opener.addEventListener('click', openStash);
+  document.getElementById('close-stash').addEventListener('click', closeStash);
+  veil.addEventListener('click', closeStash);
+  addEventListener('keydown', function (e) { if (e.key === 'Escape' && !drawer.hidden) closeStash(); });
+
+  var toastEl = document.getElementById('toast'), toastT;
+  function toast(msg) { toastEl.textContent = msg; toastEl.hidden = false; clearTimeout(toastT); toastT = setTimeout(function () { toastEl.hidden = true; }, 1800); }
+
+  updateStash(); setFilter('all');
+})();
+</script>
+</body>
+</html>
