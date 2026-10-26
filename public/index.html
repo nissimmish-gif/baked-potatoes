@@ -16,6 +16,7 @@
    black frame and a lowercase label. Peeling rolls the poster down from its top edge. */
 :root {
   --AR: 1.66;
+  --gap: calc(var(--W) * .028);
   --night: #040509;
   --fc-paper: #efe5d0;
   --fc-line: #1b1a17;
@@ -144,7 +145,7 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
 
 /* back of the poster: a flash card */
 .back { background: var(--fc-paper); color: var(--fc-line); padding: 4%; border-radius: 3px; }
-.back .fc-frame { position: absolute; inset: 4%; display: flex; flex-direction: column; padding: 4%; gap: calc(var(--W) * .022); }
+.back .fc-frame { position: absolute; inset: var(--gap); display: flex; flex-direction: column; padding: 4%; gap: calc(var(--W) * .022); }
 .back .trailer { flex: 0 0 auto; aspect-ratio: 16 / 9; background: #111; border-radius: 2px; overflow: hidden; }
 .back .trailer iframe { display: block; width: 100%; height: 100%; border: 0; }
 .back .trailer { position: relative; }
@@ -195,10 +196,10 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
 .tag.no { right: 9%; background: var(--fc-paper); }
 /* every poster sits in a cream mount with a black frame line */
 .mount { background: var(--fc-paper); }
-.mount .mat { position: absolute; inset: 4.5%; border: 3px solid var(--fc-line); border-radius: 3px; background: var(--fc-paper); }
-.mount .mat > .face { inset: 2.2%; border-radius: 1px; box-shadow: 0 0 0 1px rgba(0,0,0,.15); }
-.mount.labeled .mat > .face { inset: 2.2% 2.2% calc(var(--W) * .2) 2.2%; }
-.plabel { position: absolute; left: 4.4%; right: 4.4%; bottom: 0; height: calc(var(--W) * .2); display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-rows: auto auto; align-content: center; column-gap: 10px; color: var(--fc-line); }
+.mount .mat { position: absolute; inset: var(--gap); border: 3px solid var(--fc-line); border-radius: 3px; background: var(--fc-paper); }
+.mount .mat > .face { inset: var(--gap); border-radius: 1px; box-shadow: 0 0 0 1px rgba(0,0,0,.15); }
+.mount.labeled .mat > .face { inset: var(--gap) var(--gap) calc(var(--W) * .2) var(--gap); }
+.plabel { position: absolute; left: var(--gap); right: var(--gap); bottom: 0; height: calc(var(--W) * .2); display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-rows: auto auto; align-content: center; column-gap: 10px; color: var(--fc-line); }
 .plabel p { margin: 0; }
 .plabel .pt { font-family: var(--f-card); font-weight: 500; font-size: calc(var(--W) * .06); line-height: 1.08; letter-spacing: -.015em; text-transform: lowercase; overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
 .plabel .pm { grid-row: 2; font-size: calc(var(--W) * .037); font-weight: 500; line-height: 1.4; text-transform: lowercase; color: #6d6758; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }

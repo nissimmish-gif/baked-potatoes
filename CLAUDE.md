@@ -48,7 +48,9 @@ flash-card label under the picture, inside the black frame: title (two lines at 
 year · runtime · genre, and the potato score. The card is 1:1.66 so the poster keeps its
 2:3 shape above the label. The back has no buttons; the plot and credits use the room.
 
-Every poster sits in a cream mount with a black frame line. How to use it is said quietly:
+Every poster sits in a cream mount with a black frame line, with one even gap (`--gap`,
+2.8% of the card width) from the card edge to the line and from the line to the poster;
+the back uses the same frame. How to use it is said quietly:
 one line of small text under the poster ("← pass · tap for the plot · stash →", each a
 button), and on a first visit the top poster peels a little to the right, then to the
 left, to show the gesture, until someone peels or flips. Owner wants these low key, not flash cards. The
