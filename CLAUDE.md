@@ -46,7 +46,8 @@ cards already underneath (`promote()`) and rebuilds the back of the stack ~0.5s 
 `render()` reuses poster nodes (and ones just passed, `gone`); snapshot prep waits for
 the roll to finish; the poster texture is the pre-made `GRAIN` tile (an SVG turbulence
 filter was costly), off on the cards behind. ‹ brings the previous poster back in, rolling
-open from the side it left by (`peel().enter()`). Let go far enough and it rolls the rest of the way off; let go early and it lays back flat. The next
+open from the side it left by (`peel().enter()`). The ‹ › buttons roll slower (`ARROW_MS`,
+~0.8s) than a swipe's finish (~0.46s). Let go far enough and it rolls the rest of the way off; let go early and it lays back flat. The next
 poster is live underneath while the roll plays. Tapping a poster no longer flips it
 (owner: the back was too small to read): it grows from its own rectangle into a big
 flash-card details view (`openDetail()`): trailer, title, score, plot, credits, then one
@@ -87,8 +88,8 @@ is never ambiguous); the stash array's order is the priority. The circle marks a
 watched (`watched`, its own localStorage key) and moves it to the watched tab; posters show
 "✓ watched" on their label, and the details card has stash it and mark watched. Rows: the
 real mini poster (`miniPoster()`, the image only, not a shrunk card), title, year · runtime
-· genre, score, remove. Tapping a row puts that poster on top of the stack. A small one/grid toggle (frosted glass, top-right corner level with the wordmark, not in
-the nav and not taking its own row) switches to a
+· genre, score, remove. Tapping a row puts that poster on top of the stack. A one/grid toggle (frosted glass, about as tall as the category heading, at the right end
+of the heading's row, level with it; owner's call 2026-10-27) switches to a
 scrolling grid of every poster left; tapping a tile opens the big details card right there
 (pass / stash from it update the grid). The category text moves above the tiles in grid
 view. The choice of view is remembered.

@@ -75,7 +75,7 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
   font-family: "Arimo", Arial, sans-serif; font-weight: 700; font-size: var(--wmfs); line-height: 1; display: flex; align-items: center; gap: .22em; letter-spacing: -.02em; text-transform: lowercase; color: var(--cream); text-align: left; }
 
 /* ---------- the stack ---------- */
-.wall { position: fixed; inset: 0; z-index: 3; display: grid; place-items: center; padding: calc(132px + env(safe-area-inset-top, 0px)) 0 calc(188px + env(safe-area-inset-bottom, 0px)); }
+.wall { position: fixed; inset: 0; z-index: 3; display: grid; place-items: center; padding: calc(150px + env(safe-area-inset-top, 0px)) 0 calc(188px + env(safe-area-inset-bottom, 0px)); }
 .stack { position: relative; width: var(--W); height: calc(var(--W) * var(--AR)); }
 .poster { position: absolute; inset: 0; perspective: 1400px; touch-action: none; user-select: none; -webkit-user-select: none; }
 .poster.behind { pointer-events: none; }
@@ -174,7 +174,7 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
 
 /* phones: smaller pieces, more sky between them */
 @media (max-width: 599px) {
-  .wall { padding-top: calc(132px + env(safe-area-inset-top, 0px)); padding-bottom: calc(188px + env(safe-area-inset-bottom, 0px)); }
+  .wall { padding-top: calc(150px + env(safe-area-inset-top, 0px)); padding-bottom: calc(188px + env(safe-area-inset-bottom, 0px)); }
   .pill { bottom: calc(22px + env(safe-area-inset-bottom, 0px)); }
   .pill .fc-frame { gap: 15px; padding: 5px 12px 6px; }
   .pill button { font-size: 15px; }
@@ -185,18 +185,16 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
 /* the paper roll when a poster is sent off */
 
 /* grid view: every poster in a scrolling grid */
-.views { position: fixed; z-index: 11; right: max(16px, env(safe-area-inset-right, 0px)); top: calc(14px + env(safe-area-inset-top, 0px)); display: flex; padding: 2px; gap: 2px; border-radius: 8px;
-  background: rgba(255, 255, 255, .1); border: 1px solid rgba(255, 255, 255, .22); box-shadow: 0 8px 24px rgba(0, 0, 0, .35), inset 0 1px 0 rgba(255, 255, 255, .18);
-  -webkit-backdrop-filter: blur(14px) saturate(1.4); backdrop-filter: blur(14px) saturate(1.4); }
-.views button { display: grid; place-items: center; width: 26px; height: 22px; border-radius: 6px; color: rgba(239, 228, 204, .7); transition: background .2s ease, color .2s ease; }
-.views svg { width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 1.6; }
+.views { margin-left: auto; align-self: center; display: flex; padding: 3px; gap: 3px; border-radius: 10px; background: rgba(255, 255, 255, .1); border: 1px solid rgba(255, 255, 255, .22); box-shadow: 0 8px 24px rgba(0, 0, 0, .35), inset 0 1px 0 rgba(255, 255, 255, .18); -webkit-backdrop-filter: blur(14px) saturate(1.4); backdrop-filter: blur(14px) saturate(1.4); }
+.views button { display: grid; place-items: center; width: 38px; height: 30px; border-radius: 7px; color: rgba(239, 228, 204, .7); transition: background .2s ease, color .2s ease; }
+.views svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.6; }
 .views button[aria-pressed="true"] { background: rgba(255, 255, 255, .2); color: var(--cream); }
 @media (hover: hover) { .views button:hover { color: var(--cream); } }
-body.gridview .grid { padding-top: calc(86px + env(safe-area-inset-top, 0px)); }
+body.gridview .grid { padding-top: calc(100px + env(safe-area-inset-top, 0px)); }
 /* in the grid it sits above the tiles, lined up with them */
 .grid .catwrap { position: relative; left: -2px; bottom: auto; max-width: 1100px; margin: 0 auto 10px; }
 /* lined up with the wordmark at the page's left edge (the deck is centred, --W wide) */
-.catwrap { display: flex; align-items: center; position: absolute; left: calc(max(16px, env(safe-area-inset-left, 0px)) - (100vw - var(--W)) / 2 - 2px); bottom: 100%; margin-bottom: 32px; z-index: 40; }
+.catwrap { display: flex; align-items: center; position: absolute; left: calc(max(16px, env(safe-area-inset-left, 0px)) - (100vw - var(--W)) / 2 - 2px); right: calc(max(16px, env(safe-area-inset-right, 0px)) - (100vw - var(--W)) / 2); bottom: 100%; margin-bottom: 32px; z-index: 40; }
 .cat { display: grid; grid-template-columns: auto auto; justify-content: start; align-items: center; column-gap: 7px; padding: 4px 2px; text-align: left; white-space: nowrap; color: var(--cream); }
 .cat #cat-name { font-family: "Arimo", Arial, sans-serif; font-weight: 700; font-size: 24px; line-height: 1.05; letter-spacing: -.02em; text-transform: lowercase; }
 .cat svg { width: 16px; height: 16px; margin-top: 3px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; transition: transform .2s ease; }
@@ -337,10 +335,6 @@ body.gridview .wall, body.gridview .top { display: none; }
 
 <header class="brand"><h1 class="wordmark"><img src="img/potato.png" alt="" width="58" height="96">baked potatoes</h1><p class="tagline">what to watch when you're baked</p></header>
 
-<div class="views" role="group" aria-label="View">
-    <button type="button" id="view-one" aria-pressed="true" aria-label="One at a time"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="4" y="2" width="8" height="12" rx="1"/></svg></button>
-    <button type="button" id="view-grid" aria-pressed="false" aria-label="Grid"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="2" y="2" width="5" height="5" rx=".6"/><rect x="9" y="2" width="5" height="5" rx=".6"/><rect x="2" y="9" width="5" height="5" rx=".6"/><rect x="9" y="9" width="5" height="5" rx=".6"/></svg></button>
-  </div>
 <section class="grid" id="grid" hidden aria-label="All posters"><div class="tiles" id="tiles"></div></section>
 <main class="wall">
   <div class="deck" id="deck">
@@ -348,6 +342,10 @@ body.gridview .wall, body.gridview .top { display: none; }
       <button type="button" class="cat" id="cat" aria-haspopup="menu" aria-expanded="false"><span id="cat-name">highest rated</span><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5"/></svg></button>
       <button type="button" class="platf" id="platf" hidden aria-label="Clear the streaming filter"></button>
       <div class="catmenu fc-card" id="catmenu" role="menu" hidden><div class="fc-frame" id="catmenu-list"></div></div>
+      <div class="views" role="group" aria-label="View">
+    <button type="button" id="view-one" aria-pressed="true" aria-label="One at a time"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="4" y="2" width="8" height="12" rx="1"/></svg></button>
+    <button type="button" id="view-grid" aria-pressed="false" aria-label="Grid"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="2" y="2" width="5" height="5" rx=".6"/><rect x="9" y="2" width="5" height="5" rx=".6"/><rect x="2" y="9" width="5" height="5" rx=".6"/><rect x="9" y="9" width="5" height="5" rx=".6"/></svg></button>
+  </div>
     </div>
     <div class="stack" id="stack" aria-label="Poster stack. Drag right to stash, left to pass, tap to flip. Arrow keys work too." tabindex="0"></div>
     <button type="button" class="arrow side-l" id="side-prev" aria-label="Back"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5"/></svg></button>
@@ -644,7 +642,7 @@ body.gridview .wall, body.gridview .top { display: none; }
 
   // ---------- stack ----------
   var stack = document.getElementById('stack'), kindF = 'all', vibeF = 'all', pos = 0;
-  function sizes() { var w = Math.min(innerWidth * (innerWidth < 600 ? .73 : .84), (innerHeight - 318) / 1.66, 400); document.documentElement.style.setProperty('--W', Math.round(w) + 'px'); }
+  function sizes() { var w = Math.min(innerWidth * (innerWidth < 600 ? .73 : .84), (innerHeight - 336) / 1.66, 400); document.documentElement.style.setProperty('--W', Math.round(w) + 'px'); }
   var view = 'one', grid = document.getElementById('grid'), tiles = document.getElementById('tiles');
   try { view = localStorage.getItem('baked-potatoes-view') === 'grid' ? 'grid' : 'one'; } catch (e) {}
   function placeCat() {
@@ -776,7 +774,7 @@ body.gridview .wall, body.gridview .top { display: none; }
   }
   // step +1 shows the next poster, -1 the previous one (the back button); dir is which way the
   // poster rolls off
-  var left = [], gone = {}, tidyT = 0;
+  var left = [], gone = {}, tidyT = 0, ARROW_MS = 820;
   // the card underneath becomes the top card straight away (nothing is rebuilt during the
   // roll); the one that left is kept so going back can reuse it
   function promote(old) {
@@ -807,13 +805,13 @@ body.gridview .wall, body.gridview .top { display: none; }
       if (pr) pr.remove();
       var from = left.pop() || 1;
       pos -= 1; render();
-      var top = topEl(); if (top && !reduce) peel(top, from).enter(from);
+      var top = topEl(); if (top && !reduce) peel(top, from).enter(from, ARROW_MS);
       return;
     }
     left.push(dir);
     if (el && !reduce) {
-      underFor(step); (pr || peel(el, dir)).leave(dir > 0);
-      pos += step; promote(el); tidyT = setTimeout(render, 520);
+      underFor(step); if (pr) pr.leave(dir > 0); else peel(el, dir).leave(dir > 0, ARROW_MS);
+      pos += step; promote(el); tidyT = setTimeout(render, (pr ? 460 : ARROW_MS) + 60);
       return;
     }
     if (pr) pr.remove();
@@ -969,11 +967,11 @@ body.gridview .wall, body.gridview .top { display: none; }
     return {
       dir: dir, set: set, remove: remove,
       cancel: function (done) { tween({ p: 0, x: 0, y: 0, d: 0 }, 260, function () { remove(); el.style.opacity = ''; if (done) done(); }); },
-      leave: function (keep) { var dd = keep ? 1 : -1; tween({ p: 1, x: dd * innerWidth * .95, y: -40, d: dd * 100, fade: true }, 460, remove); },
-      enter: function (from) {
+      leave: function (keep, ms) { var dd = keep ? 1 : -1; tween({ p: 1, x: dd * innerWidth * .95, y: -40, d: dd * 100, fade: true }, ms || 460, remove); },
+      enter: function (from, ms) {
         // the reverse of leave: start rolled up and off to one side, unroll back onto the stack
         set(1, from * innerWidth * .95, -40, 0); box.style.opacity = 0;
-        tween({ p: 0, x: 0, y: 0, d: 0, fadeIn: true }, 460, function () { remove(); el.style.opacity = ''; });
+        tween({ p: 0, x: 0, y: 0, d: 0, fadeIn: true }, ms || 460, function () { remove(); el.style.opacity = ''; });
       },
       demo: function (steps, done) {
         var i = 0;
