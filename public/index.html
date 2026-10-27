@@ -645,7 +645,7 @@ body.gridview .wall, body.gridview .top { display: none; }
   function save() { try { localStorage.setItem(KEY, JSON.stringify(stash)); localStorage.setItem(WKEY, JSON.stringify(watched)); } catch (e) {} }
   function isWatched(t) { return watched.indexOf(t.key) > -1; }
   function toggleWatched(t) { learned(); if (isWatched(t)) watched = watched.filter(function (k) { return k !== t.key; }); else watched.push(t.key); save(); updateCount(); }
-  var ART = {}, IMG = 'https://image.tmdb.org/t/p/';
+  var artV = 0, ART = {}, IMG = 'https://image.tmdb.org/t/p/';
   // where each title streams (from /api/watch, for the visitor's country), and each service's site
   var WATCH = {}, platF = 'any', WATCHED_ONCE = false;
   var LIVE_TV = ['YouTube TV', 'Philo', 'Sling TV', 'DIRECTV', 'DIRECTV STREAM', 'Fubo', 'Spectrum On Demand', 'Xfinity Stream', 'JustWatch TV Store', 'FlixFling', 'VUDU Free'];
@@ -772,9 +772,10 @@ body.gridview .wall, body.gridview .top { display: none; }
     // ready), so stepping through the deck only builds the one new card at the back
     clearTimeout(tidyT); tidyT = 0;
     var keep = {};
-    [].forEach.call(stack.querySelectorAll('.poster'), function (el) { if (el._t && !keep[el._t.key]) keep[el._t.key] = el; });
-    for (var ck in gone) if (!keep[ck]) keep[ck] = gone[ck];
-    [].forEach.call(stack.children, function (el) { el.remove(); });
+    // only cards drawn with the current artwork are reused (the first draw happens before it loads)
+    [].forEach.call(stack.querySelectorAll('.poster'), function (el) { if (el._t && el._art === artV && !keep[el._t.key]) keep[el._t.key] = el; });
+    for (var ck in gone) if (!keep[ck] && gone[ck]._art === artV) keep[ck] = gone[ck];
+    while (stack.firstChild) stack.removeChild(stack.firstChild);
     var q = queue();
     vb.textContent = vibeF === 'all' ? 'categories' : vibeName(vibeF).toLowerCase();
     document.getElementById('cat-name').textContent = vibeName(vibeF).toLowerCase(); drawCatMenu();
@@ -801,7 +802,7 @@ body.gridview .wall, body.gridview .top { display: none; }
       el.dataset.rest = 'translate(' + depth * 6 + 'px,' + depth * -6 + 'px) rotate(' + rot + 'deg)';
       el.style.transform = el.dataset.rest;
       if (fresh) el.innerHTML = '<div class="sheet"><div class="face mount labeled"><div class="mat">' + front(t).replace('<img ', '<img decoding="async" ') + plabel(t) + '</div></div></div>';
-      el._t = t; stack.appendChild(el);
+      el._t = t; el._art = artV; stack.appendChild(el);
     });
     bind();
     var top = topEl(), img = top && top.querySelector('.mount .p-real img');
@@ -854,7 +855,7 @@ body.gridview .wall, body.gridview .top { display: none; }
     if (!t) { u.style.visibility = 'hidden'; return; }
     u.style.visibility = '';
     if (u._t === t) return;
-    u._t = t; u.innerHTML = '<div class="sheet"><div class="face mount labeled"><div class="mat">' + front(t) + plabel(t) + '</div></div></div>';
+    u._t = t; u._art = artV; u.innerHTML = '<div class="sheet"><div class="face mount labeled"><div class="mat">' + front(t) + plabel(t) + '</div></div></div>';
   }
   // step +1 shows the next poster, -1 the previous one (the back button); dir is which way the
   // poster rolls off
@@ -1294,7 +1295,7 @@ body.gridview .wall, body.gridview .top { display: none; }
     Promise.all(calls).then(function (all) {
       var got = {}, ok = false;
       all.forEach(function (j) { if (j && !j.error) { ok = true; for (var k in j) got[k] = j[k]; } });
-      if (ok) { ART = got; document.getElementById('tmdb-credit').hidden = false; render(); loadWatch(); }
+      if (ok) { ART = got; artV++; document.getElementById('tmdb-credit').hidden = false; render(); loadWatch(); }
     });
   })();
 
