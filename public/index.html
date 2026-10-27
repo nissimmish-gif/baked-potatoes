@@ -4,7 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Untitled Index</title>
-<meta name="theme-color" content="#040509">
+<meta name="theme-color" content="#0a0c14">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="baked potatoes">
+<link rel="apple-touch-icon" href="img/icon-180.png">
+<link rel="manifest" href="manifest.webmanifest">
 <meta name="description" content="What to watch when you're baked.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,7 +23,7 @@
 :root {
   --AR: 1.66;
   --gap: calc(var(--W) * .028);
-  --night: #040509;
+  --night: #0a0c14; /* the sky's average colour at its edges, so Safari's bars blend in */
   --fc-paper: #efe5d0;
   --fc-line: #1b1a17;
   --ink-red: #e8472b;
@@ -50,8 +56,8 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 p, h1, h2, h3 { margin: 0; font-weight: 400; }
 
 /* ---------- night scene ---------- */
-#twinkle { position: fixed; inset: 0; width: 100%; height: 100%; display: block; pointer-events: none; }
-#scene { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
+#twinkle { position: fixed; left: 0; top: 0; width: 100%; height: 100lvh; display: block; pointer-events: none; }
+#scene { position: fixed; left: 0; top: 0; width: 100%; height: 100lvh; display: block; }
 
 /* ---------- top line ---------- */
 /* ---------- flash card parts (shared) ---------- */
@@ -384,7 +390,7 @@ body.gridview .wall, body.gridview .top { display: none; }
   var cv = document.getElementById('scene'), cx = cv.getContext('2d'), H = 0;
   function rng(s) { return function () { s = (s * 16807) % 2147483647; return s / 2147483647; }; }
   function paint() {
-    var dpr = Math.min(devicePixelRatio || 1, 2), w = innerWidth, h = innerHeight, r = rng(11), i;
+    var dpr = Math.min(devicePixelRatio || 1, 2), w = innerWidth, h = Math.max(innerHeight, cv.clientHeight), r = rng(11), i;
     H = h; cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
     // grain: every pixel gets a little blue-black noise, like ink on rough paper
     var img = cx.createImageData(cv.width, cv.height), d = img.data;
@@ -406,7 +412,7 @@ body.gridview .wall, body.gridview .top { display: none; }
   // twinkling: a separate layer of stars that slowly brighten and fade, each on its own beat
   var tw = document.getElementById('twinkle'), tx = tw.getContext('2d'), stars = [];
   function seedStars() {
-    var dpr = Math.min(devicePixelRatio || 1, 2), w = innerWidth, h = innerHeight, r = rng(23);
+    var dpr = Math.min(devicePixelRatio || 1, 2), w = innerWidth, h = Math.max(innerHeight, tw.clientHeight), r = rng(23);
     tw.width = Math.round(w * dpr); tw.height = Math.round(h * dpr); tx.setTransform(dpr, 0, 0, dpr, 0, 0);
     stars = [];
     for (var i = 0; i < Math.max(40, w * h / 5000); i++) stars.push({ x: r() * w, y: r() * h, s: .7 + r() * r() * 1.8, ph: r() * 6.283, sp: .6 + r() * 1.6, glint: r() < .08, blue: r() < .3 });
@@ -419,7 +425,7 @@ body.gridview .wall, body.gridview .top { display: none; }
   }
   var WARM = sprite('255,250,236'), COOL = sprite('200,214,255');
   function drawStars(time) {
-    tx.clearRect(0, 0, innerWidth, innerHeight);
+    tx.clearRect(0, 0, innerWidth, tw.clientHeight || innerHeight);
     for (var i = 0; i < stars.length; i++) {
       var st = stars[i], a = reduce ? .6 : Math.pow(.5 + .5 * Math.sin(time / 1000 * st.sp + st.ph), 3);
       if (a < .03) continue;

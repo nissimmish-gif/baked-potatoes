@@ -24,8 +24,12 @@ added to the same Worker (see README).
 
 ## Feel of the site (owner's call, 2026-10-26)
 
-A wall of movie posters on a grainy black starfield (dense speckled stars, a few bright
-glints, paper-grain noise), with a layer of stars that slowly twinkle. Every poster image
+A wall of movie posters on a grainy night starfield (dense speckled stars, a few bright
+glints, paper-grain noise). The page colour (`--night`, #0a0c14, also `theme-color`) is the
+sky's average edge colour so Safari's own top and bottom bars blend in (a Safari tab can't
+draw under them); the sky canvases are 100lvh tall. The site is installable (manifest,
+apple-touch-icon, black-translucent status bar): from the Home Screen it runs full screen
+with stars to every edge. The sky has with a layer of stars that slowly twinkle. Every poster image
 carries a very light, even paper texture, not specks (a generated tile, `GRAIN`, no blend
 modes; also painted into
 the peel snapshot). Swiping browses: a swipe either way rolls the poster off (in the direction of the swipe)
