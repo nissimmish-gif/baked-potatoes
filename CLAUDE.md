@@ -14,7 +14,7 @@ added to the same Worker (see README).
   (owner's call, 2026-10-26). Fully Loaded 7.5–10, Half Baked 5.0–7.4, Cold Potato 0–4.9.
   Scores are stored 0–100 in the data and divided by 10 for display. "Half Baked" is a Ben &
   Jerry's trademark; check before launch.
-- **Watchlist vocabulary:** the button is **stash it** (pressed: **in your stash**); the
+- **Watchlist vocabulary:** the button is **add to stash** (pressed: **in your stash**); the
   watchlist is **your stash**. Swiping no longer stashes or passes (owner's call,
   2026-10-26): it only browses.
 - **Logo:** the traced fingerling potato (from a public-domain USDA photo), 30% chunkier,
@@ -60,10 +60,10 @@ year · runtime · genre, and the potato score. The card is 1:1.66 so the poster
 Every poster sits in a cream mount with a black frame line, with one even gap (`--gap`,
 2.8% of the card width) from the card edge to the line and from the line to the poster.
 How to use it is said quietly:
-one row ~22px under the poster (owner picked "option A", 2026-10-27): a round frosted ‹
-(back; dim on the first poster), a quiet **stash it** chip with the potato (soft yellow
-"in your stash" when on; owner: not loud) and a round ›. No "tap for more" line; on a
-first visit the top poster peels a little to the right to show the
+one row ~32px under the poster (owner's pick, 2026-10-27): a bare cream ‹ (back; dim on
+the first poster), an **add to stash** ticket (cream, notched ends, red "admit one" stub,
+fine inner border, no potato; yellow "in your stash" when on) and a bare ›, then a small line
+"tap the poster for the trailer and details". On a first visit the top poster peels a little to the right to show the
 gesture, until someone peels or taps. Owner wants these low key, not flash cards. The
 filters are called **categories** (not vibes) on the page. The categories (owner's list,
 2026-10-26): **highest rated** (default; score 5.0 and up), **new** (2015 on, newest
@@ -112,5 +112,10 @@ Plain, deadpan, kind. Specific beats clever. Errors say what happened and what t
 
 - Test at 375px wide and on desktop; the body must never scroll sideways.
 - Wrap every `localStorage` access in try/catch.
-- Don't hardcode streaming availability; it comes from live data.
+- Don't hardcode streaming availability; it comes from live data: `/api/watch` (TMDB watch
+  providers, from JustWatch, for the visitor's country). The details card lists streaming
+  services by name, each linking to the service's own site (`SITES`), plus rent or buy and
+  a "from JustWatch" credit. Live-TV bundles (`LIVE_TV`) are left out. The category menu
+  has a "streaming on" section (services with 3+ titles) that filters the deck; the filter
+  shows as an "on netflix ×" chip by the heading. Money isn't in play (owner, 2026-10-27).
 - Respect `prefers-reduced-motion` (the peel and details animations already do).

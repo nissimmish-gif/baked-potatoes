@@ -79,7 +79,7 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
   font-family: "Arimo", Arial, sans-serif; font-weight: 700; font-size: var(--wmfs); line-height: 1; display: flex; align-items: center; gap: .22em; letter-spacing: -.02em; text-transform: lowercase; color: var(--cream); text-align: left; }
 
 /* ---------- the stack ---------- */
-.wall { position: fixed; inset: 0; z-index: 3; display: grid; place-items: center; padding: calc(132px + env(safe-area-inset-top, 0px)) 0 calc(150px + env(safe-area-inset-bottom, 0px)); }
+.wall { position: fixed; inset: 0; z-index: 3; display: grid; place-items: center; padding: calc(132px + env(safe-area-inset-top, 0px)) 0 calc(186px + env(safe-area-inset-bottom, 0px)); }
 .stack { position: relative; width: var(--W); height: calc(var(--W) * var(--AR)); }
 .poster { position: absolute; inset: 0; perspective: 1400px; touch-action: none; user-select: none; -webkit-user-select: none; }
 .poster.behind { pointer-events: none; }
@@ -173,15 +173,20 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
 /* ---------- how-to: side cards, caption, first-visit nudge ---------- */
 .deck { position: relative; width: var(--W); height: calc(var(--W) * var(--AR)); }
 /* stash it: right under the poster */
-.controls { position: absolute; left: 0; right: 0; top: 100%; margin-top: 24px; display: flex; justify-content: space-between; align-items: center; }
-.controls .arrow, .stashbtn { background: rgba(255, 255, 255, .09); border: 1px solid rgba(255, 255, 255, .22); color: var(--cream); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); transition: background .2s ease, color .2s ease, border-color .2s ease, opacity .2s ease; }
-.controls .arrow { width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center; }
-.controls .arrow svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-.controls .arrow:disabled { opacity: .3; cursor: default; }
-.stashbtn { display: inline-flex; align-items: center; gap: 7px; padding: 9px 17px 10px 13px; white-space: nowrap; border-radius: 999px; font-family: var(--f-card); font-weight: 500; font-size: 15px; letter-spacing: -.005em; text-transform: lowercase; }
-.stashbtn img { height: 17px; width: auto; transform: rotate(10deg); }
-.stashbtn[aria-pressed="true"] { background: rgba(240, 198, 74, .14); border-color: rgba(240, 198, 74, .5); color: var(--ink-yellow); }
-@media (hover: hover) { .stashbtn:hover, .controls .arrow:not(:disabled):hover { background: rgba(255, 255, 255, .16); } }
+.controls { position: absolute; left: 0; right: 0; top: 100%; margin-top: 34px; display: flex; justify-content: space-between; align-items: center; }
+.controls .arrow { width: 44px; height: 44px; display: grid; place-items: center; color: var(--cream); transition: opacity .2s ease; }
+.controls .arrow svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+.controls .arrow:disabled { opacity: .25; cursor: default; }
+/* add to stash: a cream cinema ticket with notched ends, a stub and a fine inner border */
+.stashbtn { --notch: radial-gradient(circle 8px at 0 50%, #0000 98%, #000) left / 51% 100% no-repeat, radial-gradient(circle 8px at 100% 50%, #0000 98%, #000) right / 51% 100% no-repeat;
+  position: relative; display: inline-flex; align-items: center; gap: 10px; padding: 9px 22px 10px 20px; white-space: nowrap; background: var(--fc-paper); color: var(--fc-line);
+  font-family: var(--f-card); font-weight: 600; font-size: 16px; letter-spacing: -.01em; text-transform: lowercase; -webkit-mask: var(--notch); mask: var(--notch); transition: background .2s ease; }
+.stashbtn::before { content: ""; position: absolute; inset: 3px; border: 1px solid rgba(27, 26, 23, .28); border-radius: 2px; pointer-events: none; }
+.stashbtn small { font-size: 9px; font-weight: 700; line-height: 1.05; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-red); padding-right: 10px; border-right: 1.5px dashed rgba(27, 26, 23, .55); }
+.stashbtn[aria-pressed="true"] { background: var(--ink-yellow); }
+@media (hover: hover) { .stashbtn[aria-pressed="false"]:hover span { color: var(--ink-red); } }
+.taphint { position: absolute; left: 0; right: 0; top: 100%; margin-top: 92px; text-align: center; font-size: 12px; font-weight: 500; color: var(--soft); white-space: nowrap; }
+.deck.empty .taphint { visibility: hidden; }
 .deck.empty .stashbtn { visibility: hidden; }
 .roll .tag { display: none !important; }
 .tag { top: 7%; padding: 3px 9px 4px; font-family: var(--f-card); font-weight: 600; font-size: 15px; letter-spacing: -.01em; text-transform: lowercase; background: var(--fc-paper); color: var(--fc-line); border-radius: 2px; box-shadow: 0 6px 16px rgba(0,0,0,.35); }
@@ -202,7 +207,7 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
 
 /* phones: smaller pieces, more sky between them */
 @media (max-width: 599px) {
-  .wall { padding-top: calc(132px + env(safe-area-inset-top, 0px)); padding-bottom: calc(150px + env(safe-area-inset-bottom, 0px)); }
+  .wall { padding-top: calc(132px + env(safe-area-inset-top, 0px)); padding-bottom: calc(186px + env(safe-area-inset-bottom, 0px)); }
   .pill { bottom: calc(22px + env(safe-area-inset-bottom, 0px)); }
   .pill .fc-frame { gap: 15px; padding: 5px 12px 6px; }
   .pill button { font-size: 15px; }
@@ -224,7 +229,7 @@ body.gridview .grid { padding-top: calc(86px + env(safe-area-inset-top, 0px)); }
 /* in the grid it sits above the tiles, lined up with them */
 .grid .catwrap { position: relative; left: -2px; bottom: auto; max-width: 1100px; margin: 0 auto 10px; }
 /* lined up with the wordmark at the page's left edge (the deck is centred, --W wide) */
-.catwrap { position: absolute; left: calc(max(16px, env(safe-area-inset-left, 0px)) - (100vw - var(--W)) / 2 - 2px); bottom: 100%; margin-bottom: 32px; z-index: 40; }
+.catwrap { display: flex; align-items: center; position: absolute; left: calc(max(16px, env(safe-area-inset-left, 0px)) - (100vw - var(--W)) / 2 - 2px); bottom: 100%; margin-bottom: 32px; z-index: 40; }
 .cat { display: grid; grid-template-columns: auto auto; justify-content: start; align-items: center; column-gap: 7px; padding: 4px 2px; text-align: left; white-space: nowrap; color: var(--cream); }
 .cat #cat-name { font-family: "Arimo", Arial, sans-serif; font-weight: 700; font-size: 24px; line-height: 1.05; letter-spacing: -.02em; text-transform: lowercase; }
 .cat svg { width: 16px; height: 16px; margin-top: 3px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; transition: transform .2s ease; }
@@ -234,6 +239,9 @@ body.gridview .grid { padding-top: calc(86px + env(safe-area-inset-top, 0px)); }
 .catmenu .fc-frame { padding: 4px 12px; }
 .catmenu button { display: block; width: 100%; text-align: left; padding: 9px 0; font-family: var(--f-card); font-weight: 500; font-size: 17px; letter-spacing: -.01em; text-transform: lowercase; color: var(--fc-line); }
 .catmenu button + button { border-top: 2px solid var(--fc-line); }
+.catmenu .fc-frame { max-height: min(70vh, 560px); overflow-y: auto; overscroll-behavior: contain; }
+.catmenu .mh { margin: 10px 0 0; padding: 8px 0 2px; border-top: 3px solid var(--fc-line); font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: #6d6758; }
+.platf { display: inline-flex; align-items: center; gap: 6px; margin-left: 10px; padding: 3px 8px 4px 10px; border-radius: 999px; background: rgba(240, 198, 74, .16); border: 1px solid rgba(240, 198, 74, .5); color: var(--ink-yellow); font-family: var(--f-card); font-weight: 600; font-size: 13px; text-transform: lowercase; white-space: nowrap; vertical-align: 3px; }
 .catmenu button[aria-checked="true"] { color: var(--ink-red); }
 @media (hover: hover) { .catmenu button:hover { color: var(--ink-red); } }
 .deck.empty .cat { display: inline-flex; }
@@ -307,11 +315,12 @@ body.gridview .wall, body.gridview .top { display: none; }
 .detail.on { background: rgba(4, 5, 9, .62); }
 .dcard { position: relative; width: min(560px, 100%); height: min(calc(min(560px, 100vw - 24px) * 1.66), 100%); padding: 9px; transition: transform .34s cubic-bezier(.2, .8, .2, 1); will-change: transform; }
 .dcard .fc-frame { position: relative; height: 100%; border-width: 3px; }
-.dcard .x { position: absolute; z-index: 3; top: 8px; right: 8px; display: grid; place-items: center; width: 40px; height: 40px; color: var(--fc-line); }
+.dcard .x { position: absolute; z-index: 3; top: 8px; right: 8px; background: var(--fc-paper); border-radius: 3px; display: grid; place-items: center; width: 40px; height: 40px; color: var(--fc-line); }
 .dcard .x svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 3; stroke-linecap: square; }
 @media (hover: hover) { .dcard .x:hover { color: var(--ink-red); } }
 .dacts { display: flex; gap: 10px; margin-top: 8px; padding-top: 4px; }
-.dacts .ck { font-size: 18px; font-weight: 700; }
+.dacts .ck { font-size: 16px; font-weight: 700; }
+.dacts button { font-size: 17px !important; white-space: nowrap; padding-left: 6px !important; padding-right: 6px !important; }
 .dacts button[data-d="watched"][aria-pressed="true"] { background: var(--fc-line); color: var(--fc-paper); }
 .plabel .wd { font-weight: 600; color: #2f6b3a; }
 .dacts button { flex: 1; padding: 10px 0 11px; font-family: var(--f-card); font-weight: 500; font-size: 20px; text-transform: lowercase; letter-spacing: -.01em; border: 3px solid var(--fc-line); border-radius: 3px; color: var(--fc-line); }
@@ -333,6 +342,9 @@ body.gridview .wall, body.gridview .top { display: none; }
 .dbody dl { margin: 4px 0 0; display: grid; grid-template-columns: auto 1fr; column-gap: 16px; row-gap: 6px; font-size: 15px; line-height: 1.35; padding-top: 12px; border-top: 2px solid var(--fc-line); }
 .dbody dt { font-weight: 600; text-transform: lowercase; }
 .dbody dd { margin: 0; }
+.dbody .wo a { color: var(--fc-line); text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: 3px; }
+.dbody .wo .rent { display: block; margin-top: 4px; font-size: 13px; color: #6d6758; }
+.dbody .wo .rent a { color: #6d6758; }
 
 /* mini posters */
 
@@ -354,14 +366,16 @@ body.gridview .wall, body.gridview .top { display: none; }
   <div class="deck" id="deck">
     <div class="catwrap">
       <button type="button" class="cat" id="cat" aria-haspopup="menu" aria-expanded="false"><span id="cat-name">highest rated</span><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5"/></svg></button>
+      <button type="button" class="platf" id="platf" hidden aria-label="Clear the streaming filter"></button>
       <div class="catmenu fc-card" id="catmenu" role="menu" hidden><div class="fc-frame" id="catmenu-list"></div></div>
     </div>
     <div class="stack" id="stack" aria-label="Poster stack. Drag right to stash, left to pass, tap to flip. Arrow keys work too." tabindex="0"></div>
     <div class="controls">
       <button type="button" class="arrow" id="side-prev" aria-label="Back"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5"/></svg></button>
-      <button type="button" class="stashbtn" id="stashbtn" aria-pressed="false"><img src="img/potato.png" alt="" width="58" height="96"><span>stash it</span></button>
+      <button type="button" class="stashbtn" id="stashbtn" aria-pressed="false"><small aria-hidden="true">admit<br>one</small><span>add to stash</span></button>
       <button type="button" class="arrow" id="side-next" aria-label="Next"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg></button>
     </div>
+    <p class="taphint">tap the poster for the trailer and details</p>
   </div>
 </main>
 
@@ -616,6 +630,27 @@ body.gridview .wall, body.gridview .top { display: none; }
   function isWatched(t) { return watched.indexOf(t.key) > -1; }
   function toggleWatched(t) { learned(); if (isWatched(t)) watched = watched.filter(function (k) { return k !== t.key; }); else watched.push(t.key); save(); updateCount(); }
   var ART = {}, IMG = 'https://image.tmdb.org/t/p/';
+  // where each title streams (from /api/watch, for the visitor's country), and each service's site
+  var WATCH = {}, platF = 'any', WATCHED_ONCE = false;
+  var LIVE_TV = ['YouTube TV', 'Philo', 'Sling TV', 'DIRECTV', 'DIRECTV STREAM', 'Fubo', 'Spectrum On Demand', 'Xfinity Stream', 'JustWatch TV Store', 'FlixFling', 'VUDU Free'];
+  var SITES = { 'Netflix': 'https://www.netflix.com', 'Max': 'https://www.max.com', 'Hulu': 'https://www.hulu.com', 'Disney+': 'https://www.disneyplus.com',
+    'Prime Video': 'https://www.primevideo.com', 'Apple TV+': 'https://tv.apple.com', 'Apple TV Store': 'https://tv.apple.com', 'Apple TV': 'https://tv.apple.com', 'Peacock': 'https://www.peacocktv.com',
+    'Paramount+': 'https://www.paramountplus.com', 'Tubi': 'https://tubitv.com', 'Pluto TV': 'https://pluto.tv', 'The Roku Channel': 'https://therokuchannel.roku.com',
+    'Plex': 'https://www.plex.tv', 'Kanopy': 'https://www.kanopy.com', 'Hoopla': 'https://www.hoopladigital.com', 'Starz': 'https://www.starz.com', 'MGM+': 'https://www.mgmplus.com',
+    'AMC+': 'https://www.amcplus.com', 'Crunchyroll': 'https://www.crunchyroll.com', 'Adult Swim': 'https://www.adultswim.com', 'Google Play Movies': 'https://play.google.com/store/movies',
+    'YouTube': 'https://www.youtube.com', 'Fandango At Home': 'https://athome.fandango.com', 'Criterion Channel': 'https://www.criterionchannel.com', 'MUBI': 'https://mubi.com',
+    'Shudder': 'https://www.shudder.com', 'BritBox': 'https://www.britbox.com', 'Freevee': 'https://www.amazon.com/freevee', 'Philo': 'https://www.philo.com' };
+  function streams(t) { var w = WATCH[t.key]; return w && w.stream ? w.stream.filter(function (n) { return LIVE_TV.indexOf(n) < 0; }) : []; }
+  function svcLink(n, w) { return '<a href="' + esc(SITES[n] || (w && w.link) || '#') + '" target="_blank" rel="noopener">' + esc(n) + '</a>'; }
+  function watchLine(t) {
+    var w = WATCH[t.key];
+    if (!w) return WATCHED_ONCE ? 'not listed' : 'checking…';
+    var st = streams(t), rent = (w.rent || []).filter(function (n) { return LIVE_TV.indexOf(n) < 0; }).slice(0, 3);
+    var out = st.length ? st.map(function (n) { return svcLink(n, w); }).join(', ') : 'not streaming right now';
+    if (rent.length) out += '<span class="rent">rent or buy: ' + rent.map(function (n) { return svcLink(n, w); }).join(', ') + '</span>';
+    if (w.link) out += '<span class="rent"><a href="' + esc(w.link) + '" target="_blank" rel="noopener">every option ↗</a> · from JustWatch</span>';
+    return out;
+  }
 
   // ---------- poster art ----------
   function tearsSVG(seed) {
@@ -676,7 +711,7 @@ body.gridview .wall, body.gridview .top { display: none; }
 
   // ---------- stack ----------
   var stack = document.getElementById('stack'), kindF = 'all', vibeF = 'all', pos = 0;
-  function sizes() { var w = Math.min(innerWidth * (innerWidth < 600 ? .78 : .84), (innerHeight - 282) / 1.66, 400); document.documentElement.style.setProperty('--W', Math.round(w) + 'px'); }
+  function sizes() { var w = Math.min(innerWidth * (innerWidth < 600 ? .78 : .84), (innerHeight - 318) / 1.66, 400); document.documentElement.style.setProperty('--W', Math.round(w) + 'px'); }
   var view = 'one', grid = document.getElementById('grid'), tiles = document.getElementById('tiles');
   try { view = localStorage.getItem('baked-potatoes-view') === 'grid' ? 'grid' : 'one'; } catch (e) {}
   function placeCat() {
@@ -708,7 +743,7 @@ body.gridview .wall, body.gridview .top { display: none; }
     });
   }
   // every title in the category, in order; pos is the one you're looking at
-  function queue() { return T.filter(function (t) { return (kindF === 'all' || t.kind === kindF) && catOf(vibeF)[2](t); }).sort(catOf(vibeF)[3]); }
+  function queue() { return T.filter(function (t) { return (kindF === 'all' || t.kind === kindF) && catOf(vibeF)[2](t) && (platF === 'any' || streams(t).indexOf(platF) > -1); }).sort(catOf(vibeF)[3]); }
   function showKey(k) {
     // put a title on top: in this category if it's there, otherwise in highest rated with no filter
     var q = queue(), i = q.findIndex(function (t) { return t.key === k; });
@@ -721,6 +756,7 @@ body.gridview .wall, body.gridview .top { display: none; }
     var q = queue();
     vb.textContent = vibeF === 'all' ? 'categories' : vibeName(vibeF).toLowerCase();
     document.getElementById('cat-name').textContent = vibeName(vibeF).toLowerCase(); drawCatMenu();
+    var pf = document.getElementById('platf'); pf.hidden = platF === 'any'; pf.textContent = platF === 'any' ? '' : 'on ' + platF.toLowerCase() + '  ×';
     pos = Math.max(0, Math.min(pos, q.length));
     showTop(q[pos]);
     if (view === 'grid') drawGrid(q);
@@ -818,7 +854,7 @@ body.gridview .wall, body.gridview .top { display: none; }
   }
   function syncStashBtn() {
     var q = queue(), t = q[pos], b = document.getElementById('stashbtn'), on = !!t && isStashed(t) && !isWatched(t);
-    b.setAttribute('aria-pressed', String(on)); b.querySelector('span').textContent = on ? 'in your stash' : 'stash it';
+    b.setAttribute('aria-pressed', String(on)); b.querySelector('span').textContent = on ? 'in your stash' : 'add to stash';
     b.setAttribute('aria-label', t ? (on ? 'Remove ' + t.title + ' from your stash' : 'Stash ' + t.title) : 'Stash it');
   }
 
@@ -954,8 +990,8 @@ body.gridview .wall, body.gridview .top { display: none; }
       '<div class="head"><h2 class="fc-label">' + esc(t.title) + '</h2><span class="pct" aria-label="Score ' + rating(t) + ' out of 10">' + SPUD + rating(t) + '<small>/10</small></span></div>' +
       '<p class="meta">' + t.year + ' · ' + esc(t.run) + ' · ' + esc(t.genre) + ' · ' + tier(t.score).toLowerCase() + '</p>' +
       '<p class="plot">' + esc(t.plot) + '</p>' +
-      '<dl><dt>' + (t.kind === 'tv' ? 'made by' : 'directed by') + '</dt><dd>' + esc(t.dir.join(', ')) + '</dd><dt>starring</dt><dd>' + esc(t.cast.join(', ')) + '</dd><dt>category</dt><dd>' + esc((catsFor(t).join(', ') || 'highest rated').toLowerCase()) + '</dd><dt>watch on</dt><dd>coming soon</dd></dl>' +
-      '<div class="dacts"><button type="button" data-d="stash" aria-pressed="' + inTodo(t) + '"><img src="img/potato.png" alt="" width="58" height="96"><span>' + (inTodo(t) ? 'in your stash' : 'stash it') + '</span></button><button type="button" data-d="watched" aria-pressed="' + isWatched(t) + '"><span class="ck">✓</span><span>' + (isWatched(t) ? 'watched' : 'mark watched') + '</span></button></div>';
+      '<dl><dt>' + (t.kind === 'tv' ? 'made by' : 'directed by') + '</dt><dd>' + esc(t.dir.join(', ')) + '</dd><dt>starring</dt><dd>' + esc(t.cast.join(', ')) + '</dd><dt>category</dt><dd>' + esc((catsFor(t).join(', ') || 'highest rated').toLowerCase()) + '</dd><dt>watch on</dt><dd class="wo">' + watchLine(t) + '</dd></dl>' +
+      '<div class="dacts"><button type="button" data-d="stash" aria-pressed="' + inTodo(t) + '"><span>' + (inTodo(t) ? 'in your stash' : 'add to stash') + '</span></button><button type="button" data-d="watched" aria-pressed="' + isWatched(t) + '"><span class="ck">✓</span><span>' + (isWatched(t) ? 'watched' : 'mark watched') + '</span></button></div>';
     detail.hidden = false; dbody.scrollTop = 0;
     // grow from the poster's own rectangle into the big card
     var a = el.getBoundingClientRect(), b = dcard.getBoundingClientRect();
@@ -986,7 +1022,7 @@ body.gridview .wall, body.gridview .top { display: none; }
     if (b.dataset.d === 'watched') toggleWatched(t); else toggleStash(t);
     // one can change the other (stashing something watched puts it back on the to-watch list)
     var sb2 = dbody.querySelector('[data-d="stash"]'), wb = dbody.querySelector('[data-d="watched"]');
-    sb2.setAttribute('aria-pressed', String(inTodo(t))); sb2.lastChild.textContent = inTodo(t) ? 'in your stash' : 'stash it';
+    sb2.setAttribute('aria-pressed', String(inTodo(t))); sb2.lastChild.textContent = inTodo(t) ? 'in your stash' : 'add to stash';
     wb.setAttribute('aria-pressed', String(isWatched(t))); wb.lastChild.textContent = isWatched(t) ? 'watched' : 'mark watched';
     syncStashBtn();
     refreshLabels(); if (view === 'grid') drawGrid(queue());
@@ -1063,13 +1099,22 @@ body.gridview .wall, body.gridview .top { display: none; }
   vb.addEventListener('click', toggleCats);
   var catBtn = document.getElementById('cat'), catMenu = document.getElementById('catmenu');
   function closeCatMenu() { catMenu.hidden = true; catBtn.setAttribute('aria-expanded', 'false'); }
+  // the menu by the category heading: categories, then the services things stream on
+  function topServices() {
+    var n = {};
+    T.forEach(function (t) { streams(t).forEach(function (s) { n[s] = (n[s] || 0) + 1; }); });
+    return Object.keys(n).filter(function (s) { return n[s] >= 3; }).sort(function (a, b) { return n[b] - n[a]; }).slice(0, 10);
+  }
   function drawCatMenu() {
     var box = document.getElementById('catmenu-list'); box.innerHTML = '';
-    CATS.forEach(function (c) {
-      var b = document.createElement('button'); b.type = 'button'; b.setAttribute('role', 'menuitemradio'); b.setAttribute('aria-checked', String(vibeF === c[0])); b.textContent = c[1].toLowerCase();
-      b.addEventListener('click', function () { vibeF = c[0]; pos = 0; closeCatMenu(); render(); }); box.appendChild(b);
-    });
+    function item(label, on, fn) { var b = document.createElement('button'); b.type = 'button'; b.setAttribute('role', 'menuitemradio'); b.setAttribute('aria-checked', String(on)); b.textContent = label; b.addEventListener('click', fn); box.appendChild(b); }
+    CATS.forEach(function (c) { item(c[1].toLowerCase(), vibeF === c[0], function () { vibeF = c[0]; pos = 0; closeCatMenu(); render(); }); });
+    var svc = topServices(); if (!svc.length) return;
+    var h = document.createElement('p'); h.className = 'mh'; h.textContent = 'streaming on'; box.appendChild(h);
+    item('any service', platF === 'any', function () { platF = 'any'; pos = 0; closeCatMenu(); render(); });
+    svc.forEach(function (sv) { item(sv.toLowerCase(), platF === sv, function () { platF = sv; pos = 0; closeCatMenu(); render(); }); });
   }
+  document.getElementById('platf').addEventListener('click', function () { platF = 'any'; pos = 0; render(); });
   catBtn.addEventListener('click', function () { var o = catMenu.hidden; closeAll(); if (o) { drawCatMenu(); catMenu.hidden = false; catBtn.setAttribute('aria-expanded', 'true'); } });
   sb.addEventListener('click', function () { var o = sd.hidden || !sd.classList.contains('on'); closeAll(); if (o) openStash(); });
   function drawVibes() {
@@ -1155,6 +1200,21 @@ body.gridview .wall, body.gridview .top { display: none; }
   document.addEventListener('pointerdown', function (e) { if (!e.target.closest('.pill') && !e.target.closest('.cat') && !e.target.closest('.drawer') && !e.target.closest('.panel') && !e.target.closest('.scrim')) { vd.hidden = true; vb.setAttribute('aria-expanded', 'false'); } if (!e.target.closest('.catwrap')) closeCatMenu(); });
   addEventListener('keydown', function (e) { if (e.key === 'Escape') closeAll(); });
 
+  // ---------- where to watch, once the art (and so the TMDB ids) is in ----------
+  function loadWatch() {
+    var ids = T.filter(function (t) { return ART[t.key] && ART[t.key].id; }), calls = [];
+    for (var i = 0; i < ids.length; i += 40) (function (batch) {
+      calls.push(fetch('/api/watch?q=' + encodeURIComponent(batch.map(function (t) { return t.kind + ':' + ART[t.key].id; }).join('|')))
+        .then(function (r) { return r.ok ? r.json() : {}; }).then(function (j) {
+          batch.forEach(function (t) { var w = j && j.titles && j.titles[t.kind + ':' + ART[t.key].id]; if (w && !w.error) WATCH[t.key] = w; });
+        }).catch(function () {}));
+    })(ids.slice(i, i + 40));
+    Promise.all(calls).then(function () {
+      WATCHED_ONCE = true; drawCatMenu();
+      var wo = dbody.querySelector('.wo'); if (wo && openFrom) wo.innerHTML = watchLine(openFrom._t);
+    });
+  }
+
   // ---------- real stills and posters from TMDB, via the Worker, once the key is set ----------
   (function () {
     var keys = T.map(function (t) { return t.key; }), calls = [];
@@ -1162,7 +1222,7 @@ body.gridview .wall, body.gridview .top { display: none; }
     Promise.all(calls).then(function (all) {
       var got = {}, ok = false;
       all.forEach(function (j) { if (j && !j.error) { ok = true; for (var k in j) got[k] = j[k]; } });
-      if (ok) { ART = got; document.getElementById('tmdb-credit').hidden = false; render(); }
+      if (ok) { ART = got; document.getElementById('tmdb-credit').hidden = false; render(); loadWatch(); }
     });
   })();
 
