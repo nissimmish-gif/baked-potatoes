@@ -86,14 +86,15 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
 .sheet { position: absolute; inset: 0; transform-style: preserve-3d; transition: transform .6s cubic-bezier(.45, .05, .55, .95); will-change: transform; }
 /* no blend modes or filters inside a flipping poster: iOS Safari flattens the 3D and shows both sides */
 .poster *, .poster *::after { mix-blend-mode: normal !important; }
-.poster .face::after { opacity: .3; }
+.poster .face::after { opacity: .9; }
+.poster.behind .face::after { display: none; }
 .poster .spud { filter: none; }
 .face { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; overflow: hidden; border-radius: 3px;
   box-shadow: 0 2px 0 rgba(255,255,255,.08) inset, 0 30px 60px -20px rgba(0,0,0,.75), 0 0 0 1px rgba(0,0,0,.25); }
-.face::after { content: ""; position: absolute; inset: 0; pointer-events: none; mix-blend-mode: multiply; opacity: .55;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='p'><feTurbulence type='fractalNoise' baseFrequency='.6' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .55  0 0 0 0 .5  0 0 0 0 .42  0 0 0 .5 0'/></filter><rect width='100%' height='100%' filter='url(%23p)'/></svg>"),
+.face::after { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 1;
+  background-image: var(--grain),
     linear-gradient(180deg, rgba(255,255,255,0) 48%, rgba(0,0,0,.08) 50%, rgba(255,255,255,0) 52%),
-    linear-gradient(90deg, rgba(255,255,255,0) 48%, rgba(0,0,0,.07) 50%, rgba(255,255,255,0) 52%); }
+    linear-gradient(90deg, rgba(255,255,255,0) 48%, rgba(0,0,0,.07) 50%, rgba(255,255,255,0) 52%); background-size: 160px 160px, auto, auto; }
 .tag { position: absolute; top: 18%; z-index: 6; padding: 4px 12px 2px; font-family: var(--f-cond); font-size: 30px; letter-spacing: .04em; text-transform: uppercase; opacity: 0;
   background: var(--gold); color: var(--ink); box-shadow: 3px 3px 0 rgba(0,0,0,.4); }
 .tag.yes { left: 14px; transform: rotate(-9deg); }
@@ -767,7 +768,13 @@ body.gridview .wall, body.gridview .top { display: none; }
   }
   function render() {
     stopNudge();
-    stack.innerHTML = '';
+    // keep poster nodes that are still in view (their images are decoded and their snapshot is
+    // ready), so stepping through the deck only builds the one new card at the back
+    clearTimeout(tidyT); tidyT = 0;
+    var keep = {};
+    [].forEach.call(stack.querySelectorAll('.poster'), function (el) { if (el._t && !keep[el._t.key]) keep[el._t.key] = el; });
+    for (var ck in gone) if (!keep[ck]) keep[ck] = gone[ck];
+    [].forEach.call(stack.children, function (el) { el.remove(); });
     var q = queue();
     vb.textContent = vibeF === 'all' ? 'categories' : vibeName(vibeF).toLowerCase();
     document.getElementById('cat-name').textContent = vibeName(vibeF).toLowerCase(); drawCatMenu();
@@ -786,17 +793,19 @@ body.gridview .wall, body.gridview .top { display: none; }
       d.querySelector('.fc-frame').appendChild(b); stack.appendChild(d); return;
     }
     q.slice(pos, pos + 3).reverse().forEach(function (t, k, arr) {
-      var depth = arr.length - 1 - k, el = document.createElement('div');
+      var depth = arr.length - 1 - k, el = keep[t.key], fresh = !el;
+      if (fresh) el = document.createElement('div');
+      el.style.opacity = ''; el.style.visibility = ''; el.style.transition = '';
       el.className = 'poster' + (depth ? ' behind' : ''); el.style.zIndex = String(10 - depth); el.dataset.depth = String(depth);
       var rot = ((t.i * 37) % 7 - 3) * (depth ? 1 : .35);
       el.dataset.rest = 'translate(' + depth * 6 + 'px,' + depth * -6 + 'px) rotate(' + rot + 'deg)';
       el.style.transform = el.dataset.rest;
-      el.innerHTML = '<div class="sheet"><div class="face mount labeled"><div class="mat">' + front(t) + plabel(t) + '</div></div></div>';
+      if (fresh) el.innerHTML = '<div class="sheet"><div class="face mount labeled"><div class="mat">' + front(t).replace('<img ', '<img decoding="async" ') + plabel(t) + '</div></div></div>';
       el._t = t; stack.appendChild(el);
     });
     bind();
     var top = topEl(), img = top && top.querySelector('.mount .p-real img');
-    function prep() { (window.requestIdleCallback || setTimeout)(function () { if (top === topEl()) frontSnapshot(top); }); }
+    function prep() { if (peeling) return setTimeout(prep, 250); (window.requestIdleCallback || setTimeout)(function () { if (peeling) return prep(); if (top === topEl()) frontSnapshot(top); }); }
     if (img) { if (img.complete) prep(); else img.addEventListener('load', prep, { once: true }); }
   }
   // the flash-card label under the picture: title, the basics, and the score
@@ -806,7 +815,7 @@ body.gridview .wall, body.gridview .top { display: none; }
   function showTop(t) { document.title = t ? t.title + ' · baked potatoes' : 'baked potatoes'; }
   function topEl() { return stack.querySelector('.poster:not(.behind)'); }
   function bind() {
-    var el = topEl(); if (!el) return;
+    var el = topEl(); if (!el || el._bound) return; el._bound = true;
     var x0 = 0, y0 = 0, dx = 0, dy = 0, down = false, t0 = 0, moved = false, pr = null;
     el.addEventListener('pointerdown', function (e) {
       busy = true; stopNudge(); down = true; moved = false; x0 = e.clientX; y0 = e.clientY; t0 = Date.now(); dx = dy = 0; el.setPointerCapture(e.pointerId);
@@ -849,14 +858,47 @@ body.gridview .wall, body.gridview .top { display: none; }
   }
   // step +1 shows the next poster, -1 the previous one (the back button); dir is which way the
   // poster rolls off
+  var left = [], gone = {}, tidyT = 0;
+  // the card underneath becomes the top card straight away (nothing is rebuilt during the
+  // roll); the one that left is kept so going back can reuse it
+  function promote(old) {
+    if (old && old._t) { gone[old._t.key] = old; var ks = Object.keys(gone); if (ks.length > 6) delete gone[ks[0]]; old.remove(); }
+    var q = queue();
+    [].forEach.call(stack.querySelectorAll('.poster.behind'), function (el) {
+      var depth = Math.max(0, (+el.dataset.depth || 1) - 1), t = el._t; if (!t) return;
+      el.className = 'poster' + (depth ? ' behind' : ''); el.style.zIndex = String(10 - depth); el.dataset.depth = String(depth);
+      var rot = ((t.i * 37) % 7 - 3) * (depth ? 1 : .35);
+      el.dataset.rest = 'translate(' + depth * 6 + 'px,' + depth * -6 + 'px) rotate(' + rot + 'deg)';
+      el.style.transition = 'transform .3s ease'; el.style.transform = el.dataset.rest;
+    });
+    showTop(q[pos]); deck.classList.toggle('empty', pos >= q.length);
+    document.getElementById('side-prev').disabled = pos === 0;
+    document.getElementById('side-next').disabled = pos >= q.length;
+    syncStashBtn(); bind();
+    if (pos >= q.length || !topEl()) render();
+  }
   function go(step, pr, dir) {
+    if (tidyT) render();
     dir = dir || 1;
     var q = queue(), el = topEl(); stopNudge();
     if (step < 0 && pos === 0) { if (pr) pr.cancel(); return; }
     if (step > 0 && pos >= q.length) return;
     learned(); pull(0, 0);
-    if (el && !reduce) { underFor(step); (pr || peel(el, dir)).leave(dir > 0); }
-    else if (pr) pr.remove();
+    if (step < 0) {
+      // back: the previous poster rolls back in from the side it left by
+      if (pr) pr.remove();
+      var from = left.pop() || 1;
+      pos -= 1; render();
+      var top = topEl(); if (top && !reduce) peel(top, from).enter(from);
+      return;
+    }
+    left.push(dir);
+    if (el && !reduce) {
+      underFor(step); (pr || peel(el, dir)).leave(dir > 0);
+      pos += step; promote(el); tidyT = setTimeout(render, 520);
+      return;
+    }
+    if (pr) pr.remove();
     pos += step; render();
   }
   function isStashed(t) { return stash.indexOf(t.key) > -1; }
@@ -932,7 +974,7 @@ body.gridview .wall, body.gridview .top { display: none; }
   // you swipe right and the top-right corner when you swipe left.
   var TILT = .46, PAPER = '#efe5d0';
   function peel(el, dir) {
-    var w = el.offsetWidth, h = el.offsetHeight, rho = -dir * TILT, s = Math.min(devicePixelRatio || 1, 2);
+    var w = el.offsetWidth, h = el.offsetHeight, rho = -dir * TILT, s = Math.min(devicePixelRatio || 1, 1.5);
     var Dy = w * Math.abs(Math.sin(rho)) + h * Math.abs(Math.cos(rho)), Dx = w * Math.abs(Math.cos(rho)) + h * Math.abs(Math.sin(rho));
     var snap = frontSnapshot(el), pad = 40;
     var box = document.createElement('div'); box.className = 'roll';
@@ -980,6 +1022,7 @@ body.gridview .wall, body.gridview .top { display: none; }
         var q = Math.min(1, (now - t0) / ms), e = 1 - Math.pow(1 - q, 3);
         set(from.p + (to.p - from.p) * e, from.x + (to.x - from.x) * e, from.y + (to.y - from.y) * e, to.d);
         if (to.fade) box.style.opacity = q < .55 ? 1 : 1 - (q - .55) / .45;
+        if (to.fadeIn) box.style.opacity = Math.min(1, q / .35);
         if (q < 1) raf = requestAnimationFrame(step); else if (done) done();
       })(t0);
     }
@@ -987,8 +1030,13 @@ body.gridview .wall, body.gridview .top { display: none; }
     function remove() { if (gone) return; gone = true; cancelAnimationFrame(raf); box.remove(); peeling = Math.max(0, peeling - 1); }
     return {
       dir: dir, set: set, remove: remove,
-      cancel: function (done) { tween({ p: 0, x: 0, y: 0, d: 0 }, 320, function () { remove(); el.style.opacity = ''; if (done) done(); }); },
-      leave: function (keep) { var dd = keep ? 1 : -1; tween({ p: 1, x: dd * innerWidth * .95, y: -40, d: dd * 100, fade: true }, 620, remove); },
+      cancel: function (done) { tween({ p: 0, x: 0, y: 0, d: 0 }, 260, function () { remove(); el.style.opacity = ''; if (done) done(); }); },
+      leave: function (keep) { var dd = keep ? 1 : -1; tween({ p: 1, x: dd * innerWidth * .95, y: -40, d: dd * 100, fade: true }, 460, remove); },
+      enter: function (from) {
+        // the reverse of leave: start rolled up and off to one side, unroll back onto the stack
+        set(1, from * innerWidth * .95, -40, 0); box.style.opacity = 0;
+        tween({ p: 0, x: 0, y: 0, d: 0, fadeIn: true }, 460, function () { remove(); el.style.opacity = ''; });
+      },
       demo: function (steps, done) {
         var i = 0;
         (function next() { if (gone) return; if (i >= steps.length) { remove(); el.style.opacity = ''; if (done) done(); return; } var st = steps[i++]; tween({ p: st[0], x: st[1], y: 0, d: st[1] }, st[2], next); })();
@@ -1124,7 +1172,7 @@ body.gridview .wall, body.gridview .top { display: none; }
   function drawCatMenu() {
     var box = document.getElementById('catmenu-list'); box.innerHTML = '';
     function item(label, on, fn) { var b = document.createElement('button'); b.type = 'button'; b.setAttribute('role', 'menuitemradio'); b.setAttribute('aria-checked', String(on)); b.textContent = label; b.addEventListener('click', fn); box.appendChild(b); }
-    CATS.forEach(function (c) { item(c[1].toLowerCase(), vibeF === c[0], function () { vibeF = c[0]; pos = 0; closeCatMenu(); render(); }); });
+    CATS.forEach(function (c) { item(c[1].toLowerCase(), vibeF === c[0], function () { vibeF = c[0]; pos = 0; left = []; closeCatMenu(); render(); }); });
     var svc = topServices(); if (!svc.length) return;
     // streaming on: one row that opens into the list of services
     var dd = document.createElement('button'); dd.type = 'button'; dd.className = 'svc-toggle'; dd.setAttribute('aria-expanded', String(svcOpen));

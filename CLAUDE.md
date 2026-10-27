@@ -41,7 +41,12 @@ when you swipe right, top-right when you swipe left) like paper coming off a wal
 follows your finger the whole way. `peel()` draws it flat on one canvas each frame: the
 poster below the fold line (from `frontSnapshot()`, prepared at idle), a light cream tube
 along the line and its soft shadow. No 3D at all: every 3D version (strips, backface
-tricks) glitched on iOS Safari. The twinkle pauses while a poster is peeled. Let go far enough and it rolls the rest of the way off; let go early and it lays back flat. The next
+tricks) glitched on iOS Safari. The twinkle pauses while a poster is peeled. Speed rules (owner: "moves slow"): nothing is built during a roll. `go()` promotes the
+cards already underneath (`promote()`) and rebuilds the back of the stack ~0.5s later;
+`render()` reuses poster nodes (and ones just passed, `gone`); snapshot prep waits for
+the roll to finish; the poster texture is the pre-made `GRAIN` tile (an SVG turbulence
+filter was costly), off on the cards behind. ‹ brings the previous poster back in, rolling
+open from the side it left by (`peel().enter()`). Let go far enough and it rolls the rest of the way off; let go early and it lays back flat. The next
 poster is live underneath while the roll plays. Tapping a poster no longer flips it
 (owner: the back was too small to read): it grows from its own rectangle into a big
 flash-card details view (`openDetail()`): trailer, title, score, plot, credits, then one
