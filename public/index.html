@@ -14,7 +14,7 @@
 <meta name="description" content="What to watch when you're baked.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Arimo:wght@700&family=Archivo+Black&family=Oswald:wght@400;600&family=Rubik:wght@800&family=Inter+Tight:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Arimo:wght@700&family=Inter+Tight:wght@400;500;600&display=swap">
 <style>
 /* Layout: a grainy black starfield fills the screen. A stack of movie posters sits on it:
    drag one to peel it off (right stashes, left passes), tap it to flip. The back of each
@@ -37,10 +37,6 @@
   --red: #e2402b;
   --gold: #edc755;
   --soft: rgba(239, 228, 204, .62);
-  --f-cond: "Anton", "Oswald", "Impact", sans-serif;
-  --f-black: "Archivo Black", "Arial Black", sans-serif;
-  --f-small: "Oswald", "Arial Narrow", sans-serif;
-  --f-round: "Rubik", "Arial Rounded MT Bold", sans-serif;
   --f-ui: "Inter Tight", "Helvetica Neue", Arial, sans-serif;
   --f-card: "Inter Tight", "Helvetica Neue", Helvetica, Arial, sans-serif;
   color-scheme: dark;
@@ -95,57 +91,20 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
   background-image: var(--grain),
     linear-gradient(180deg, rgba(255,255,255,0) 48%, rgba(0,0,0,.08) 50%, rgba(255,255,255,0) 52%),
     linear-gradient(90deg, rgba(255,255,255,0) 48%, rgba(0,0,0,.07) 50%, rgba(255,255,255,0) 52%); background-size: 160px 160px, auto, auto; }
-.tag { position: absolute; top: 18%; z-index: 6; padding: 4px 12px 2px; font-family: var(--f-cond); font-size: 30px; letter-spacing: .04em; text-transform: uppercase; opacity: 0;
+.tag { position: absolute; top: 18%; z-index: 6; padding: 4px 12px 2px; font-family: "Arimo", Arial, sans-serif; font-weight: 700; font-size: 30px; letter-spacing: .04em; text-transform: uppercase; opacity: 0;
   background: var(--gold); color: var(--ink); box-shadow: 3px 3px 0 rgba(0,0,0,.4); }
 .tag.yes { left: 14px; transform: rotate(-9deg); }
 .tag.no { right: 14px; transform: rotate(9deg); background: var(--cream); }
 
-/* poster type: torn */
-.p-torn { background: var(--paper); color: var(--ink); }
-.p-torn .low { position: absolute; left: 4.5%; right: 4.5%; top: 63%; bottom: 9%; }
-.p-torn .tl { font-family: var(--f-black); text-align: center; font-size: calc(var(--W) * .042); padding: 0 8%; letter-spacing: .03em; color: var(--paper); position: absolute; top: 6.5%; left: 0; right: 0; z-index: 2; text-transform: uppercase; }
-.p-torn .panel { position: absolute; left: 4.5%; right: 4.5%; top: 4.5%; height: 57%; border-radius: 10px; overflow: hidden; background: var(--a); }
-.p-torn .names { display: flex; justify-content: space-between; font-family: var(--f-small); font-weight: 600; font-size: calc(var(--W) * .043); line-height: .95; text-transform: uppercase; padding: 3.5% 3% 0; position: relative; z-index: 1; }
-.p-torn .names span { max-width: 30%; }
-.p-torn .names span:nth-child(2) { text-align: center; } .p-torn .names span:nth-child(3) { text-align: right; }
-.p-torn .rules { position: absolute; inset: 0; font-family: var(--f-small); font-size: calc(var(--W) * .036); line-height: 1.25; text-transform: uppercase; color: rgba(20,20,20,.13); overflow: hidden; word-break: break-all; padding: 0 2%; }
-.p-torn .title { position: relative; z-index: 1; font-family: var(--f-cond); color: var(--red); text-align: center; text-transform: uppercase; line-height: .92; letter-spacing: .28em; padding-left: .28em; margin-top: 4%; white-space: nowrap; }
-.p-torn .by { position: absolute; left: 0; right: 0; bottom: 3%; text-align: center; font-family: var(--f-black); font-size: calc(var(--W) * .038); text-transform: uppercase; letter-spacing: .03em; }
 
-/* poster type: one-sheet */
-.p-sheet { background: #e9e6dd; color: var(--ink); }
-.p-sheet .bar { position: absolute; left: 0; right: 0; top: 0; height: 11%; background: #111; color: #f4f1ea; display: grid; grid-template-columns: 1.2fr 1fr 1.2fr; align-items: center; padding: 0 3%; gap: 2%; font-family: var(--f-black); text-transform: uppercase; }
-.p-sheet .bar span { font-size: calc(var(--W) * .026); line-height: 1.05; text-align: center; }
-.p-sheet .bar span:first-child { font-size: calc(var(--W) * .05); text-align: left; letter-spacing: .02em; }
-.p-sheet .bar span:last-child { font-size: calc(var(--W) * .042); text-align: right; }
-.p-sheet .art { position: absolute; left: 0; right: 0; top: 11%; height: 62%; overflow: hidden; background: var(--a); }
-.p-sheet .quip { position: absolute; z-index: 2; right: 5%; top: 30%; width: 48%; font-family: var(--f-black); font-size: calc(var(--W) * .052); line-height: 1.05; text-transform: uppercase; text-align: center; color: #111; }
-.p-sheet .rule { position: absolute; left: 4%; right: 4%; height: 2px; background: var(--red); }
-.p-sheet .star { position: absolute; left: 0; right: 0; top: 75.5%; text-align: center; font-family: var(--f-black); font-size: calc(var(--W) * .03); color: var(--red); text-transform: uppercase; }
-.p-sheet .title { position: absolute; left: 3%; right: 3%; top: 79%; font-family: var(--f-black); text-transform: uppercase; line-height: .88; text-align: center; letter-spacing: -.02em; }
-.p-sheet .billing { position: absolute; left: 4%; right: 4%; bottom: 3.5%; font-family: var(--f-small); font-weight: 600; font-size: calc(var(--W) * .027); line-height: 1.15; text-align: center; text-transform: uppercase; }
 
-/* poster type: screen print */
-.p-print { background: var(--a); color: var(--cream); }
-.p-print .title { position: absolute; left: 6%; right: 6%; top: 5%; font-family: var(--f-round); text-transform: lowercase; line-height: .82; letter-spacing: -.045em; color: var(--paper); }
-.p-print .title small { display: block; text-align: right; font-size: .5em; }
-.p-print .art { position: absolute; left: 12%; right: 12%; top: 38%; height: 44%; }
-.p-print .billing { position: absolute; left: 8%; right: 8%; bottom: 4%; font-family: var(--f-small); font-weight: 600; font-size: calc(var(--W) * .026); line-height: 1.2; text-align: center; text-transform: uppercase; color: rgba(20,20,20,.75); }
 
 /* a real poster from TMDB fills the front */
 .p-real { background: var(--a); }
-.p-real h2 { position: absolute; left: 8%; right: 8%; top: 40%; text-align: center; font-family: var(--f-cond); font-size: calc(var(--W) * .11); line-height: .95; text-transform: uppercase; color: var(--paper); }
+.stack.waiting .poster { visibility: hidden; }
+.p-real h2 { text-transform: lowercase !important;  position: absolute; left: 8%; right: 8%; top: 40%; text-align: center; font-family: "Arimo", Arial, sans-serif; font-weight: 700; font-size: calc(var(--W) * .11); line-height: .95; text-transform: uppercase; color: var(--paper); }
 .p-real img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 
-/* image or generated art inside panels */
-.pic { position: absolute; inset: 0; }
-.pic img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity .6s ease; }
-.pic img.ok { opacity: 1; }
-.duo img { filter: grayscale(1) contrast(1.15) brightness(1.05); opacity: .9; }
-.dots { -webkit-mask: radial-gradient(circle, #000 42%, transparent 46%) 0 0 / 5px 5px; mask: radial-gradient(circle, #000 42%, transparent 46%) 0 0 / 5px 5px; }
-.gen { position: absolute; inset: 0; }
-.gen i { position: absolute; border-radius: 50%; }
-.tears { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; }
 
 /* back of the poster: a flash card */
 .spud { height: 1.6em; width: auto; margin-right: .18em; vertical-align: -.42em; transform: rotate(8deg); filter: drop-shadow(0 0 .5px rgba(27,26,23,.9)) drop-shadow(0 1px 0 rgba(27,26,23,.25)); }
@@ -302,7 +261,7 @@ body.gridview .wall, body.gridview .top { display: none; }
 .mini { position: relative; display: block; width: 64px; height: 96px; overflow: hidden; background: var(--a, #333); border: 2px solid var(--fc-line); border-radius: 2px; box-shadow: 0 6px 14px -6px rgba(0,0,0,.5); transform: rotate(-1.5deg); }
 .mini img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .mini::after { content: ""; position: absolute; inset: 0; background: var(--grain) 0 0 / 160px 160px repeat; }
-.mini b { position: absolute; inset: 0; display: grid; place-items: center; padding: 4px; text-align: center; font-family: var(--f-cond); font-weight: 400; font-size: 11px; line-height: 1; text-transform: uppercase; color: var(--paper); }
+.mini b { position: absolute; inset: 0; display: grid; place-items: center; padding: 4px; text-align: center; font-family: "Arimo", Arial, sans-serif; font-weight: 700; font-weight: 400; font-size: 11px; line-height: 1; text-transform: uppercase; color: var(--paper); }
 .prow .tx { min-width: 0; }
 .prow .nm { font-family: var(--f-card); font-weight: 500; font-size: 18px; line-height: 1.15; letter-spacing: -.015em; text-transform: lowercase; }
 .prow .mt { margin-top: 3px; font-size: 12px; font-weight: 500; text-transform: lowercase; color: #6d6758; }
@@ -493,9 +452,9 @@ body.gridview .wall, body.gridview .top { display: none; }
   // ---------- data (credits from memory; scores are placeholders) ----------
   // kind, title, year, dir, cast, runtime, genre, vibes, score, tagline, plot, style, colours [a, b, c]
   var T = [
-    ['movie', 'Ferris Bueller\'s Day Off', 1986, ['John Hughes'], ['Matthew Broderick', 'Alan Ruck', 'Mia Sara'], '103 min', 'Comedy', ['giggle', 'couch'], 88, 'Life moves pretty fast.', 'A high-school senior fakes being sick and drags his best friend and girlfriend through one perfect day off in Chicago, in a borrowed Ferrari. Light, quick and very easy to love.', 'sheet', ['#e2402b', '#2b55a8', '#edc755'], 'posters/ferris-buellers-day-off.jpg'],
-    ['movie', 'The Truman Show', 1998, ['Peter Weir'], ['Jim Carrey', 'Laura Linney', 'Ed Harris'], '103 min', 'Comedy, Drama', ['brain', 'couch'], 90, 'On the air. Unaware.', 'A cheerful insurance salesman slowly works out that his whole life is a TV show and everyone he knows is acting. Funny, then strange, then it gets you.', 'print', ['#c8322b', '#1b1a17', '#efe4cc'], 'posters/the-truman-show.jpg'],
-    ['movie', 'Fight Club', 1999, ['David Fincher'], ['Edward Norton', 'Brad Pitt', 'Helena Bonham Carter'], '139 min', 'Drama, Thriller', ['brain'], 79, 'Mischief. Mayhem. Soap.', 'An insomniac office worker meets a soap salesman and they start an underground fight club that grows into something much bigger. Has a twist you will want to talk about after.', 'torn', ['#4f7a52', '#1a375f', '#edc755'], 'posters/fight-club.jpg'],
+    ['movie', 'Ferris Bueller\'s Day Off', 1986, ['John Hughes'], ['Matthew Broderick', 'Alan Ruck', 'Mia Sara'], '103 min', 'Comedy', ['giggle', 'couch'], 88, 'Life moves pretty fast.', 'A high-school senior fakes being sick and drags his best friend and girlfriend through one perfect day off in Chicago, in a borrowed Ferrari. Light, quick and very easy to love.', 'sheet', ['#e2402b', '#2b55a8', '#edc755']],
+    ['movie', 'The Truman Show', 1998, ['Peter Weir'], ['Jim Carrey', 'Laura Linney', 'Ed Harris'], '103 min', 'Comedy, Drama', ['brain', 'couch'], 90, 'On the air. Unaware.', 'A cheerful insurance salesman slowly works out that his whole life is a TV show and everyone he knows is acting. Funny, then strange, then it gets you.', 'print', ['#c8322b', '#1b1a17', '#efe4cc']],
+    ['movie', 'Fight Club', 1999, ['David Fincher'], ['Edward Norton', 'Brad Pitt', 'Helena Bonham Carter'], '139 min', 'Drama, Thriller', ['brain'], 79, 'Mischief. Mayhem. Soap.', 'An insomniac office worker meets a soap salesman and they start an underground fight club that grows into something much bigger. Has a twist you will want to talk about after.', 'torn', ['#4f7a52', '#1a375f', '#edc755']],
     ['movie', 'Fantastic Planet', 1973, ['René Laloux'], ['Jennifer Drake', 'Eric Baugin', 'Jean Topart'], '72 min', 'Animation, Sci-fi', ['plot', 'eye'], 94, 'Tiny humans. Giant blue aliens.', 'Humans the size of a thumbnail are kept as pets by enormous blue aliens on a strange planet. A French cartoon that drifts more than it explains. You won\'t follow it. You don\'t need to.', 'print', ['#2f6f8f', '#e2402b', '#edc755']],
     ['movie', 'Paddington 2', 2017, ['Paul King'], ['Ben Whishaw', 'Hugh Grant', 'Brendan Gleeson'], '103 min', 'Comedy, Family', ['couch', 'giggle'], 92, 'Marmalade. Prison. Kindness.', 'A bear in a duffle coat is framed for theft and makes prison a nicer place to be. Hugh Grant is having the time of his life. Impossible to feel bad during this.', 'print', ['#1f3f8a', '#edc755', '#e2402b']],
     ['movie', 'Koyaanisqatsi', 1982, ['Godfrey Reggio'], ['Philip Glass (music)'], '86 min', 'Documentary', ['plot'], 90, 'Life out of balance.', 'No dialogue and no story. Clouds roll, cities rush, crowds pour through stations in time-lapse, all to a hypnotic Philip Glass score. Pure looking.', 'torn', ['#e2551f', '#1a375f', '#edc755']],
@@ -615,7 +574,7 @@ body.gridview .wall, body.gridview .top { display: none; }
     ['movie', 'Twisters', 2024, ['Lee Isaac Chung'], ['Daisy Edgar-Jones', 'Glen Powell', 'Anthony Ramos'], '123 min', 'Action, Thriller', [], 78, 'Ride it out.', 'A storm chaser scarred by a deadly tornado teams up with a cowboy YouTuber during an outbreak of huge twisters in Oklahoma. Big, loud weather.', 'sheet', ['#e2402b', '#1b1a17', '#edc755']],
     ['movie', 'Uncut Gems', 2019, ['Josh Safdie', 'Benny Safdie'], ['Adam Sandler', 'Julia Fox', 'LaKeith Stanfield'], '135 min', 'Crime, Thriller', ['sober'], 28, 'This is how I win.', 'A jeweller with a gambling problem makes every wrong choice at full volume for two hours. A great film. Not tonight.', 'torn', ['#6b2fa3', '#e2402b', '#edc755']],
     ['movie', 'Midsommar', 2019, ['Ari Aster'], ['Florence Pugh', 'Jack Reynor', 'Will Poulter'], '148 min', 'Horror, Drama', ['sober'], 22, 'Let the festivities begin.', 'A grieving woman joins her boyfriend on a trip to a Swedish midsummer festival that goes very, very wrong. Save it for a clear head.', 'sheet', ['#9cbf6a', '#e2402b', '#edc755']]
-  ].map(function (r, i) { return { i: i, kind: r[0], title: r[1], year: r[2], dir: r[3], cast: r[4], run: r[5], genre: r[6], vibes: r[7], score: r[8], tag: r[9], plot: r[10], style: r[11], col: r[12], img: r[13] || '', key: r[0] + ':' + r[1] + ':' + r[2] }; });
+  ].map(function (r, i) { return { i: i, kind: r[0], title: r[1], year: r[2], dir: r[3], cast: r[4], run: r[5], genre: r[6], vibes: r[7], score: r[8], tag: r[9], plot: r[10], style: r[11], col: r[12], key: r[0] + ':' + r[1] + ':' + r[2] }; });
   // categories: [id, name, which titles, order]. Highest rated leaves out the low scorers;
   // the hand-picked ones go by title.
   var TRIPPY = ['Avatar', 'Dune: Part Two', 'Interstellar', '2001: A Space Odyssey', 'Annihilation', 'The Matrix', 'Inception', 'The Midnight Gospel', 'Over the Garden Wall', "Howl's Moving Castle", 'Eternal Sunshine of the Spotless Mind', 'Blade Runner 2049', 'Dune', 'Arrival', 'Scott Pilgrim vs. the World', 'The Super Mario Bros. Movie', 'Rick and Morty', 'Fear and Loathing in Las Vegas', 'Fantastic Planet', 'Koyaanisqatsi', 'Spirited Away', 'Everything Everywhere All at Once', 'Adventure Time', 'Planet Earth II'];
@@ -669,60 +628,13 @@ body.gridview .wall, body.gridview .top { display: none; }
   }
 
   // ---------- poster art ----------
-  function tearsSVG(seed) {
-    var r = rng(seed * 97 + 3), out = '';
-    [.28, .5, .66, .82].forEach(function (y0, k) {
-      var pts = [], x = -5, y = y0 * 100 + (r() - .5) * 6, slope = (r() - .5) * 10;
-      while (x < 105) { pts.push(x.toFixed(1) + ',' + (y + slope * x / 100 + (r() - .5) * 2.2).toFixed(1)); x += 1.5 + r() * 2.5; }
-      var top = pts.join(' '), h = 2.2 + r() * 2.5;
-      var bot = pts.slice().reverse().map(function (p) { var q = p.split(','); return q[0] + ',' + (+q[1] + h + (r() - .5) * 1.6).toFixed(1); }).join(' ');
-      out += '<polygon points="' + top + ' ' + bot + '" fill="#f6f0e2"/><polyline points="' + top + '" fill="none" stroke="rgba(0,0,0,.25)" stroke-width=".4"/>';
-    });
-    return '<svg class="tears" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">' + out + '</svg>';
-  }
-  function genArt(t, mode) {
-    // until real stills arrive: blurred colour fields and a sun, printed in the poster's inks
-    var r = rng(t.i * 31 + 7), c = t.col, html = '';
-    if (mode === 'print') {
-      for (var k = 0; k < 3; k++) html += '<i style="left:' + (r() * 60) + '%;top:' + (r() * 50) + '%;width:' + (40 + r() * 40) + '%;aspect-ratio:1;background:' + (k ? '#141414' : '#efe4cc') + ';opacity:' + (k ? .85 : 1) + '"></i>';
-      return '<div class="gen dots">' + html + '</div>';
-    }
-    html += '<i style="left:-10%;top:-20%;width:90%;aspect-ratio:1;background:' + c[1] + ';filter:blur(26px)"></i>';
-    html += '<i style="right:-15%;bottom:-25%;width:80%;aspect-ratio:1;background:' + c[2] + ';filter:blur(30px);opacity:.8"></i>';
-    html += '<i style="left:30%;top:22%;width:38%;aspect-ratio:1;background:rgba(239,228,204,.85);filter:blur(2px)"></i>';
-    return '<div class="gen">' + html + '</div>';
-  }
-  function imgTag(t, which) { var a = ART[t.key]; var p = a && (which === 'backdrop' ? (a.backdrop || a.poster) : (a.poster || a.backdrop)); return p ? '<img alt="" draggable="false" src="' + IMG + 'w780' + p + '" onload="this.classList.add(\'ok\')">' : ''; }
-  function fit(title, base) { var n = title.length; return base * (n <= 8 ? 1 : n <= 14 ? .78 : n <= 22 ? .6 : .48); }
   function front(t) {
-    // the owner's own picks win; everything else uses the TMDB poster
-    var real = t.img || (ART[t.key] && ART[t.key].poster ? IMG + 'w780' + ART[t.key].poster : '');
-    if (real) return '<div class="face p-real" style="--a:' + t.col[0] + '"><h2>' + esc(t.title) + '</h2><img alt="' + esc(t.title) + ' poster" draggable="false" src="' + real + '" onerror="this.remove()"></div>';
-    var Wv = 'var(--W)', names = t.cast.slice(0, 3), credits = esc((t.kind === 'tv' ? 'Created by ' : 'Directed by ') + t.dir.join(' & ') + ' · starring ' + t.cast.join(', ') + ' · ' + t.year + ' · ' + t.run);
-    if (t.style === 'torn') {
-      var words = t.title.toUpperCase().split(' '), half = Math.ceil(words.length / 2);
-      var rules = ''; for (var k = 0; k < 14; k++) rules += 'Rule number ' + (k + 1) + ': ' + esc(t.tag) + ' ';
-      var l1 = words.slice(0, half).join(' '), l2 = words.slice(half).join(' '), longest = Math.max(l1.length, l2.length), size = Math.min(.2, .9 / (longest * .78 + .3));
-      return '<div class="face p-torn" style="--a:' + t.col[0] + '"><p class="tl">' + esc(t.tag) + '</p>' +
-        '<div class="panel"><div class="pic duo" style="background:' + t.col[0] + '">' + genArt(t, 'torn') + imgTag(t, 'backdrop') + '</div>' + tearsSVG(t.i) + '</div>' +
-        '<div class="low"><div class="rules">' + rules + '</div><div class="names">' + names.map(function (n) { return '<span>' + esc(n) + '</span>'; }).join('') + '</div>' +
-        '<h2 class="title" style="font-size:calc(' + Wv + ' * ' + size.toFixed(3) + ')">' + esc(l1) + (l2 ? '<br>' + esc(l2) : '') + '</h2></div>' +
-        '<p class="by">A ' + esc(t.dir[0]) + ' ' + (t.kind === 'tv' ? 'series' : 'film') + '</p></div>';
-    }
-    if (t.style === 'sheet') {
-      return '<div class="face p-sheet" style="--a:' + t.col[0] + '"><div class="bar"><span>Tonight</span><span>On the couch<br>· all night ·</span><span>And across the sofa</span></div>' +
-        '<div class="art"><div class="pic">' + genArt(t, 'sheet') + imgTag(t, 'backdrop') + '</div></div>' +
-        '<p class="quip">' + esc(t.tag) + '</p>' +
-        '<span class="rule" style="top:74.5%"></span><p class="star">' + esc(t.cast[0]) + '</p>' +
-        '<h2 class="title" style="font-size:calc(' + Wv + ' * ' + fit(t.title, .13).toFixed(3) + ')">' + esc(t.title) + '</h2>' +
-        '<p class="billing">' + credits + '</p><span class="rule" style="bottom:2%"></span></div>';
-    }
-    var tw = t.title.split(' '), first = tw.length > 2 ? tw.slice(0, -1).join(' ') : tw[0], last = tw.length > 2 ? tw[tw.length - 1] : (tw[1] || '');
-    return '<div class="face p-print" style="--a:' + t.col[0] + '">' +
-      '<h2 class="title" style="font-size:calc(' + Wv + ' * ' + fit(first, .2).toFixed(3) + ')">' + esc(first) + (last ? '<small>' + esc(last) + '</small>' : '') + '</h2>' +
-      '<div class="art"><div class="pic dots">' + genArt(t, 'print') + imgTag(t, 'poster') + '</div></div>' +
-      '<p class="billing">' + credits + '</p></div>';
+    // the TMDB poster. With no poster (TMDB
+    // down, or a title it doesn't have) the card is plain, with the title on it.
+    var real = (ART[t.key] && ART[t.key].poster ? IMG + 'w780' + ART[t.key].poster : '');
+    return '<div class="face p-real" style="--a:' + t.col[0] + '"><h2>' + esc(t.title) + '</h2>' + (real ? '<img alt="' + esc(t.title) + ' poster" draggable="false" src="' + real + '" onerror="this.remove()">' : '') + '</div>';
   }
+
 
 
   // ---------- stack ----------
@@ -960,7 +872,7 @@ body.gridview .wall, body.gridview .top { display: none; }
     if (!img) {
       // a placeholder poster: its main ink and its title, enough for a moment in motion
       x.fillStyle = t.col[0]; x.fillRect(po[0], po[1], pw, ph);
-      x.fillStyle = PAPER; x.font = '400 ' + Math.round(w * .1) + 'px Anton, Impact, sans-serif'; x.textAlign = 'center'; x.textBaseline = 'middle';
+      x.fillStyle = PAPER; x.font = '700 ' + Math.round(w * .085) + 'px Arimo, Arial, sans-serif'; x.textAlign = 'center'; x.textBaseline = 'middle';
       wrap(x, t.title.toUpperCase(), pw * .84).forEach(function (ln, i, all) { x.fillText(ln, po[0] + pw / 2, po[1] + ph * .45 + (i - (all.length - 1) / 2) * w * .11); });
     }
     x.fillStyle = x.createPattern(GRAIN, 'repeat'); x.fillRect(po[0], po[1], pw, ph);
@@ -1200,7 +1112,7 @@ body.gridview .wall, body.gridview .top { display: none; }
     });
   }
   function miniPoster(t) {
-    var src = t.img || (ART[t.key] && ART[t.key].poster ? IMG + 'w185' + ART[t.key].poster : '');
+    var src = (ART[t.key] && ART[t.key].poster ? IMG + 'w185' + ART[t.key].poster : '');
     return '<span class="mini" style="--a:' + t.col[0] + '" aria-hidden="true">' + (src ? '<img src="' + src + '" alt="" loading="lazy" decoding="async">' : '<b>' + esc(t.title) + '</b>') + '</span>';
   }
   // the stash: to watch (in priority order, drag ≡ to reorder) and watched, filtered by category
@@ -1295,6 +1207,7 @@ body.gridview .wall, body.gridview .top { display: none; }
     Promise.all(calls).then(function (all) {
       var got = {}, ok = false;
       all.forEach(function (j) { if (j && !j.error) { ok = true; for (var k in j) got[k] = j[k]; } });
+      stack.classList.remove('waiting');
       if (ok) { ART = got; artV++; document.getElementById('tmdb-credit').hidden = false; render(); loadWatch(); }
     });
   })();
@@ -1304,6 +1217,7 @@ body.gridview .wall, body.gridview .top { display: none; }
   document.body.classList.toggle('gridview', view === 'grid'); grid.hidden = view !== 'grid';
   document.getElementById('view-one').setAttribute('aria-pressed', String(view === 'one')); document.getElementById('view-grid').setAttribute('aria-pressed', String(view === 'grid'));
   placeCat();
+  stack.classList.add('waiting'); setTimeout(function () { stack.classList.remove('waiting'); }, 2500);
   sizes(); updateCount(); render(); setTimeout(nudge, 900);
 })();
 </script>

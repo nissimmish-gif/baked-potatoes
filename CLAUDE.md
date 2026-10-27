@@ -51,11 +51,9 @@ poster is live underneath while the roll plays. Tapping a poster no longer flips
 (owner: the back was too small to read): it grows from its own rectangle into a big
 flash-card details view (`openDetail()`): trailer, title, score, plot, credits, then one
 stash it / in your stash toggle at the bottom (the card stays open), with a
-plain heavy black × top right (no circle); Esc or a tap outside also closes it. Fronts are real TMDB posters once `TMDB_TOKEN` is set; until then, original
-placeholder posters in three print styles (torn-paper photo, 80s one-sheet, halftone
-screen print). Inspired by real posters, never copies of them. Exception: the three
-posters in `public/posters/` (Ferris Bueller's Day Off, The Truman Show, Fight Club) are
-the owner's own reference images, used as stand-ins until TMDB is on; delete them then.
+plain heavy black × top right (no circle); Esc or a tap outside also closes it. Fronts are the real TMDB posters (no drawn placeholder posters any more, owner's call
+2026-10-27; the stack waits up to 2.5s for the artwork). With no poster the card is plain,
+cream title on the title's ink colour. Fonts: only Arimo Bold and Inter Tight.
 
 There is no header bar (owner: it took too much space). Each poster card carries its own
 flash-card label under the picture, inside the black frame: title (two lines at most),
