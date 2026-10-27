@@ -174,7 +174,7 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
 /* ---------- how-to: side cards, caption, first-visit nudge ---------- */
 .deck { position: relative; width: var(--W); height: calc(var(--W) * var(--AR)); }
 /* stash it: right under the poster */
-.controls { position: absolute; left: 0; right: 0; top: 100%; margin-top: 30px; display: flex; justify-content: center; }
+.controls { position: absolute; left: 0; right: 0; top: 100%; margin-top: 42px; display: flex; justify-content: center; }
 /* back and next sit either side of the poster, centred in the space beside it */
 .arrow { position: absolute; z-index: 15; top: 44%; width: 32px; height: 56px; display: grid; place-items: center; color: var(--cream); border-radius: 999px; transition: opacity .2s ease, background .2s ease; }
 .arrow svg { width: 26px; height: 26px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 2px 4px rgba(0,0,0,.6)); }
@@ -187,13 +187,13 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
 .stashbtn { display: inline-block; padding: 0; filter: drop-shadow(0 3px 0 #a99a7a) drop-shadow(0 10px 16px rgba(0, 0, 0, .5)); transition: transform .12s ease, filter .12s ease; }
 .stashbtn:active { transform: translateY(2px); filter: drop-shadow(0 1px 0 #a99a7a) drop-shadow(0 5px 8px rgba(0, 0, 0, .45)); }
 .stashbtn .tk { --notch: radial-gradient(circle 9px at 0 50%, #0000 98%, #000) left / 51% 100% no-repeat, radial-gradient(circle 9px at 100% 50%, #0000 98%, #000) right / 51% 100% no-repeat;
-  position: relative; display: inline-flex; align-items: center; gap: 12px; padding: 12px 28px 13px 24px; white-space: nowrap; background: var(--fc-paper); color: var(--fc-line);
+  position: relative; display: inline-flex; align-items: center; gap: 12px; padding: 12px 30px 13px; white-space: nowrap; background: var(--fc-paper); color: var(--fc-line);
   font-family: var(--f-card); font-weight: 600; font-size: 17px; letter-spacing: -.01em; text-transform: lowercase; -webkit-mask: var(--notch); mask: var(--notch); transition: background .2s ease; }
 .stashbtn .tk::before { content: ""; position: absolute; inset: 3px; border: 1px solid rgba(27, 26, 23, .28); border-radius: 2px; pointer-events: none; }
 .stashbtn small { font-size: 9px; font-weight: 700; line-height: 1.05; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-red); padding-right: 12px; border-right: 1.5px dashed rgba(27, 26, 23, .55); }
 .stashbtn[aria-pressed="true"] .tk { background: var(--ink-yellow); }
 @media (hover: hover) { .stashbtn[aria-pressed="false"]:hover .lbl { color: var(--ink-red); } }
-.taphint { position: absolute; left: 0; right: 0; top: 100%; margin-top: 94px; text-align: center; font-size: 12px; font-weight: 500; color: var(--soft); white-space: nowrap; }
+.taphint { position: absolute; left: 0; right: 0; top: 100%; margin-top: 10px; text-align: center; font-size: 12px; font-weight: 500; color: var(--soft); white-space: nowrap; }
 .deck.empty .taphint { visibility: hidden; }
 .deck.empty .stashbtn { visibility: hidden; }
 .roll .tag { display: none !important; }
@@ -389,7 +389,7 @@ body.gridview .wall, body.gridview .top { display: none; }
     <button type="button" class="arrow side-l" id="side-prev" aria-label="Back"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5"/></svg></button>
     <button type="button" class="arrow side-r" id="side-next" aria-label="Next"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg></button>
     <div class="controls">
-      <button type="button" class="stashbtn" id="stashbtn" aria-pressed="false"><span class="tk"><small aria-hidden="true">admit<br>one</small><span class="lbl">add to stash</span></span></button>
+      <button type="button" class="stashbtn" id="stashbtn" aria-pressed="false"><span class="tk"><span class="lbl">add to stash</span></span></button>
     </div>
     <p class="taphint">tap the poster for the trailer and details</p>
   </div>

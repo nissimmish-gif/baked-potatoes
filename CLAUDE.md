@@ -66,8 +66,8 @@ Every poster sits in a cream mount with a black frame line, with one even gap (`
 2.8% of the card width) from the card edge to the line and from the line to the poster.
 How to use it is said quietly:
 bare cream ‹ and › either side of the poster, centred in the space beside it (‹ dim on
-the first poster); ~30px under the poster an **add to stash** ticket that reads as a button
-(cream, notched ends, red "admit one" stub, fine inner border, raised edge and shadow,
+the first poster); the line "tap the poster for the trailer and details" right under the poster, then an **add to stash** ticket that reads as a button
+(cream, notched ends, fine inner border, no stub, raised edge and shadow,
 presses in; no potato; yellow "in your stash" when on), then a small line
 "tap the poster for the trailer and details". On a first visit the top poster peels a little to the right to show the
 gesture, until someone peels or taps. Owner wants these low key, not flash cards. The
