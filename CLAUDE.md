@@ -81,7 +81,7 @@ category in Arimo Bold ~24px in cream with a small arrow ("now showing" was trie
 dropped) (owner: it got lost in the background; yellow was tried and dropped); tapping it opens a small flash-card menu right there. The bottom nav keeps a
 categories entry too. The stash is a panel that slides
 in from the right (full height, flash-card style, dimmed page behind; close with ×, a tap
-outside, a swipe right or Esc). It has two tabs, **to watch** and **watched**, and
+outside, a swipe right or Esc). On phones it fills the width with roomier rows (owner: it was tight). It has two tabs, **to watch** and **watched**, and
 category chips (all, films, tv and the categories, only those with something in them).
 To watch is in priority order: numbered, drag the ≡ to reorder (only on "all", so the order
 is never ambiguous); the stash array's order is the priority. The circle marks a title
@@ -92,7 +92,7 @@ real mini poster (`miniPoster()`, the image only, not a shrunk card), title, yea
 of the heading's row, level with it; owner's call 2026-10-27) switches to a
 scrolling grid of every poster left; tapping a tile opens the big details card right there
 (pass / stash from it update the grid). The category text moves above the tiles in grid
-view. The choice of view is remembered.
+view. The choice of view is remembered; with no saved choice, computers (1000px and wider with a mouse) start in the grid and phones and tablets in one (owner's call, 2026-10-27).
 
 The details view, the nav and the drawers are **vintage flash cards**:
 cream paper, a heavy black rounded frame and a lowercase grotesque label (Inter Tight). No

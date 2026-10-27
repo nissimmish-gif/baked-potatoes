@@ -319,6 +319,22 @@ body.gridview .wall, body.gridview .top { display: none; }
 .dbody .wo .rent { display: block; margin-top: 4px; font-size: 13px; color: #6d6758; }
 .dbody .wo .rent a { color: #6d6758; }
 
+/* the stash on phones: full width and more breathing room */
+@media (max-width: 599px) {
+  .panel { width: 100vw; padding: 6px; }
+  .panel .fc-frame { padding-left: 18px; padding-right: 18px; }
+  .ptabs { margin-top: 16px; }
+  .pchips { padding: 14px 0 8px; gap: 8px; }
+  .prow { grid-template-columns: 22px 72px minmax(0, 1fr) 40px; gap: 14px; padding: 18px 0; }
+  .panel:has([data-tab="done"][aria-selected="true"]) .prow { grid-template-columns: 72px minmax(0, 1fr) 40px; }
+  .prow .mini { width: 72px; height: 108px; }
+  .prow .nm { font-size: 19px; }
+  .prow .mt { margin-top: 5px; line-height: 1.35; }
+  .prow .sc { margin-top: 8px; }
+  .prow .pact { gap: 12px; }
+  .prow .wk { width: 34px; height: 34px; }
+}
+
 /* the poster that flies into the stash */
 .fly { position: fixed; z-index: 60; pointer-events: none; transform-origin: 50% 50%; }
 .fly .mini { width: 100%; height: 100%; transform: none; box-shadow: 0 12px 26px rgba(0,0,0,.5); }
@@ -644,7 +660,9 @@ body.gridview .wall, body.gridview .top { display: none; }
   var stack = document.getElementById('stack'), kindF = 'all', vibeF = 'all', pos = 0;
   function sizes() { var w = Math.min(innerWidth * (innerWidth < 600 ? .73 : .84), (innerHeight - 336) / 1.66, 400); document.documentElement.style.setProperty('--W', Math.round(w) + 'px'); }
   var view = 'one', grid = document.getElementById('grid'), tiles = document.getElementById('tiles');
-  try { view = localStorage.getItem('baked-potatoes-view') === 'grid' ? 'grid' : 'one'; } catch (e) {}
+  var savedView = null; try { savedView = localStorage.getItem('baked-potatoes-view'); } catch (e) {}
+  // a saved choice wins; otherwise computers (wide screens with a mouse) start in the grid
+  view = savedView === 'grid' || savedView === 'one' ? savedView : (innerWidth >= 1000 && matchMedia('(hover: hover)').matches ? 'grid' : 'one');
   function placeCat() {
     var cw = document.querySelector('.catwrap');
     if (view === 'grid') grid.insertBefore(cw, tiles); else deck.insertBefore(cw, deck.firstChild);
