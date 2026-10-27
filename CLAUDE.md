@@ -33,7 +33,7 @@ with stars to every edge. The sky has with a layer of stars that slowly twinkle.
 carries a very light, even paper texture, not specks (a generated tile, `GRAIN`, no blend
 modes; also painted into
 the peel snapshot). Swiping browses: a swipe either way rolls the poster off (in the direction of the swipe)
-and shows the next one. Going back is only the "← back" button (owner: no swipe back).
+and shows the next one. Going back is only the ‹ button (owner: no swipe back).
 Nothing is removed from the deck. Drag a poster to peel it: it rolls up from the top corner opposite the swipe (top-left
 when you swipe right, top-right when you swipe left) like paper coming off a wall, and
 follows your finger the whole way. `peel()` draws it flat on one canvas each frame: the
@@ -58,9 +58,10 @@ year · runtime · genre, and the potato score. The card is 1:1.66 so the poster
 Every poster sits in a cream mount with a black frame line, with one even gap (`--gap`,
 2.8% of the card width) from the card edge to the line and from the line to the poster.
 How to use it is said quietly:
-a small, quiet **stash it** chip right under the poster (frosted glass like the view
-toggle, potato icon, 14px; soft yellow "in your stash" when on; owner: not loud), then one line of small text ("← back · tap for more · next →", each
-a button), and on a first visit the top poster peels a little to the right to show the
+one row ~22px under the poster (owner picked "option A", 2026-10-27): a round frosted ‹
+(back; dim on the first poster), a quiet **stash it** chip with the potato (soft yellow
+"in your stash" when on; owner: not loud) and a round ›. No "tap for more" line; on a
+first visit the top poster peels a little to the right to show the
 gesture, until someone peels or taps. Owner wants these low key, not flash cards. The
 filters are called **categories** (not vibes) on the page. The categories (owner's list,
 2026-10-26): **highest rated** (default; score 5.0 and up), **new** (2015 on, newest

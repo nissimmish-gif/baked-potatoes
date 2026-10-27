@@ -79,7 +79,7 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
   font-family: "Arimo", Arial, sans-serif; font-weight: 700; font-size: var(--wmfs); line-height: 1; display: flex; align-items: center; gap: .22em; letter-spacing: -.02em; text-transform: lowercase; color: var(--cream); text-align: left; }
 
 /* ---------- the stack ---------- */
-.wall { position: fixed; inset: 0; z-index: 3; display: grid; place-items: center; padding: calc(132px + env(safe-area-inset-top, 0px)) 0 calc(178px + env(safe-area-inset-bottom, 0px)); }
+.wall { position: fixed; inset: 0; z-index: 3; display: grid; place-items: center; padding: calc(132px + env(safe-area-inset-top, 0px)) 0 calc(150px + env(safe-area-inset-bottom, 0px)); }
 .stack { position: relative; width: var(--W); height: calc(var(--W) * var(--AR)); }
 .poster { position: absolute; inset: 0; perspective: 1400px; touch-action: none; user-select: none; -webkit-user-select: none; }
 .poster.behind { pointer-events: none; }
@@ -172,20 +172,17 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
 
 /* ---------- how-to: side cards, caption, first-visit nudge ---------- */
 .deck { position: relative; width: var(--W); height: calc(var(--W) * var(--AR)); }
-.howto { position: absolute; left: -4px; right: -4px; top: 100%; margin-top: 52px; display: flex; justify-content: space-between; align-items: baseline; }
-.howto button { font-family: var(--f-card); font-weight: 500; font-size: 13px; text-transform: lowercase; color: var(--soft); padding: 6px 4px; white-space: nowrap; transition: color .2s ease, transform .2s ease; }
-.howto .pass { transform: translateX(calc(var(--pp, 0) * -6px)); }
-.howto .keep { transform: translateX(calc(var(--pk, 0) * 6px)); }
-.deck.lean-p .pass, .deck.lean-k .keep { color: var(--cream); }
-.howto button:disabled { opacity: .35; cursor: default; }
 /* stash it: right under the poster */
-.stashbtn { position: absolute; left: 50%; top: 100%; margin-top: 12px; transform: translateX(-50%); display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px 6px 9px; white-space: nowrap; border-radius: 999px;
-  background: rgba(255, 255, 255, .08); border: 1px solid rgba(255, 255, 255, .2); color: var(--cream); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
-  font-family: var(--f-card); font-weight: 500; font-size: 14px; letter-spacing: -.005em; text-transform: lowercase; transition: background .2s ease, color .2s ease, border-color .2s ease; }
-.stashbtn img { height: 16px; width: auto; transform: rotate(10deg); }
+.controls { position: absolute; left: 0; right: 0; top: 100%; margin-top: 24px; display: flex; justify-content: space-between; align-items: center; }
+.controls .arrow, .stashbtn { background: rgba(255, 255, 255, .09); border: 1px solid rgba(255, 255, 255, .22); color: var(--cream); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); transition: background .2s ease, color .2s ease, border-color .2s ease, opacity .2s ease; }
+.controls .arrow { width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center; }
+.controls .arrow svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.controls .arrow:disabled { opacity: .3; cursor: default; }
+.stashbtn { display: inline-flex; align-items: center; gap: 7px; padding: 9px 17px 10px 13px; white-space: nowrap; border-radius: 999px; font-family: var(--f-card); font-weight: 500; font-size: 15px; letter-spacing: -.005em; text-transform: lowercase; }
+.stashbtn img { height: 17px; width: auto; transform: rotate(10deg); }
 .stashbtn[aria-pressed="true"] { background: rgba(240, 198, 74, .14); border-color: rgba(240, 198, 74, .5); color: var(--ink-yellow); }
-@media (hover: hover) { .stashbtn:hover { background: rgba(255, 255, 255, .16); } }
-.deck.empty .stashbtn { display: none; }
+@media (hover: hover) { .stashbtn:hover, .controls .arrow:not(:disabled):hover { background: rgba(255, 255, 255, .16); } }
+.deck.empty .stashbtn { visibility: hidden; }
 .roll .tag { display: none !important; }
 .tag { top: 7%; padding: 3px 9px 4px; font-family: var(--f-card); font-weight: 600; font-size: 15px; letter-spacing: -.01em; text-transform: lowercase; background: var(--fc-paper); color: var(--fc-line); border-radius: 2px; box-shadow: 0 6px 16px rgba(0,0,0,.35); }
 .tag.yes { color: var(--ink-red); left: 9%; }
@@ -205,12 +202,11 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
 
 /* phones: smaller pieces, more sky between them */
 @media (max-width: 599px) {
-  .wall { padding-top: calc(132px + env(safe-area-inset-top, 0px)); padding-bottom: calc(178px + env(safe-area-inset-bottom, 0px)); }
+  .wall { padding-top: calc(132px + env(safe-area-inset-top, 0px)); padding-bottom: calc(150px + env(safe-area-inset-bottom, 0px)); }
   .pill { bottom: calc(22px + env(safe-area-inset-bottom, 0px)); }
   .pill .fc-frame { gap: 15px; padding: 5px 12px 6px; }
   .pill button { font-size: 15px; }
   .pill .fc-frame { gap: 13px; }
-  .howto button { font-size: 12.5px; }
 
 }
 
@@ -339,11 +335,10 @@ body.gridview .wall, body.gridview .top { display: none; }
       <div class="catmenu fc-card" id="catmenu" role="menu" hidden><div class="fc-frame" id="catmenu-list"></div></div>
     </div>
     <div class="stack" id="stack" aria-label="Poster stack. Drag right to stash, left to pass, tap to flip. Arrow keys work too." tabindex="0"></div>
-    <button type="button" class="stashbtn" id="stashbtn" aria-pressed="false"><img src="img/potato.png" alt="" width="58" height="96"><span>stash it</span></button>
-    <div class="howto">
-      <button type="button" class="side pass" id="side-prev">← back</button>
-      <button type="button" class="caption" id="caption"><span id="cap-text">tap for more</span></button>
-      <button type="button" class="side keep" id="side-next">next →</button>
+    <div class="controls">
+      <button type="button" class="arrow" id="side-prev" aria-label="Back"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5"/></svg></button>
+      <button type="button" class="stashbtn" id="stashbtn" aria-pressed="false"><img src="img/potato.png" alt="" width="58" height="96"><span>stash it</span></button>
+      <button type="button" class="arrow" id="side-next" aria-label="Next"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg></button>
     </div>
   </div>
 </main>
@@ -569,7 +564,7 @@ body.gridview .wall, body.gridview .top { display: none; }
 
   // ---------- stack ----------
   var stack = document.getElementById('stack'), kindF = 'all', vibeF = 'all', pos = 0;
-  function sizes() { var w = Math.min(innerWidth * (innerWidth < 600 ? .7 : .84), (innerHeight - 326) / 1.66, 380); document.documentElement.style.setProperty('--W', Math.round(w) + 'px'); }
+  function sizes() { var w = Math.min(innerWidth * (innerWidth < 600 ? .78 : .84), (innerHeight - 282) / 1.66, 400); document.documentElement.style.setProperty('--W', Math.round(w) + 'px'); }
   var view = 'one', grid = document.getElementById('grid'), tiles = document.getElementById('tiles');
   try { view = localStorage.getItem('baked-potatoes-view') === 'grid' ? 'grid' : 'one'; } catch (e) {}
   function placeCat() {
@@ -617,7 +612,7 @@ body.gridview .wall, body.gridview .top { display: none; }
     pos = Math.max(0, Math.min(pos, q.length));
     showTop(q[pos]);
     if (view === 'grid') drawGrid(q);
-    deck.classList.toggle('empty', pos >= q.length); pull(0, 0); capText(false);
+    deck.classList.toggle('empty', pos >= q.length); pull(0, 0);
     document.getElementById('side-prev').disabled = pos === 0;
     document.getElementById('side-next').disabled = pos >= q.length;
     syncStashBtn();
@@ -888,15 +883,13 @@ body.gridview .wall, body.gridview .top { display: none; }
   }
 
   // ---------- how-to: side cards, caption, and a nudge until the first peel or flip ----------
-  var deck = document.getElementById('deck'), cap = document.getElementById('cap-text'), busy = false, HKEY = 'baked-potatoes-learned', knows = false;
+  var deck = document.getElementById('deck'), busy = false, HKEY = 'baked-potatoes-learned', knows = false;
   try { knows = localStorage.getItem(HKEY) === '1'; } catch (e) {}
   function learned() { busy = true; if (!knows) { knows = true; try { localStorage.setItem(HKEY, '1'); } catch (e) {} } }
   function pull(k, p) { deck.style.setProperty('--pk', k); deck.style.setProperty('--pp', p); deck.classList.toggle('lean-k', k > .4); deck.classList.toggle('lean-p', p > .4); }
-  function capText() { cap.textContent = 'tap for more'; }
   document.getElementById('side-prev').addEventListener('click', function () { go(-1); });
   document.getElementById('side-next').addEventListener('click', function () { go(1); });
   document.getElementById('stashbtn').addEventListener('click', function () { var t = queue()[pos]; if (t) toggleStash(t); });
-  document.getElementById('caption').addEventListener('click', function () { var el = topEl(); if (el) openDetail(el); });
   var demoing = null;
   function stopNudge() { if (demoing) { var d = demoing; demoing = null; d.remove(); var el = topEl(); if (el) el.style.opacity = ''; } }
   function nudge() {
