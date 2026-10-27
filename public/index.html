@@ -79,7 +79,7 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
   font-family: "Arimo", Arial, sans-serif; font-weight: 700; font-size: var(--wmfs); line-height: 1; display: flex; align-items: center; gap: .22em; letter-spacing: -.02em; text-transform: lowercase; color: var(--cream); text-align: left; }
 
 /* ---------- the stack ---------- */
-.wall { position: fixed; inset: 0; z-index: 3; display: grid; place-items: center; padding: calc(132px + env(safe-area-inset-top, 0px)) 0 calc(186px + env(safe-area-inset-bottom, 0px)); }
+.wall { position: fixed; inset: 0; z-index: 3; display: grid; place-items: center; padding: calc(132px + env(safe-area-inset-top, 0px)) 0 calc(188px + env(safe-area-inset-bottom, 0px)); }
 .stack { position: relative; width: var(--W); height: calc(var(--W) * var(--AR)); }
 .poster { position: absolute; inset: 0; perspective: 1400px; touch-action: none; user-select: none; -webkit-user-select: none; }
 .poster.behind { pointer-events: none; }
@@ -173,19 +173,26 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
 /* ---------- how-to: side cards, caption, first-visit nudge ---------- */
 .deck { position: relative; width: var(--W); height: calc(var(--W) * var(--AR)); }
 /* stash it: right under the poster */
-.controls { position: absolute; left: 0; right: 0; top: 100%; margin-top: 34px; display: flex; justify-content: space-between; align-items: center; }
-.controls .arrow { width: 44px; height: 44px; display: grid; place-items: center; color: var(--cream); transition: opacity .2s ease; }
-.controls .arrow svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
-.controls .arrow:disabled { opacity: .25; cursor: default; }
-/* add to stash: a cream cinema ticket with notched ends, a stub and a fine inner border */
-.stashbtn { --notch: radial-gradient(circle 8px at 0 50%, #0000 98%, #000) left / 51% 100% no-repeat, radial-gradient(circle 8px at 100% 50%, #0000 98%, #000) right / 51% 100% no-repeat;
-  position: relative; display: inline-flex; align-items: center; gap: 10px; padding: 9px 22px 10px 20px; white-space: nowrap; background: var(--fc-paper); color: var(--fc-line);
-  font-family: var(--f-card); font-weight: 600; font-size: 16px; letter-spacing: -.01em; text-transform: lowercase; -webkit-mask: var(--notch); mask: var(--notch); transition: background .2s ease; }
-.stashbtn::before { content: ""; position: absolute; inset: 3px; border: 1px solid rgba(27, 26, 23, .28); border-radius: 2px; pointer-events: none; }
-.stashbtn small { font-size: 9px; font-weight: 700; line-height: 1.05; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-red); padding-right: 10px; border-right: 1.5px dashed rgba(27, 26, 23, .55); }
-.stashbtn[aria-pressed="true"] { background: var(--ink-yellow); }
-@media (hover: hover) { .stashbtn[aria-pressed="false"]:hover span { color: var(--ink-red); } }
-.taphint { position: absolute; left: 0; right: 0; top: 100%; margin-top: 92px; text-align: center; font-size: 12px; font-weight: 500; color: var(--soft); white-space: nowrap; }
+.controls { position: absolute; left: 0; right: 0; top: 100%; margin-top: 30px; display: flex; justify-content: center; }
+/* back and next sit either side of the poster, centred in the space beside it */
+.arrow { position: absolute; z-index: 15; top: 44%; width: 32px; height: 56px; display: grid; place-items: center; color: var(--cream); border-radius: 999px; transition: opacity .2s ease, background .2s ease; }
+.arrow svg { width: 26px; height: 26px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 2px 4px rgba(0,0,0,.6)); }
+.arrow.side-l { right: 100%; margin-right: clamp(2px, calc(((100vw - var(--W)) / 2 - 32px) / 2), 36px); }
+.arrow.side-r { left: 100%; margin-left: clamp(12px, calc(((100vw - var(--W)) / 2 - 32px) / 2 + 6px), 48px); }
+.arrow:disabled { opacity: .2; cursor: default; }
+@media (hover: hover) { .arrow:not(:disabled):hover { background: rgba(255, 255, 255, .08); } }
+.deck.empty .arrow.side-r { visibility: hidden; }
+/* add to stash: a cream cinema ticket that reads as a button: raised edge, shadow, presses in */
+.stashbtn { display: inline-block; padding: 0; filter: drop-shadow(0 3px 0 #a99a7a) drop-shadow(0 10px 16px rgba(0, 0, 0, .5)); transition: transform .12s ease, filter .12s ease; }
+.stashbtn:active { transform: translateY(2px); filter: drop-shadow(0 1px 0 #a99a7a) drop-shadow(0 5px 8px rgba(0, 0, 0, .45)); }
+.stashbtn .tk { --notch: radial-gradient(circle 9px at 0 50%, #0000 98%, #000) left / 51% 100% no-repeat, radial-gradient(circle 9px at 100% 50%, #0000 98%, #000) right / 51% 100% no-repeat;
+  position: relative; display: inline-flex; align-items: center; gap: 12px; padding: 12px 28px 13px 24px; white-space: nowrap; background: var(--fc-paper); color: var(--fc-line);
+  font-family: var(--f-card); font-weight: 600; font-size: 17px; letter-spacing: -.01em; text-transform: lowercase; -webkit-mask: var(--notch); mask: var(--notch); transition: background .2s ease; }
+.stashbtn .tk::before { content: ""; position: absolute; inset: 3px; border: 1px solid rgba(27, 26, 23, .28); border-radius: 2px; pointer-events: none; }
+.stashbtn small { font-size: 9px; font-weight: 700; line-height: 1.05; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-red); padding-right: 12px; border-right: 1.5px dashed rgba(27, 26, 23, .55); }
+.stashbtn[aria-pressed="true"] .tk { background: var(--ink-yellow); }
+@media (hover: hover) { .stashbtn[aria-pressed="false"]:hover .lbl { color: var(--ink-red); } }
+.taphint { position: absolute; left: 0; right: 0; top: 100%; margin-top: 94px; text-align: center; font-size: 12px; font-weight: 500; color: var(--soft); white-space: nowrap; }
 .deck.empty .taphint { visibility: hidden; }
 .deck.empty .stashbtn { visibility: hidden; }
 .roll .tag { display: none !important; }
@@ -207,7 +214,7 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
 
 /* phones: smaller pieces, more sky between them */
 @media (max-width: 599px) {
-  .wall { padding-top: calc(132px + env(safe-area-inset-top, 0px)); padding-bottom: calc(186px + env(safe-area-inset-bottom, 0px)); }
+  .wall { padding-top: calc(132px + env(safe-area-inset-top, 0px)); padding-bottom: calc(188px + env(safe-area-inset-bottom, 0px)); }
   .pill { bottom: calc(22px + env(safe-area-inset-bottom, 0px)); }
   .pill .fc-frame { gap: 15px; padding: 5px 12px 6px; }
   .pill button { font-size: 15px; }
@@ -378,10 +385,10 @@ body.gridview .wall, body.gridview .top { display: none; }
       <div class="catmenu fc-card" id="catmenu" role="menu" hidden><div class="fc-frame" id="catmenu-list"></div></div>
     </div>
     <div class="stack" id="stack" aria-label="Poster stack. Drag right to stash, left to pass, tap to flip. Arrow keys work too." tabindex="0"></div>
+    <button type="button" class="arrow side-l" id="side-prev" aria-label="Back"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5"/></svg></button>
+    <button type="button" class="arrow side-r" id="side-next" aria-label="Next"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg></button>
     <div class="controls">
-      <button type="button" class="arrow" id="side-prev" aria-label="Back"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5"/></svg></button>
-      <button type="button" class="stashbtn" id="stashbtn" aria-pressed="false"><small aria-hidden="true">admit<br>one</small><span>add to stash</span></button>
-      <button type="button" class="arrow" id="side-next" aria-label="Next"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg></button>
+      <button type="button" class="stashbtn" id="stashbtn" aria-pressed="false"><span class="tk"><small aria-hidden="true">admit<br>one</small><span class="lbl">add to stash</span></span></button>
     </div>
     <p class="taphint">tap the poster for the trailer and details</p>
   </div>
@@ -719,7 +726,7 @@ body.gridview .wall, body.gridview .top { display: none; }
 
   // ---------- stack ----------
   var stack = document.getElementById('stack'), kindF = 'all', vibeF = 'all', pos = 0;
-  function sizes() { var w = Math.min(innerWidth * (innerWidth < 600 ? .78 : .84), (innerHeight - 318) / 1.66, 400); document.documentElement.style.setProperty('--W', Math.round(w) + 'px'); }
+  function sizes() { var w = Math.min(innerWidth * (innerWidth < 600 ? .73 : .84), (innerHeight - 318) / 1.66, 400); document.documentElement.style.setProperty('--W', Math.round(w) + 'px'); }
   var view = 'one', grid = document.getElementById('grid'), tiles = document.getElementById('tiles');
   try { view = localStorage.getItem('baked-potatoes-view') === 'grid' ? 'grid' : 'one'; } catch (e) {}
   function placeCat() {
@@ -862,7 +869,7 @@ body.gridview .wall, body.gridview .top { display: none; }
   }
   function syncStashBtn() {
     var q = queue(), t = q[pos], b = document.getElementById('stashbtn'), on = !!t && isStashed(t) && !isWatched(t);
-    b.setAttribute('aria-pressed', String(on)); b.querySelector('span').textContent = on ? 'in your stash' : 'add to stash';
+    b.setAttribute('aria-pressed', String(on)); b.querySelector('.lbl').textContent = on ? 'in your stash' : 'add to stash';
     b.setAttribute('aria-label', t ? (on ? 'Remove ' + t.title + ' from your stash' : 'Stash ' + t.title) : 'Stash it');
   }
 

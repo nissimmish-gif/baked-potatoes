@@ -60,9 +60,10 @@ year · runtime · genre, and the potato score. The card is 1:1.66 so the poster
 Every poster sits in a cream mount with a black frame line, with one even gap (`--gap`,
 2.8% of the card width) from the card edge to the line and from the line to the poster.
 How to use it is said quietly:
-one row ~32px under the poster (owner's pick, 2026-10-27): a bare cream ‹ (back; dim on
-the first poster), an **add to stash** ticket (cream, notched ends, red "admit one" stub,
-fine inner border, no potato; yellow "in your stash" when on) and a bare ›, then a small line
+bare cream ‹ and › either side of the poster, centred in the space beside it (‹ dim on
+the first poster); ~30px under the poster an **add to stash** ticket that reads as a button
+(cream, notched ends, red "admit one" stub, fine inner border, raised edge and shadow,
+presses in; no potato; yellow "in your stash" when on), then a small line
 "tap the poster for the trailer and details". On a first visit the top poster peels a little to the right to show the
 gesture, until someone peels or taps. Owner wants these low key, not flash cards. The
 filters are called **categories** (not vibes) on the page. The categories (owner's list,
