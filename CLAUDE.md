@@ -90,6 +90,13 @@ under it in small soft cream, lined up with the word (owner: make the purpose cl
 Rejected so far: space gradients, texture everywhere, typewriter/handwriting fonts,
 stickers/VHS, the 70s eyeball broadcast, the A24 disc library.
 
+## Catalogue
+
+89 titles in `T` (public/index.html). Credits, cast, runtimes and genres for new titles come
+from TMDB through `/api/info` (don't write them from memory). Blurbs and Potato Scores are
+editorial: the score is how well it plays baked, informed by TMDB's rating, so a great but
+harrowing film (Hereditary) can score low and drop out of highest rated.
+
 ## Copy
 
 Plain, deadpan, kind. Specific beats clever. Errors say what happened and what to do.
