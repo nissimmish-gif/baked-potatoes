@@ -74,9 +74,14 @@ category in Arimo Bold ~24px in cream with a small arrow ("now showing" was trie
 dropped) (owner: it got lost in the background; yellow was tried and dropped); tapping it opens a small flash-card menu right there. The bottom nav keeps a
 categories entry too. The stash is a panel that slides
 in from the right (full height, flash-card style, dimmed page behind; close with ×, a tap
-outside, a swipe right or Esc). Rows: the real mini poster (`miniPoster()`, the image
-only, not a shrunk card), title, year · runtime · genre, score, remove. Tapping a row puts
-that poster on top of the stack. A small one/grid toggle (frosted glass, top-right corner level with the wordmark, not in
+outside, a swipe right or Esc). It has two tabs, **to watch** and **watched**, and
+category chips (all, films, tv and the categories, only those with something in them).
+To watch is in priority order: numbered, drag the ≡ to reorder (only on "all", so the order
+is never ambiguous); the stash array's order is the priority. The circle marks a title
+watched (`watched`, its own localStorage key) and moves it to the watched tab; posters show
+"✓ watched" on their label, and the details card has stash it and mark watched. Rows: the
+real mini poster (`miniPoster()`, the image only, not a shrunk card), title, year · runtime
+· genre, score, remove. Tapping a row puts that poster on top of the stack. A small one/grid toggle (frosted glass, top-right corner level with the wordmark, not in
 the nav and not taking its own row) switches to a
 scrolling grid of every poster left; tapping a tile opens the big details card right there
 (pass / stash from it update the grid). The category text moves above the tiles in grid

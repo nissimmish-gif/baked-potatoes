@@ -263,7 +263,17 @@ body.gridview .wall, body.gridview .top { display: none; }
 .panel h2 span { font-size: .55em; color: var(--ink-red); vertical-align: .35em; }
 .panel .x { width: 36px; height: 36px; font-size: 30px; line-height: 1; color: var(--fc-line); }
 .plist { flex: 1; overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; margin: 0 -4px; padding: 0 4px; }
-.prow { display: grid; grid-template-columns: 64px minmax(0, 1fr) auto; gap: 14px; align-items: center; padding: 12px 0; border-bottom: 2px solid var(--fc-line); }
+.ptabs { display: flex; gap: 0; margin: 12px 0 0; border: 2px solid var(--fc-line); border-radius: 3px; }
+.ptabs button { flex: 1; padding: 8px 0 9px; font-family: var(--f-card); font-weight: 600; font-size: 15px; text-transform: lowercase; color: var(--fc-line); }
+.ptabs button + button { border-left: 2px solid var(--fc-line); }
+.ptabs button[aria-selected="true"] { background: var(--fc-line); color: var(--fc-paper); }
+.ptabs span { color: var(--ink-red); }
+.ptabs button[aria-selected="true"] span { color: var(--ink-yellow); }
+.pchips { display: flex; gap: 6px; overflow-x: auto; padding: 10px 0 4px; scrollbar-width: none; flex-shrink: 0; }
+.pchips::-webkit-scrollbar { display: none; }
+.pchips button { flex-shrink: 0; padding: 5px 11px 6px; border: 1.5px solid var(--fc-line); border-radius: 999px; font-size: 13px; font-weight: 500; text-transform: lowercase; white-space: nowrap; color: var(--fc-line); }
+.pchips button[aria-pressed="true"] { background: var(--fc-line); color: var(--fc-paper); }
+.prow { position: relative; display: grid; grid-template-columns: auto 64px minmax(0, 1fr) auto; gap: 12px; background: var(--fc-paper); align-items: center; padding: 12px 0; border-bottom: 2px solid var(--fc-line); }
 .prow .open { display: contents; text-align: left; color: inherit; }
 .mini { position: relative; display: block; width: 64px; height: 96px; overflow: hidden; background: var(--a, #333); border: 2px solid var(--fc-line); border-radius: 2px; box-shadow: 0 6px 14px -6px rgba(0,0,0,.5); transform: rotate(-1.5deg); }
 .mini img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
@@ -275,7 +285,16 @@ body.gridview .wall, body.gridview .top { display: none; }
 .prow .sc { margin-top: 6px; font-family: var(--f-card); font-weight: 600; font-size: 15px; color: var(--ink-red); }
 .prow .sc small { font-size: .7em; font-weight: 500; color: #6d6758; }
 .prow .sc .spud { filter: none; }
-.prow .rm { align-self: start; margin-top: 2px; padding: 4px 0 4px 6px; font-size: 12px; text-transform: lowercase; color: #6d6758; }
+.prow .pn { font-family: "Arimo", Arial, sans-serif; font-weight: 700; font-size: 18px; color: var(--ink-red); min-width: 14px; text-align: center; }
+.prow .pact { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.prow .wk { width: 30px; height: 30px; border-radius: 50%; border: 2px solid var(--fc-line); font-size: 15px; font-weight: 700; color: transparent; }
+.prow .wk[aria-pressed="true"] { background: #2f6b3a; border-color: #2f6b3a; color: var(--fc-paper); }
+@media (hover: hover) { .prow .wk[aria-pressed="false"]:hover { color: #6d6758; } }
+.prow .grip { font-size: 22px; line-height: 1; color: #6d6758; cursor: grab; touch-action: none; padding: 2px 6px; user-select: none; }
+.prow.lifting { z-index: 2; box-shadow: 0 10px 24px rgba(0,0,0,.25); }
+.prow.is-watched .mini { opacity: .55; }
+.prow .rm { padding: 2px 0; font-size: 11px; text-transform: lowercase; color: #6d6758; }
+.panel:has([data-tab="done"][aria-selected="true"]) .prow { grid-template-columns: 64px minmax(0, 1fr) auto; }
 @media (hover: hover) { .prow .rm:hover, .prow .open:hover .nm { color: var(--ink-red); } }
 .panel .empty { color: #6d6758; padding: 18px 0; line-height: 1.4; }
 @media (prefers-reduced-motion: reduce) { .panel, .scrim { transition: none; } }
@@ -291,7 +310,10 @@ body.gridview .wall, body.gridview .top { display: none; }
 .dcard .x { position: absolute; z-index: 3; top: 8px; right: 8px; display: grid; place-items: center; width: 40px; height: 40px; color: var(--fc-line); }
 .dcard .x svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 3; stroke-linecap: square; }
 @media (hover: hover) { .dcard .x:hover { color: var(--ink-red); } }
-.dacts { display: flex; margin-top: 8px; padding-top: 4px; }
+.dacts { display: flex; gap: 10px; margin-top: 8px; padding-top: 4px; }
+.dacts .ck { font-size: 18px; font-weight: 700; }
+.dacts button[data-d="watched"][aria-pressed="true"] { background: var(--fc-line); color: var(--fc-paper); }
+.plabel .wd { font-weight: 600; color: #2f6b3a; }
 .dacts button { flex: 1; padding: 10px 0 11px; font-family: var(--f-card); font-weight: 500; font-size: 20px; text-transform: lowercase; letter-spacing: -.01em; border: 3px solid var(--fc-line); border-radius: 3px; color: var(--fc-line); }
 .dacts button { display: inline-flex; justify-content: center; align-items: center; gap: 8px; }
 .dacts img { height: 24px; width: auto; transform: rotate(10deg); }
@@ -357,8 +379,10 @@ body.gridview .wall, body.gridview .top { display: none; }
 <div class="scrim" id="scrim" hidden></div>
 <aside class="panel fc-card" id="stash-panel" aria-label="Your stash" hidden tabindex="-1"><div class="fc-frame">
   <header class="ph"><h2 class="fc-label">your stash <span id="stash-count"></span></h2><button type="button" class="x" id="stash-close" aria-label="Close your stash">×</button></header>
+  <div class="ptabs" role="tablist"><button type="button" role="tab" data-tab="todo" aria-selected="true">to watch <span id="n-todo"></span></button><button type="button" role="tab" data-tab="done" aria-selected="false">watched <span id="n-done"></span></button></div>
+  <div class="pchips" id="stash-chips"></div>
   <div class="plist" id="stash-list"></div>
-  <p class="empty" id="stash-empty">Nothing stashed yet. Peel a poster to the right and it lands here.</p>
+  <p class="empty" id="stash-empty"></p>
 </div></aside>
 
 <script>
@@ -586,7 +610,11 @@ body.gridview .wall, body.gridview .top { display: none; }
 
   var KEY = 'baked-potatoes-stash', stash = [];
   try { stash = JSON.parse(localStorage.getItem(KEY) || '[]').filter(function (k) { return T.some(function (t) { return t.key === k; }); }); } catch (e) { stash = []; }
-  function save() { try { localStorage.setItem(KEY, JSON.stringify(stash)); } catch (e) {} }
+  var WKEY = 'baked-potatoes-watched', watched = [];
+  try { watched = JSON.parse(localStorage.getItem(WKEY) || '[]').filter(function (k) { return T.some(function (t) { return t.key === k; }); }); } catch (e) { watched = []; }
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(stash)); localStorage.setItem(WKEY, JSON.stringify(watched)); } catch (e) {} }
+  function isWatched(t) { return watched.indexOf(t.key) > -1; }
+  function toggleWatched(t) { learned(); if (isWatched(t)) watched = watched.filter(function (k) { return k !== t.key; }); else watched.push(t.key); save(); updateCount(); }
   var ART = {}, IMG = 'https://image.tmdb.org/t/p/';
 
   // ---------- poster art ----------
@@ -722,7 +750,7 @@ body.gridview .wall, body.gridview .top { display: none; }
   }
   // the flash-card label under the picture: title, the basics, and the score
   function plabel(t) {
-    return '<div class="plabel"><p class="pt"' + (t.title.length > 26 ? ' style="font-size:calc(var(--W) * .05)"' : '') + '>' + esc(t.title) + '</p><p class="pm">' + t.year + ' · ' + esc(t.run) + ' · ' + esc(t.genre) + '</p><p class="pr" aria-label="Score ' + rating(t) + ' out of 10">' + SPUD + rating(t) + '<small>/10</small></p></div>';
+    return '<div class="plabel"><p class="pt"' + (t.title.length > 26 ? ' style="font-size:calc(var(--W) * .05)"' : '') + '>' + esc(t.title) + '</p><p class="pm">' + (isWatched(t) ? '<b class="wd">✓ watched</b> · ' : '') + t.year + ' · ' + esc(t.run) + ' · ' + esc(t.genre) + '</p><p class="pr" aria-label="Score ' + rating(t) + ' out of 10">' + SPUD + rating(t) + '<small>/10</small></p></div>';
   }
   function showTop(t) { document.title = t ? t.title + ' · baked potatoes' : 'baked potatoes'; }
   function topEl() { return stack.querySelector('.poster:not(.behind)'); }
@@ -781,13 +809,15 @@ body.gridview .wall, body.gridview .top { display: none; }
     pos += step; render();
   }
   function isStashed(t) { return stash.indexOf(t.key) > -1; }
+  function inTodo(t) { return isStashed(t) && !isWatched(t); }
   function toggleStash(t) {
     learned();
-    if (isStashed(t)) stash = stash.filter(function (k) { return k !== t.key; }); else stash.push(t.key);
+    if (isStashed(t) && !isWatched(t)) stash = stash.filter(function (k) { return k !== t.key; });
+    else { if (!isStashed(t)) stash.push(t.key); watched = watched.filter(function (k) { return k !== t.key; }); }
     save(); updateCount(); syncStashBtn();
   }
   function syncStashBtn() {
-    var q = queue(), t = q[pos], b = document.getElementById('stashbtn'), on = !!t && isStashed(t);
+    var q = queue(), t = q[pos], b = document.getElementById('stashbtn'), on = !!t && isStashed(t) && !isWatched(t);
     b.setAttribute('aria-pressed', String(on)); b.querySelector('span').textContent = on ? 'in your stash' : 'stash it';
     b.setAttribute('aria-label', t ? (on ? 'Remove ' + t.title + ' from your stash' : 'Stash ' + t.title) : 'Stash it');
   }
@@ -925,7 +955,7 @@ body.gridview .wall, body.gridview .top { display: none; }
       '<p class="meta">' + t.year + ' · ' + esc(t.run) + ' · ' + esc(t.genre) + ' · ' + tier(t.score).toLowerCase() + '</p>' +
       '<p class="plot">' + esc(t.plot) + '</p>' +
       '<dl><dt>' + (t.kind === 'tv' ? 'made by' : 'directed by') + '</dt><dd>' + esc(t.dir.join(', ')) + '</dd><dt>starring</dt><dd>' + esc(t.cast.join(', ')) + '</dd><dt>category</dt><dd>' + esc((catsFor(t).join(', ') || 'highest rated').toLowerCase()) + '</dd><dt>watch on</dt><dd>coming soon</dd></dl>' +
-      '<div class="dacts"><button type="button" data-d="stash" aria-pressed="' + isStashed(t) + '"><img src="img/potato.png" alt="" width="58" height="96"><span>' + (isStashed(t) ? 'in your stash' : 'stash it') + '</span></button></div>';
+      '<div class="dacts"><button type="button" data-d="stash" aria-pressed="' + isStashed(t) + '"><img src="img/potato.png" alt="" width="58" height="96"><span>' + (isStashed(t) ? 'in your stash' : 'stash it') + '</span></button><button type="button" data-d="watched" aria-pressed="' + isWatched(t) + '"><span class="ck">✓</span><span>' + (isWatched(t) ? 'watched' : 'mark watched') + '</span></button></div>';
     detail.hidden = false; dbody.scrollTop = 0;
     // grow from the poster's own rectangle into the big card
     var a = el.getBoundingClientRect(), b = dcard.getBoundingClientRect();
@@ -949,13 +979,19 @@ body.gridview .wall, body.gridview .top { display: none; }
     setTimeout(function () { detail.hidden = true; dcard.style.transform = ''; el.style.opacity = ''; }, 340);
   }
   document.getElementById('dclose').addEventListener('click', closeDetail);
-  // stash from the big card: it stays open and the button flips
+  // stash or mark watched from the big card: it stays open and the button flips
   dbody.addEventListener('click', function (e) {
     var b = e.target.closest('[data-d]'); if (!b || !openFrom) return;
-    var t = openFrom._t; toggleStash(t);
-    b.setAttribute('aria-pressed', String(isStashed(t))); b.querySelector('span').textContent = isStashed(t) ? 'in your stash' : 'stash it';
-    if (view === 'grid') drawGrid(queue());
+    var t = openFrom._t;
+    if (b.dataset.d === 'watched') { toggleWatched(t); b.setAttribute('aria-pressed', String(isWatched(t))); b.lastChild.textContent = isWatched(t) ? 'watched' : 'mark watched'; }
+    else { toggleStash(t); b.setAttribute('aria-pressed', String(isStashed(t))); b.lastChild.textContent = isStashed(t) ? 'in your stash' : 'stash it'; }
+    refreshLabels(); if (view === 'grid') drawGrid(queue());
   });
+  // the poster labels show the watched mark, so redraw them in place
+  function refreshLabels() {
+    [].forEach.call(stack.querySelectorAll('.poster'), function (el) { var l = el.querySelector('.plabel'); if (l && el._t) l.outerHTML = plabel(el._t); });
+    var top = topEl(); if (top) top._snap = null;
+  }
   detail.addEventListener('click', function (e) { if (e.target === detail) closeDetail(); });
   addEventListener('keydown', function (e) { if (e.key === 'Escape') closeDetail(); });
   function trailer(t) {
@@ -1045,23 +1081,73 @@ body.gridview .wall, body.gridview .top { display: none; }
     var src = t.img || (ART[t.key] && ART[t.key].poster ? IMG + 'w185' + ART[t.key].poster : '');
     return '<span class="mini" style="--a:' + t.col[0] + '" aria-hidden="true">' + (src ? '<img src="' + src + '" alt="" loading="lazy" decoding="async">' : '<b>' + esc(t.title) + '</b>') + '</span>';
   }
+  // the stash: to watch (in priority order, drag ≡ to reorder) and watched, filtered by category
+  var stashTab = 'todo', stashCat = 'all';
+  var SCATS = [['all', 'all'], ['movie', 'films'], ['tv', 'tv'], ['comedy', 'comedy'], ['trippy', 'trippy as balls'], ['scary', 'scary af'], ['huh', 'what did i just watch?'], ['new', 'new']];
+  function inCat(t, c) { return c === 'all' ? true : (c === 'movie' || c === 'tv') ? t.kind === c : catOf(c)[2](t); }
+  function byKey(k) { return T.filter(function (x) { return x.key === k; })[0]; }
+  function stashList(tab) {
+    return tab === 'todo' ? stash.filter(function (k) { return watched.indexOf(k) < 0; }) : watched.slice().reverse();
+  }
   function drawStash() {
-    var box = document.getElementById('stash-list'); box.innerHTML = '';
-    document.getElementById('stash-empty').hidden = stash.length > 0;
-    document.getElementById('stash-count').textContent = stash.length || '';
-    stash.slice().reverse().forEach(function (k) {
-      var t = T.filter(function (x) { return x.key === k; })[0]; if (!t) return;
-      var r = document.createElement('div'); r.className = 'prow';
-      r.innerHTML = '<button type="button" class="open">' + miniPoster(t) + '<span class="tx"><span class="nm"></span><span class="mt" style="display:block">' + t.year + ' · ' + esc(t.run) + ' · ' + esc(t.genre) + '</span><span class="sc" style="display:block">' + SPUD + rating(t) + '<small>/10</small></span></span></button><button type="button" class="rm">remove</button>';
+    var box = document.getElementById('stash-list'), chips = document.getElementById('stash-chips'); box.innerHTML = ''; chips.innerHTML = '';
+    var todo = stashList('todo'), done = stashList('done');
+    document.getElementById('n-todo').textContent = todo.length || ''; document.getElementById('n-done').textContent = done.length || '';
+    document.getElementById('stash-count').textContent = todo.length || '';
+    [].forEach.call(sd.querySelectorAll('[data-tab]'), function (b) { b.setAttribute('aria-selected', String(b.dataset.tab === stashTab)); });
+    var keys = stashTab === 'todo' ? todo : done;
+    // category chips: only the ones that have something in this tab
+    SCATS.forEach(function (c) {
+      var n = keys.filter(function (k) { var t = byKey(k); return t && inCat(t, c[0]); }).length;
+      if (c[0] !== 'all' && !n) return;
+      var b = document.createElement('button'); b.type = 'button'; b.textContent = c[1]; b.setAttribute('aria-pressed', String(stashCat === c[0]));
+      b.addEventListener('click', function () { stashCat = c[0]; drawStash(); }); chips.appendChild(b);
+    });
+    if (!chips.querySelector('[aria-pressed="true"]')) stashCat = 'all';
+    var shown = keys.filter(function (k) { var t = byKey(k); return t && inCat(t, stashCat); });
+    var empty = document.getElementById('stash-empty');
+    empty.hidden = shown.length > 0;
+    empty.textContent = stashTab === 'todo' ? (todo.length ? 'Nothing stashed in this category.' : 'Nothing stashed yet. Tap stash it under a poster and it lands here.') : 'Nothing marked watched yet. Tick the circle on anything in your stash once you have seen it.';
+    var canSort = stashTab === 'todo' && stashCat === 'all' && shown.length > 1;
+    shown.forEach(function (k, i) {
+      var t = byKey(k), w = isWatched(t), r = document.createElement('div'); r.className = 'prow' + (w ? ' is-watched' : ''); r.dataset.key = k;
+      r.innerHTML = (stashTab === 'todo' ? '<span class="pn">' + (i + 1) + '</span>' : '') +
+        '<button type="button" class="open">' + miniPoster(t) + '<span class="tx"><span class="nm"></span><span class="mt" style="display:block">' + t.year + ' · ' + esc(t.run) + ' · ' + esc(t.genre) + '</span><span class="sc" style="display:block">' + SPUD + rating(t) + '<small>/10</small></span></span></button>' +
+        '<span class="pact"><button type="button" class="wk" aria-pressed="' + w + '" aria-label="' + (w ? 'Mark ' + esc(t.title) + ' as not watched' : 'Mark ' + esc(t.title) + ' as watched') + '">✓</button>' +
+        (canSort ? '<span class="grip" aria-label="Drag to reorder" role="img">≡</span>' : '') +
+        '<button type="button" class="rm" aria-label="Remove ' + esc(t.title) + '">remove</button></span>';
       r.querySelector('.nm').textContent = t.title;
       r.querySelector('.open').setAttribute('aria-label', 'Open ' + t.title);
-      // open it on top of the stack, to flip for the trailer and details
       r.querySelector('.open').addEventListener('click', function () { showKey(k); if (view === 'grid') setView('one'); else render(); closeStash(); });
-      r.querySelector('.rm').addEventListener('click', function () { stash = stash.filter(function (x) { return x !== k; }); save(); updateCount(); drawStash(); render(); });
+      r.querySelector('.wk').addEventListener('click', function () { toggleWatched(t); drawStash(); refreshLabels(); });
+      r.querySelector('.rm').addEventListener('click', function () {
+        stash = stash.filter(function (x) { return x !== k; }); if (stashTab === 'done') watched = watched.filter(function (x) { return x !== k; });
+        save(); updateCount(); drawStash(); render();
+      });
+      var g = r.querySelector('.grip'); if (g) dragSort(g, r, box);
       box.appendChild(r);
     });
   }
-  function updateCount() { document.getElementById('stash-n').textContent = stash.length; }
+  // drag a row by its ≡ to set the order you want to watch things in
+  function dragSort(grip, row, box) {
+    var y0 = 0, on = false;
+    grip.addEventListener('pointerdown', function (e) { e.preventDefault(); e.stopPropagation(); on = true; y0 = e.clientY; grip.setPointerCapture(e.pointerId); row.classList.add('lifting'); });
+    grip.addEventListener('pointermove', function (e) {
+      if (!on) return; var dy = e.clientY - y0; row.style.transform = 'translateY(' + dy + 'px)';
+      var prev = row.previousElementSibling, next = row.nextElementSibling;
+      if (next && dy > next.offsetHeight / 2) { box.insertBefore(next, row); y0 += next.offsetHeight; row.style.transform = 'translateY(' + (e.clientY - y0) + 'px)'; }
+      else if (prev && dy < -prev.offsetHeight / 2) { box.insertBefore(row, prev); y0 -= prev.offsetHeight; row.style.transform = 'translateY(' + (e.clientY - y0) + 'px)'; }
+    });
+    function end() {
+      if (!on) return; on = false; row.classList.remove('lifting'); row.style.transform = '';
+      var order = [].map.call(box.querySelectorAll('.prow'), function (r) { return r.dataset.key; });
+      stash = order.concat(stash.filter(function (k) { return order.indexOf(k) < 0; }));
+      save(); drawStash();
+    }
+    grip.addEventListener('pointerup', end); grip.addEventListener('pointercancel', end);
+  }
+  [].forEach.call(sd.querySelectorAll('[data-tab]'), function (b) { b.addEventListener('click', function () { stashTab = b.dataset.tab; stashCat = 'all'; drawStash(); }); });
+  function updateCount() { document.getElementById('stash-n').textContent = stashList('todo').length; }
   document.addEventListener('pointerdown', function (e) { if (!e.target.closest('.pill') && !e.target.closest('.cat') && !e.target.closest('.drawer') && !e.target.closest('.panel') && !e.target.closest('.scrim')) { vd.hidden = true; vb.setAttribute('aria-expanded', 'false'); } if (!e.target.closest('.catwrap')) closeCatMenu(); });
   addEventListener('keydown', function (e) { if (e.key === 'Escape') closeAll(); });
 
