@@ -1,6 +1,7 @@
 // Serves the static site from public/, plus one API route:
 //   GET /api/art?q=<kind>:<title>:<year>|...   -> { "<kind>:<title>:<year>": { poster, backdrop, id } }
 //   GET /api/trailer?kind=movie|tv&id=<tmdb id> -> { key } (a YouTube video id, or null)
+//   GET /api/info?kind=movie|tv&id=<tmdb id>    -> { title, year, runtime, genres, by, cast, rating, votes, overview, seasons }
 // Posters and stills come from the TMDB API using the TMDB_TOKEN secret
 // (Worker → Settings → Variables and Secrets). Without the secret the route
 // answers { error: "no-token" } and the page keeps its placeholder posters.
@@ -13,6 +14,7 @@ export default {
     const url = new URL(request.url);
     if (url.pathname === '/api/art') return art(url, env, ctx);
     if (url.pathname === '/api/trailer') return trailer(url, env, ctx);
+    if (url.pathname === '/api/info') return info(url, env, ctx);
     return env.ASSETS.fetch(request);
   },
 };
@@ -25,7 +27,7 @@ async function art(url, env, ctx) {
   if (hit) return hit;
 
   // keys are joined with | because titles can contain commas ("Dude, Where's My Car?")
-  const keys = (url.searchParams.get('q') || '').split('|').filter(Boolean).slice(0, 80);
+  const keys = (url.searchParams.get('q') || '').split('|').filter(Boolean).slice(0, 50);
   const out = {};
   await Promise.all(keys.map(async (key) => {
     // titles can contain colons ("Mad Max: Fury Road"), so kind is the first part and year the last
@@ -68,6 +70,42 @@ async function trailer(url, env, ctx) {
     // prefer an official trailer, then any trailer, then a teaser
     const pick = vids.find((v) => v.type === 'Trailer' && v.official) || vids.find((v) => v.type === 'Trailer') || vids.find((v) => v.type === 'Teaser');
     const resp = json({ key: pick ? pick.key : null }, 200, DAY);
+    ctx.waitUntil(cache.put(cacheKey, resp.clone()));
+    return resp;
+  } catch (e) {
+    return json({ error: 'fetch-failed' }, 502, 60);
+  }
+}
+
+// the facts for one title, used to keep the catalogue's credits and runtimes right
+async function info(url, env, ctx) {
+  if (!env.TMDB_TOKEN) return json({ error: 'no-token' }, 200, 60);
+  const kind = url.searchParams.get('kind'), id = url.searchParams.get('id') || '';
+  if (!['movie', 'tv'].includes(kind) || !/^\d+$/.test(id)) return json({ error: 'bad-request' }, 400, 60);
+  const cache = caches.default;
+  const cacheKey = new Request(url.toString(), { method: 'GET' });
+  const hit = await cache.match(cacheKey);
+  if (hit) return hit;
+  try {
+    const res = await fetch(`${TMDB}/${kind}/${id}?append_to_response=credits&language=en-US`, {
+      headers: { Authorization: `Bearer ${env.TMDB_TOKEN}`, Accept: 'application/json' },
+    });
+    if (!res.ok) return json({ error: `tmdb-${res.status}` }, 502, 60);
+    const d = await res.json();
+    const crew = d.credits?.crew || [];
+    const out = {
+      title: d.title || d.name,
+      year: (d.release_date || d.first_air_date || '').slice(0, 4),
+      runtime: kind === 'movie' ? d.runtime : (d.episode_run_time || [])[0] || null,
+      seasons: kind === 'tv' ? d.number_of_seasons : null,
+      episodes: kind === 'tv' ? d.number_of_episodes : null,
+      genres: (d.genres || []).map((g) => g.name),
+      by: kind === 'movie' ? crew.filter((c) => c.job === 'Director').map((c) => c.name) : (d.created_by || []).map((c) => c.name),
+      cast: (d.credits?.cast || []).slice(0, 3).map((c) => c.name),
+      rating: d.vote_average, votes: d.vote_count,
+      overview: d.overview,
+    };
+    const resp = json(out, 200, DAY);
     ctx.waitUntil(cache.put(cacheKey, resp.clone()));
     return resp;
   } catch (e) {
