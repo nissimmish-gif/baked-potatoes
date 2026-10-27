@@ -106,7 +106,7 @@ stickers/VHS, the 70s eyeball broadcast, the A24 disc library.
 
 ## Catalogue
 
-122 titles in `T` (public/index.html). Credits, cast, runtimes and genres for new titles come
+330 titles in `T` (public/index.html; 208 added 2026-10-27). Past roughly 500 the list should move out of the page into a JSON file the Worker serves, so the page stays light. Credits, cast, runtimes and genres for new titles come
 from TMDB through `/api/info` (don't write them from memory). Blurbs and Potato Scores are
 editorial: the score is how well it plays baked, informed by TMDB's rating, so a great but
 harrowing film (Hereditary) can score low and drop out of highest rated.
