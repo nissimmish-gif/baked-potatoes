@@ -1,5 +1,7 @@
 # Baked Potatoes
 
+Live at **https://watchbakedpotatoes.com**.
+
 What to watch when you're baked. Movie and TV picks rated with the **Potato Score**,
 sorted by vibe, and swiped into **your stash**.
 

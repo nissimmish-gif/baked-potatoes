@@ -12,6 +12,11 @@ const DAY = 60 * 60 * 24;
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
+    // one address for the site: www goes to the bare domain, keeping the path
+    if (url.hostname === 'www.watchbakedpotatoes.com') {
+      url.hostname = 'watchbakedpotatoes.com';
+      return Response.redirect(url.toString(), 301);
+    }
     if (url.pathname === '/api/art') return art(url, env, ctx);
     if (url.pathname === '/api/trailer') return trailer(url, env, ctx);
     if (url.pathname === '/api/info') return info(url, env, ctx);

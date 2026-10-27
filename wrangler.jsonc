@@ -1,6 +1,6 @@
 {
   // Cloudflare Worker config. The dashboard's Worker name must match "name".
-  // worker/index.js answers /api/* (TMDB artwork); everything else is the static site in public/.
+  // worker/index.js answers /api/* (TMDB data) and redirects www; everything else is the static site in public/.
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "baked-potatoes",
   "main": "worker/index.js",
@@ -8,8 +8,15 @@
   "assets": {
     "directory": "./public",
     "binding": "ASSETS",
-    "run_worker_first": ["/api/*"]
+    // the Worker sees every request so it can send www to the bare domain; everything
+    // that isn't /api/* or www is handed straight to the static site
+    "run_worker_first": true
   },
+  // the site lives at watchbakedpotatoes.com; www redirects there
+  "routes": [
+    { "pattern": "watchbakedpotatoes.com", "custom_domain": true },
+    { "pattern": "www.watchbakedpotatoes.com", "custom_domain": true }
+  ],
   "workers_dev": true,
   "preview_urls": true
 }

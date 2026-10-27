@@ -2,7 +2,9 @@
 
 Baked Potatoes: a site for what to watch when you're baked. `public/` is the site
 (static, no build step). It deploys as a Cloudflare Worker serving `public/` as static
-assets (`wrangler.jsonc`); every push to `main` redeploys. Real movie data will be
+assets (`wrangler.jsonc`); every push to `main` redeploys. It lives at
+**https://watchbakedpotatoes.com** (custom domain in `wrangler.jsonc`; www redirects to it
+in `worker/index.js`; the workers.dev address still works). Real movie data will be
 added to the same Worker (see README).
 
 ## Brand decisions (settled with the owner, keep them)
