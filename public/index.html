@@ -321,6 +321,11 @@ body.gridview .wall, body.gridview .top { display: none; }
 .dbody .wo .rent { display: block; margin-top: 4px; font-size: 13px; color: #6d6758; }
 .dbody .wo .rent a { color: #6d6758; }
 
+/* the poster that flies into the stash */
+.fly { position: fixed; z-index: 60; pointer-events: none; transform-origin: 50% 50%; }
+.fly .mini { width: 100%; height: 100%; transform: none; box-shadow: 0 12px 26px rgba(0,0,0,.5); }
+#stash-btn { display: inline-block; }
+
 /* mini posters */
 
 @media (prefers-reduced-motion: reduce) { .sheet, .dcard, .detail, .dbody { transition: none !important; } }
@@ -819,8 +824,28 @@ body.gridview .wall, body.gridview .top { display: none; }
   function toggleStash(t) {
     learned();
     if (isStashed(t) && !isWatched(t)) stash = stash.filter(function (k) { return k !== t.key; });
-    else { if (!isStashed(t)) stash.push(t.key); watched = watched.filter(function (k) { return k !== t.key; }); }
+    else { if (!isStashed(t)) stash.push(t.key); watched = watched.filter(function (k) { return k !== t.key; }); flyToStash(t); }
     save(); updateCount(); syncStashBtn();
+  }
+  // a small copy of the poster flies into the stash button, then the count bumps
+  function flyToStash(t) {
+    var target = document.getElementById('stash-btn'), from = !detail.hidden ? dcard : (view === 'grid' ? null : topEl());
+    if (!from && view === 'grid') { var tl = [].filter.call(tiles.querySelectorAll('.tile'), function (x) { return x.querySelector('.nm').textContent === t.title; })[0]; from = tl && tl.querySelector('.poster-mini'); }
+    if (reduce || !from || !target || !target.animate) return;
+    var a = from.getBoundingClientRect(), b = target.getBoundingClientRect();
+    var w = Math.min(a.width * .5, 150), h = w * 1.5, x0 = a.left + (a.width - w) / 2, y0 = a.top + (a.height - h) / 2 - (from === dcard ? 0 : a.height * .05);
+    var f = document.createElement('div'); f.className = 'fly'; f.innerHTML = miniPoster(t);
+    f.style.cssText = 'left:' + x0 + 'px;top:' + y0 + 'px;width:' + w + 'px;height:' + h + 'px';
+    document.body.appendChild(f);
+    var dx = b.left + b.width / 2 - (x0 + w / 2), dy = b.top + b.height / 2 - (y0 + h / 2);
+    f.animate([
+      { transform: 'translate(0,0) scale(1) rotate(0deg)', opacity: 1 },
+      { transform: 'translate(' + dx * .45 + 'px,' + (dy * .45 - 40) + 'px) scale(.6) rotate(-8deg)', opacity: 1, offset: .45 },
+      { transform: 'translate(' + dx + 'px,' + dy + 'px) scale(.12) rotate(-14deg)', opacity: .4 }
+    ], { duration: 520, easing: 'cubic-bezier(.4,0,.7,1)' }).onfinish = function () {
+      f.remove();
+      target.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.25)' }, { transform: 'scale(1)' }], { duration: 260, easing: 'ease-out' });
+    };
   }
   function syncStashBtn() {
     var q = queue(), t = q[pos], b = document.getElementById('stashbtn'), on = !!t && isStashed(t) && !isWatched(t);

@@ -66,7 +66,9 @@ How to use it is said quietly:
 bare cream ‹ and › either side of the poster, centred in the space beside it (‹ dim on
 the first poster); the line "tap the poster for the trailer and details" right under the poster, then an **add to stash** ticket that reads as a button
 (cream, notched ends, fine inner border, no stub, raised edge and shadow,
-presses in; no potato; yellow "in your stash" when on), then a small line
+presses in; no potato; yellow "in your stash" when on); adding to the stash (from the ticket, the details card or the grid) sends a small copy
+of the poster flying into the nav's stash button, shrinking, and the button bumps
+(`flyToStash()`, ~0.5s, off under reduced motion), then a small line
 "tap the poster for the trailer and details". On a first visit the top poster peels a little to the right to show the
 gesture, until someone peels or taps. Owner wants these low key, not flash cards. The
 filters are called **categories** (not vibes) on the page. The categories (owner's list,
