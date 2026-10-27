@@ -116,6 +116,7 @@ Plain, deadpan, kind. Specific beats clever. Errors say what happened and what t
   providers, from JustWatch, for the visitor's country). The details card lists streaming
   services by name, each linking to the service's own site (`SITES`), plus rent or buy and
   a "from JustWatch" credit. Live-TV bundles (`LIVE_TV`) are left out. The category menu
-  has a "streaming on" section (services with 3+ titles) that filters the deck; the filter
+  ends with a "streaming on" dropdown row (shows the current service; opens into the
+  services with 3+ titles) that filters the deck; the filter
   shows as an "on netflix ×" chip by the heading. Money isn't in play (owner, 2026-10-27).
 - Respect `prefers-reduced-motion` (the peel and details animations already do).

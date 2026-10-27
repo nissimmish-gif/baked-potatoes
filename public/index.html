@@ -240,6 +240,14 @@ body.gridview .grid { padding-top: calc(86px + env(safe-area-inset-top, 0px)); }
 .catmenu button { display: block; width: 100%; text-align: left; padding: 9px 0; font-family: var(--f-card); font-weight: 500; font-size: 17px; letter-spacing: -.01em; text-transform: lowercase; color: var(--fc-line); }
 .catmenu button + button { border-top: 2px solid var(--fc-line); }
 .catmenu .fc-frame { max-height: min(70vh, 560px); overflow-y: auto; overscroll-behavior: contain; }
+.catmenu .svc-toggle { display: grid !important; grid-template-columns: 1fr auto auto; align-items: center; gap: 6px; margin-top: 4px; border-top: 3px solid var(--fc-line) !important; }
+.catmenu .svc-toggle .mh2 { font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: #6d6758; }
+.catmenu .svc-toggle .cur { font-size: 15px; color: var(--ink-red); }
+.catmenu .svc-toggle svg { width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: transform .2s ease; }
+.catmenu .svc-toggle[aria-expanded="true"] svg { transform: rotate(180deg); }
+.catmenu .svc-list { margin: 0 0 4px 12px; padding-left: 10px; border-left: 2px solid var(--fc-line); }
+.catmenu .svc-list button { font-size: 15px; padding: 7px 0; }
+.catmenu .svc-list button + button { border-top: 1px solid rgba(27, 26, 23, .35); }
 .catmenu .mh { margin: 10px 0 0; padding: 8px 0 2px; border-top: 3px solid var(--fc-line); font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: #6d6758; }
 .platf { display: inline-flex; align-items: center; gap: 6px; margin-left: 10px; padding: 3px 8px 4px 10px; border-radius: 999px; background: rgba(240, 198, 74, .16); border: 1px solid rgba(240, 198, 74, .5); color: var(--ink-yellow); font-family: var(--f-card); font-weight: 600; font-size: 13px; text-transform: lowercase; white-space: nowrap; vertical-align: 3px; }
 .catmenu button[aria-checked="true"] { color: var(--ink-red); }
@@ -1100,6 +1108,7 @@ body.gridview .wall, body.gridview .top { display: none; }
   var catBtn = document.getElementById('cat'), catMenu = document.getElementById('catmenu');
   function closeCatMenu() { catMenu.hidden = true; catBtn.setAttribute('aria-expanded', 'false'); }
   // the menu by the category heading: categories, then the services things stream on
+  var svcOpen = false;
   function topServices() {
     var n = {};
     T.forEach(function (t) { streams(t).forEach(function (s) { n[s] = (n[s] || 0) + 1; }); });
@@ -1110,9 +1119,17 @@ body.gridview .wall, body.gridview .top { display: none; }
     function item(label, on, fn) { var b = document.createElement('button'); b.type = 'button'; b.setAttribute('role', 'menuitemradio'); b.setAttribute('aria-checked', String(on)); b.textContent = label; b.addEventListener('click', fn); box.appendChild(b); }
     CATS.forEach(function (c) { item(c[1].toLowerCase(), vibeF === c[0], function () { vibeF = c[0]; pos = 0; closeCatMenu(); render(); }); });
     var svc = topServices(); if (!svc.length) return;
-    var h = document.createElement('p'); h.className = 'mh'; h.textContent = 'streaming on'; box.appendChild(h);
-    item('any service', platF === 'any', function () { platF = 'any'; pos = 0; closeCatMenu(); render(); });
-    svc.forEach(function (sv) { item(sv.toLowerCase(), platF === sv, function () { platF = sv; pos = 0; closeCatMenu(); render(); }); });
+    // streaming on: one row that opens into the list of services
+    var dd = document.createElement('button'); dd.type = 'button'; dd.className = 'svc-toggle'; dd.setAttribute('aria-expanded', String(svcOpen));
+    dd.innerHTML = '<span class="mh2">streaming on</span><span class="cur"></span><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5"/></svg>';
+    dd.querySelector('.cur').textContent = platF === 'any' ? 'any service' : platF.toLowerCase();
+    dd.addEventListener('click', function () { svcOpen = !svcOpen; drawCatMenu(); var l = box.querySelector('.svc-list'); if (l) l.scrollIntoView({ block: 'nearest' }); });
+    box.appendChild(dd);
+    if (!svcOpen) return;
+    var list = document.createElement('div'); list.className = 'svc-list'; box.appendChild(list);
+    function sitem(label, on, fn) { var b = document.createElement('button'); b.type = 'button'; b.setAttribute('role', 'menuitemradio'); b.setAttribute('aria-checked', String(on)); b.textContent = label; b.addEventListener('click', fn); list.appendChild(b); }
+    sitem('any service', platF === 'any', function () { platF = 'any'; pos = 0; svcOpen = false; closeCatMenu(); render(); });
+    svc.forEach(function (sv) { sitem(sv.toLowerCase(), platF === sv, function () { platF = sv; pos = 0; svcOpen = false; closeCatMenu(); render(); }); });
   }
   document.getElementById('platf').addEventListener('click', function () { platF = 'any'; pos = 0; render(); });
   catBtn.addEventListener('click', function () { var o = catMenu.hidden; closeAll(); if (o) { drawCatMenu(); catMenu.hidden = false; catBtn.setAttribute('aria-expanded', 'true'); } });
