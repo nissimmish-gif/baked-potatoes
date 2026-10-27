@@ -1,6 +1,7 @@
 // Serves the static site from public/, plus one API route:
 //   GET /api/art?q=<kind>:<title>:<year>|...   -> { "<kind>:<title>:<year>": { poster, backdrop, id } }
 //   GET /api/trailer?kind=movie|tv&id=<tmdb id> -> { key } (a YouTube video id, or null)
+//   GET /api/watch?q=<kind>:<tmdb id>|...       -> { country, titles: { "<kind>:<id>": { stream, rent, link } } }
 //   GET /api/info?kind=movie|tv&id=<tmdb id>    -> { title, year, runtime, genres, by, cast, rating, votes, overview, seasons }
 // Posters and stills come from the TMDB API using the TMDB_TOKEN secret
 // (Worker → Settings → Variables and Secrets). Without the secret the route
@@ -20,6 +21,7 @@ export default {
     if (url.pathname === '/api/art') return art(url, env, ctx);
     if (url.pathname === '/api/trailer') return trailer(url, env, ctx);
     if (url.pathname === '/api/info') return info(url, env, ctx);
+    if (url.pathname === '/api/watch') return watch(url, request, env, ctx);
     return env.ASSETS.fetch(request);
   },
 };
@@ -80,6 +82,45 @@ async function trailer(url, env, ctx) {
   } catch (e) {
     return json({ error: 'fetch-failed' }, 502, 60);
   }
+}
+
+// where each title streams in the visitor's country (TMDB's watch providers, which come from
+// JustWatch). Service names are tidied so the same service always has one name.
+const RENAME = {
+  'Disney Plus': 'Disney+', 'Apple TV Plus': 'Apple TV+', 'Apple TV': 'Apple TV', 'Amazon Prime Video': 'Prime Video',
+  'Amazon Video': 'Prime Video', 'HBO Max': 'Max', 'Paramount Plus': 'Paramount+', 'Paramount+ with Showtime': 'Paramount+',
+  'Paramount Plus Essential': 'Paramount+', 'Paramount Plus Premium': 'Paramount+', 'Peacock Premium': 'Peacock',
+  'Peacock Premium Plus': 'Peacock', 'Tubi TV': 'Tubi', 'fuboTV': 'Fubo', 'Netflix basic with Ads': 'Netflix',
+};
+function serviceName(n) {
+  n = n.replace(/ (Standard |Basic )?with Ads$/i, '').replace(/ (Amazon|Apple TV|Roku Premium) Channel$/i, '').trim();
+  return RENAME[n] || n;
+}
+async function watch(url, request, env, ctx) {
+  if (!env.TMDB_TOKEN) return json({ error: 'no-token' }, 200, 60);
+  const country = /^[A-Z]{2}$/.test(url.searchParams.get('country') || '') ? url.searchParams.get('country') : (request.cf && request.cf.country) || 'US';
+  const keys = (url.searchParams.get('q') || '').split('|').filter((k) => /^(movie|tv):\d+$/.test(k)).slice(0, 40);
+  const cacheUrl = new URL(url.toString()); cacheUrl.searchParams.set('country', country);
+  const cache = caches.default, cacheKey = new Request(cacheUrl.toString(), { method: 'GET' });
+  const hit = await cache.match(cacheKey);
+  if (hit) return hit;
+  const titles = {};
+  await Promise.all(keys.map(async (k) => {
+    const [kind, id] = k.split(':');
+    try {
+      const res = await fetch(`${TMDB}/${kind}/${id}/watch/providers`, { headers: { Authorization: `Bearer ${env.TMDB_TOKEN}`, Accept: 'application/json' } });
+      if (!res.ok) { titles[k] = { error: `tmdb-${res.status}` }; return; }
+      const r = ((await res.json()).results || {})[country];
+      if (!r) { titles[k] = { stream: [], rent: [] }; return; }
+      const names = (list) => [...new Set((list || []).sort((a, b) => a.display_priority - b.display_priority).map((p) => serviceName(p.provider_name)))];
+      titles[k] = { stream: names([...(r.flatrate || []), ...(r.free || []), ...(r.ads || [])]), rent: names([...(r.rent || []), ...(r.buy || [])]), link: r.link || null };
+    } catch (e) {
+      titles[k] = { error: 'fetch-failed' };
+    }
+  }));
+  const resp = json({ country, titles }, 200, DAY);
+  ctx.waitUntil(cache.put(cacheKey, resp.clone()));
+  return resp;
 }
 
 // the facts for one title, used to keep the catalogue's credits and runtimes right
