@@ -88,7 +88,7 @@ is never ambiguous); the stash array's order is the priority. The circle marks a
 watched (`watched`, its own localStorage key) and moves it to the watched tab; posters show
 "✓ watched" on their label, and the details card has stash it and mark watched. Rows: the
 real mini poster (`miniPoster()`, the image only, not a shrunk card), title, year · runtime
-· genre, score, remove. Tapping a row puts that poster on top of the stack. A one/grid toggle (frosted glass, about as tall as the category heading, at the right end
+· genre, score, remove. Tapping a row opens that title's details card over the stash (owner's call, 2026-10-28); closing it (×, Esc, tap outside) leaves the stash open, and stash or watched changes made in the card update the rows underneath. A one/grid toggle (frosted glass, about as tall as the category heading, at the right end
 of the heading's row, level with it; owner's call 2026-10-27) switches to a
 scrolling grid of every poster left; tapping a tile opens the big details card right there
 (pass / stash from it update the grid). The category text moves above the tiles in grid

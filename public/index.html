@@ -1251,6 +1251,7 @@ body.gridview .wall, body.gridview .top { display: none; }
     wb.setAttribute('aria-pressed', String(isWatched(t))); wb.lastChild.textContent = isWatched(t) ? 'watched' : 'mark watched';
     syncStashBtn();
     refreshLabels(); if (view === 'grid') drawGrid(queue());
+    if (!sd.hidden) drawStash();
   });
   // the poster labels show the watched mark, so redraw them in place
   function refreshLabels() {
@@ -1258,7 +1259,7 @@ body.gridview .wall, body.gridview .top { display: none; }
     var top = topEl(); if (top) top._snap = null;
   }
   detail.addEventListener('click', function (e) { if (e.target === detail) closeDetail(); });
-  addEventListener('keydown', function (e) { if (e.key === 'Escape') closeDetail(); });
+  addEventListener('keydown', function (e) { if (e.key === 'Escape' && !detail.hidden) { closeDetail(); e.stopImmediatePropagation(); } });
   function trailer(t) {
     var a = ART[t.key], slot = dbody.querySelector('.trailer'); if (!a || !a.id) return;
     function show(key) { if (!key || detail.hidden || openFrom === null || openFrom._t !== t) return; slot.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + encodeURIComponent(key) + '?playsinline=1&rel=0&fs=1" title="' + esc(t.title) + ' trailer" allow="encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>'; slot.hidden = false; }
@@ -1400,8 +1401,10 @@ body.gridview .wall, body.gridview .top { display: none; }
         (canSort ? '<span class="grip" aria-label="Drag to reorder" role="img">≡</span>' : '') +
         '<button type="button" class="rm" aria-label="Remove ' + esc(t.title) + '">remove</button></span>';
       r.querySelector('.nm').textContent = t.title;
-      r.querySelector('.open').setAttribute('aria-label', 'Open ' + t.title);
-      r.querySelector('.open').addEventListener('click', function () { showKey(k); if (view === 'grid') setView('one'); else render(); closeStash(); });
+      r.querySelector('.open').setAttribute('aria-label', 'Details for ' + t.title);
+      var mp = r.querySelector('.mini'); mp._t = t;
+      // tapping a row opens its details card over the stash, growing from the mini poster
+      r.querySelector('.open').addEventListener('click', function () { openDetail(mp); });
       r.querySelector('.wk').addEventListener('click', function () { toggleWatched(t); drawStash(); refreshLabels(); });
       r.querySelector('.rm').addEventListener('click', function () {
         stash = stash.filter(function (x) { return x !== k; }); if (stashTab === 'done') watched = watched.filter(function (x) { return x !== k; });
