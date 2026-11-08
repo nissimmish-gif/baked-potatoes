@@ -79,7 +79,7 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
 .stack { position: relative; width: var(--W); height: calc(var(--W) * var(--AR)); }
 .poster { position: absolute; inset: 0; perspective: 1400px; touch-action: none; user-select: none; -webkit-user-select: none; }
 .poster.behind { pointer-events: none; }
-.sheet { position: absolute; inset: 0; transform-style: preserve-3d; transition: transform .6s cubic-bezier(.45, .05, .55, .95); will-change: transform; }
+.sheet { position: absolute; inset: 0; }
 /* no blend modes or filters inside a flipping poster: iOS Safari flattens the 3D and shows both sides */
 .poster *, .poster *::after { mix-blend-mode: normal !important; }
 .poster .face::after { opacity: .9; }
@@ -91,10 +91,6 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
   background-image: var(--grain),
     linear-gradient(180deg, rgba(255,255,255,0) 48%, rgba(0,0,0,.08) 50%, rgba(255,255,255,0) 52%),
     linear-gradient(90deg, rgba(255,255,255,0) 48%, rgba(0,0,0,.07) 50%, rgba(255,255,255,0) 52%); background-size: 160px 160px, auto, auto; }
-.tag { position: absolute; top: 18%; z-index: 6; padding: 4px 12px 2px; font-family: "Arimo", Arial, sans-serif; font-weight: 700; font-size: 30px; letter-spacing: .04em; text-transform: uppercase; opacity: 0;
-  background: var(--gold); color: var(--ink); box-shadow: 3px 3px 0 rgba(0,0,0,.4); }
-.tag.yes { left: 14px; transform: rotate(-9deg); }
-.tag.no { right: 14px; transform: rotate(9deg); background: var(--cream); }
 
 
 
@@ -155,10 +151,6 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
 .taphint { position: absolute; left: 0; right: 0; top: 100%; margin-top: 10px; text-align: center; font-size: 12px; font-weight: 500; color: var(--soft); white-space: nowrap; }
 .deck.empty .taphint { visibility: hidden; }
 .deck.empty .stashbtn { visibility: hidden; }
-.roll .tag { display: none !important; }
-.tag { top: 7%; padding: 3px 9px 4px; font-family: var(--f-card); font-weight: 600; font-size: 15px; letter-spacing: -.01em; text-transform: lowercase; background: var(--fc-paper); color: var(--fc-line); border-radius: 2px; box-shadow: 0 6px 16px rgba(0,0,0,.35); }
-.tag.yes { color: var(--ink-red); left: 9%; }
-.tag.no { right: 9%; background: var(--fc-paper); }
 /* every poster sits in a cream mount with a black frame line */
 .mount { background: var(--fc-paper); }
 .mount .mat { position: absolute; inset: var(--gap); border: 3px solid var(--fc-line); border-radius: 3px; background: var(--fc-paper); }
@@ -185,7 +177,7 @@ p, h1, h2, h3 { margin: 0; font-weight: 400; }
 /* the paper roll when a poster is sent off */
 
 /* grid view: every poster in a scrolling grid */
-.views { margin-left: auto; align-self: center; display: flex; padding: 3px; gap: 3px; border-radius: 10px; background: rgba(255, 255, 255, .1); border: 1px solid rgba(255, 255, 255, .22); box-shadow: 0 8px 24px rgba(0, 0, 0, .35), inset 0 1px 0 rgba(255, 255, 255, .18); -webkit-backdrop-filter: blur(14px) saturate(1.4); backdrop-filter: blur(14px) saturate(1.4); }
+.views { margin-left: auto; align-self: center; display: flex; padding: 3px; gap: 3px; border-radius: 10px; background: rgba(46, 52, 72, .78); border: 1px solid rgba(255, 255, 255, .22); box-shadow: 0 8px 24px rgba(0, 0, 0, .35), inset 0 1px 0 rgba(255, 255, 255, .18); }
 .views button { display: grid; place-items: center; width: 38px; height: 30px; border-radius: 7px; color: rgba(239, 228, 204, .7); transition: background .2s ease, color .2s ease; }
 .views svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.6; }
 .views button[aria-pressed="true"] { background: rgba(255, 255, 255, .2); color: var(--cream); }
@@ -222,7 +214,7 @@ body.gridview .wall, body.gridview .top { display: none; }
 .grid { position: fixed; inset: 0; z-index: 4; overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch;
   padding: calc(18px + env(safe-area-inset-top, 0px)) 16px calc(96px + env(safe-area-inset-bottom, 0px)); }
 .tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 22px 14px; max-width: 1100px; margin: 0 auto; }
-.tile { display: block; text-align: left; color: var(--cream); }
+.tile { display: block; text-align: left; color: var(--cream); content-visibility: auto; contain-intrinsic-size: auto 300px; }
 .tile .poster-mini { position: relative; display: block; width: 100%; aspect-ratio: 2 / 3; box-shadow: 0 14px 28px -12px rgba(0,0,0,.8); }
 .tile .poster-mini .face { box-shadow: none; }
 .tile .poster-mini *, .tile .poster-mini *::after { mix-blend-mode: normal !important; }
@@ -274,23 +266,34 @@ body.gridview .wall, body.gridview .top { display: none; }
 .prow .grip { font-size: 22px; line-height: 1; color: #6d6758; cursor: grab; touch-action: none; padding: 2px 6px; user-select: none; }
 .prow.lifting { z-index: 2; box-shadow: 0 10px 24px rgba(0,0,0,.25); }
 .prow.is-watched .mini { opacity: .55; }
-.prow .rm { padding: 2px 0; font-size: 11px; text-transform: lowercase; color: #6d6758; }
+.prow .rm { min-height: 34px; padding: 6px 12px 7px; border: 2px solid var(--fc-line); border-radius: 999px; font-size: 13px; font-weight: 600; text-transform: lowercase; color: var(--fc-line); background: var(--fc-paper); }
+.prow .rm:active { background: var(--fc-line); color: var(--fc-paper); }
 .panel:has([data-tab="done"][aria-selected="true"]) .prow { grid-template-columns: 64px minmax(0, 1fr) auto; }
 @media (hover: hover) { .prow .rm:hover, .prow .open:hover .nm { color: var(--ink-red); } }
 .panel .empty { color: #6d6758; padding: 18px 0; line-height: 1.4; }
 @media (prefers-reduced-motion: reduce) { .panel, .scrim { transition: none; } }
 
 .roll { position: absolute; inset: 0; z-index: 50; pointer-events: none; }
-.roll .tag { top: auto; bottom: 9%; z-index: 60; }
 
 /* details: the poster grows into a big flash card */
 .detail { position: fixed; inset: 0; z-index: 30; display: grid; place-items: center; padding: calc(14px + env(safe-area-inset-top, 0px)) 12px calc(14px + env(safe-area-inset-bottom, 0px)); background: rgba(4, 5, 9, 0); transition: background .3s ease; }
 .detail.on { background: rgba(4, 5, 9, .62); }
-.dcard { position: relative; width: min(560px, 100%); height: min(calc(min(560px, 100vw - 24px) * 1.66), 100%); padding: 9px; transition: transform .34s cubic-bezier(.2, .8, .2, 1); will-change: transform; }
+.dcard { position: relative; width: min(560px, 100%); height: min(calc(min(560px, 100vw - 24px) * 1.66), calc(100vh - 28px)); height: min(calc(min(560px, 100vw - 24px) * 1.66), calc(100dvh - 28px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px))); padding: 9px; transition: transform .34s cubic-bezier(.2, .8, .2, 1); will-change: transform; }
 .dcard .fc-frame { position: relative; height: 100%; border-width: 3px; }
 .dcard .x { position: absolute; z-index: 3; top: 8px; right: 8px; background: var(--fc-paper); border-radius: 3px; display: grid; place-items: center; width: 40px; height: 40px; color: var(--fc-line); }
 .dcard .x svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 3; stroke-linecap: square; }
 @media (hover: hover) { .dcard .x:hover { color: var(--ink-red); } }
+.mine { padding-top: 12px; border-top: 2px solid var(--fc-line); }
+.mine .mlbl { display: flex; justify-content: space-between; align-items: baseline; font-family: var(--f-card); font-weight: 600; font-size: 16px; text-transform: lowercase; color: var(--fc-line); }
+.mine .mlbl b { font-weight: 600; font-size: 15px; color: var(--ink-red); }
+.mine .mlbl b.none { color: #6d6758; font-weight: 500; }
+.pots { display: grid; grid-template-columns: repeat(10, 1fr); margin-top: 6px; }
+.pots button { display: grid; place-items: center; height: 44px; padding: 0; }
+.pots img { height: 30px; width: auto; transform: rotate(10deg); opacity: .22; filter: grayscale(1); transition: opacity .12s ease, transform .12s ease; }
+.pots button.on img { opacity: 1; filter: none; }
+.pots button:active img { transform: rotate(10deg) scale(1.2); }
+@media (hover: hover) { .pots:hover button img { opacity: .22; filter: grayscale(1); } .pots button:hover img, .pots button:has(~ button:hover) img { opacity: 1; filter: none; } }
+.prow .sc .you { font-size: .8em; font-weight: 600; color: var(--fc-line); }
 .dacts { display: flex; gap: 10px; margin-top: 8px; padding-top: 4px; }
 .dacts .ck { font-size: 16px; font-weight: 700; }
 .dacts button { font-size: 17px !important; white-space: nowrap; padding-left: 6px !important; padding-right: 6px !important; }
@@ -305,6 +308,12 @@ body.gridview .wall, body.gridview .top { display: none; }
 .detail.on .dbody { opacity: 1; }
 .dbody .trailer { flex: 0 0 auto; aspect-ratio: 16 / 9; background: #111; border-radius: 2px; overflow: hidden; }
 .dbody .trailer iframe { display: block; width: 100%; height: 100%; border: 0; }
+.tplay { position: relative; display: grid; place-items: center; width: 100%; height: 100%; background: #111 center / cover no-repeat; }
+.tplay::before { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0) 45%, rgba(0,0,0,.55)); }
+.tplay .tbtn { position: relative; display: grid; place-items: center; width: 64px; height: 64px; border-radius: 50%; background: var(--fc-paper); border: 3px solid var(--fc-line); box-shadow: 0 6px 18px rgba(0,0,0,.45); transition: transform .12s ease; }
+.tplay .tbtn svg { width: 28px; height: 28px; margin-left: 4px; fill: var(--fc-line); }
+.tplay:active .tbtn { transform: scale(.94); }
+.tplay .tlbl { position: absolute; left: 12px; bottom: 9px; font-family: var(--f-card); font-weight: 600; font-size: 14px; text-transform: lowercase; color: var(--cream); }
 .dbody .head { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; }
 .dbody h2 { font-size: clamp(28px, 8vw, 40px); line-height: 1; margin: 0; }
 .dbody .pct { font-family: var(--f-card); font-weight: 600; font-size: 26px; line-height: 1; color: var(--ink-red); white-space: nowrap; }
@@ -325,8 +334,8 @@ body.gridview .wall, body.gridview .top { display: none; }
   .panel .fc-frame { padding-left: 18px; padding-right: 18px; }
   .ptabs { margin-top: 16px; }
   .pchips { padding: 14px 0 8px; gap: 8px; }
-  .prow { grid-template-columns: 22px 72px minmax(0, 1fr) 40px; gap: 14px; padding: 18px 0; }
-  .panel:has([data-tab="done"][aria-selected="true"]) .prow { grid-template-columns: 72px minmax(0, 1fr) 40px; }
+  .prow { grid-template-columns: 22px 72px minmax(0, 1fr) auto; gap: 12px; padding: 18px 0; }
+  .panel:has([data-tab="done"][aria-selected="true"]) .prow { grid-template-columns: 72px minmax(0, 1fr) auto; }
   .prow .mini { width: 72px; height: 108px; }
   .prow .nm { font-size: 19px; }
   .prow .mt { margin-top: 5px; line-height: 1.35; }
@@ -439,7 +448,7 @@ body.gridview .wall, body.gridview .top { display: none; }
   // twinkling: a separate layer of stars that slowly brighten and fade, each on its own beat
   var tw = document.getElementById('twinkle'), tx = tw.getContext('2d'), stars = [];
   function seedStars() {
-    var dpr = Math.min(devicePixelRatio || 1, 2), w = innerWidth, h = Math.max(innerHeight, tw.clientHeight), r = rng(23);
+    var dpr = 1, w = innerWidth, h = Math.max(innerHeight, tw.clientHeight), r = rng(23);
     tw.width = Math.round(w * dpr); tw.height = Math.round(h * dpr); tx.setTransform(dpr, 0, 0, dpr, 0, 0);
     stars = [];
     for (var i = 0; i < Math.max(40, w * h / 5000); i++) stars.push({ x: r() * w, y: r() * h, s: .7 + r() * r() * 1.8, ph: r() * 6.283, sp: .6 + r() * 1.6, glint: r() < .08, blue: r() < .3 });
@@ -463,7 +472,7 @@ body.gridview .wall, body.gridview .top { display: none; }
   }
   // the stars hold still while a poster is being peeled, so the peel gets the whole frame
   var lastT = 0, peeling = 0;
-  function loop(time) { if (!peeling && time - lastT > 50) { lastT = time; drawStars(time); } requestAnimationFrame(loop); }
+  function loop(time) { if (!peeling && detail.hidden && time - lastT > 70) { lastT = time; drawStars(time); } requestAnimationFrame(loop); }
   paint(); seedStars();
   if (reduce) drawStars(0); else requestAnimationFrame(loop);
   var lastW = innerWidth; addEventListener('resize', function () { if (innerWidth !== lastW || Math.abs(innerHeight - H) > 120) { lastW = innerWidth; paint(); seedStars(); if (reduce) drawStars(0); } sizes(); if (view === 'grid') render(); });
@@ -830,6 +839,16 @@ body.gridview .wall, body.gridview .top { display: none; }
   var WKEY = 'baked-potatoes-watched', watched = [];
   try { watched = JSON.parse(localStorage.getItem(WKEY) || '[]').filter(function (k) { return T.some(function (t) { return t.key === k; }); }); } catch (e) { watched = []; }
   function save() { try { localStorage.setItem(KEY, JSON.stringify(stash)); localStorage.setItem(WKEY, JSON.stringify(watched)); } catch (e) {} }
+  // your own scores, 1 to 10, kept on this device
+  var MKEY = 'baked-potatoes-mine', mineS = {};
+  try { mineS = JSON.parse(localStorage.getItem(MKEY) || '{}') || {}; } catch (e) { mineS = {}; }
+  function mine(t) { return +mineS[t.key] || 0; }
+  function setMine(t, n) { if (n) mineS[t.key] = n; else delete mineS[t.key]; try { localStorage.setItem(MKEY, JSON.stringify(mineS)); } catch (e) {} }
+  function minePart(t) {
+    var n = mine(t), h = '<div class="mine"><p class="mlbl">your score ' + (n ? '<b>' + n + '/10</b>' : '<b class="none">tap a potato</b>') + '</p><div class="pots" role="group" aria-label="Your score out of 10">';
+    for (var i = 1; i <= 10; i++) h += '<button type="button" data-r="' + i + '" aria-label="' + i + ' out of 10" aria-pressed="' + (n === i) + '"' + (i <= n ? ' class="on"' : '') + '><img src="img/potato.png" alt="" width="58" height="96"></button>';
+    return h + '</div></div>';
+  }
   function isWatched(t) { return watched.indexOf(t.key) > -1; }
   function toggleWatched(t) { learned(); if (isWatched(t)) watched = watched.filter(function (k) { return k !== t.key; }); else watched.push(t.key); save(); updateCount(); }
   var artV = 0, ART = {}, IMG = 'https://image.tmdb.org/t/p/';
@@ -916,7 +935,8 @@ body.gridview .wall, body.gridview .top { display: none; }
     var keep = {};
     // only cards drawn with the current artwork are reused (the first draw happens before it loads)
     [].forEach.call(stack.querySelectorAll('.poster'), function (el) { if (el._t && el._art === artV && !keep[el._t.key]) keep[el._t.key] = el; });
-    for (var ck in gone) if (!keep[ck] && gone[ck]._art === artV) keep[ck] = gone[ck];
+    // a passed card is reused only if it still shows that title (the card underneath gets repainted while you swipe back)
+    for (var ck in gone) if (!keep[ck] && gone[ck]._art === artV && gone[ck]._t && gone[ck]._t.key === ck && !gone[ck].isConnected) keep[ck] = gone[ck];
     while (stack.firstChild) stack.removeChild(stack.firstChild);
     var q = queue();
     vb.textContent = vibeF === 'all' ? 'categories' : vibeName(vibeF).toLowerCase();
@@ -925,7 +945,7 @@ body.gridview .wall, body.gridview .top { display: none; }
     pos = Math.max(0, Math.min(pos, q.length));
     showTop(q[pos]);
     if (view === 'grid') drawGrid(q);
-    deck.classList.toggle('empty', pos >= q.length); pull(0, 0);
+    deck.classList.toggle('empty', pos >= q.length);
     document.getElementById('side-prev').disabled = pos === 0;
     document.getElementById('side-next').disabled = pos >= q.length;
     syncStashBtn();
@@ -949,7 +969,8 @@ body.gridview .wall, body.gridview .top { display: none; }
     bind();
     var top = topEl(), img = top && top.querySelector('.mount .p-real img');
     function prep() { if (peeling) return setTimeout(prep, 250); (window.requestIdleCallback || setTimeout)(function () { if (peeling) return prep(); if (top === topEl()) frontSnapshot(top); }); }
-    if (img) { if (img.complete) prep(); else img.addEventListener('load', prep, { once: true }); }
+    function ready() { if (img.decode) img.decode().then(prep, prep); else prep(); }
+    if (img) { if (img.complete) ready(); else img.addEventListener('load', ready, { once: true }); }
   }
   // the flash-card label under the picture: title, the basics, and the score
   function plabel(t) {
@@ -961,28 +982,28 @@ body.gridview .wall, body.gridview .top { display: none; }
     var el = topEl(); if (!el || el._bound) return; el._bound = true;
     var x0 = 0, y0 = 0, dx = 0, dy = 0, down = false, t0 = 0, moved = false, pr = null;
     el.addEventListener('pointerdown', function (e) {
-      busy = true; stopNudge(); down = true; moved = false; x0 = e.clientX; y0 = e.clientY; t0 = Date.now(); dx = dy = 0; el.setPointerCapture(e.pointerId);
+      busy = true; stopNudge(); down = true; fingerDown = true; moved = false; x0 = e.clientX; y0 = e.clientY; t0 = Date.now(); dx = dy = 0; el.setPointerCapture(e.pointerId);
     });
     el.addEventListener('pointermove', function (e) {
       if (!down) return; dx = e.clientX - x0; dy = e.clientY - y0;
       if (!moved && Math.abs(dx) + Math.abs(dy) > 8) moved = true;
       if (!moved) return;
-      // either way is next; the roll just follows the swipe
+      // right is next, left is back; the card underneath shows where you're going
       var dir = dx >= 0 ? 1 : -1;
-      if (!pr || (pr.dir !== dir && Math.abs(dx) > 14)) { if (pr) pr.remove(); pr = peel(el, dir); }
+      if (!pr || (pr.dir !== dir && Math.abs(dx) > 14)) { if (pr) pr.remove(); underFor(dir); pr = peel(el, dir); }
       // the further you drag, the further the top rolls down; the sheet follows your finger
       var p = Math.min(.82, Math.hypot(dx, Math.max(dy, 0) * 1.4) / (el.offsetWidth * 1.15));
       pr.set(p, dx * .55, Math.max(-20, dy * .25), dx);
-      pull(dx > 30 ? Math.min(1, dx / 120) : 0, dx < -30 ? Math.min(1, -dx / 120) : 0);
     });
     function end() {
-      if (!down) return; down = false;
+      if (!down) return; down = false; fingerDown = false;
       if (!moved) { openDetail(el); return; }
       var fast = Math.abs(dx) / Math.max(1, Date.now() - t0) > .6;
-      if (Math.abs(dx) > 100 || (fast && Math.abs(dx) > 40)) { go(1, pr, dx > 0 ? 1 : -1); pr = null; return; }
-      pr.cancel(); pr = null; pull(0, 0);
+      if (Math.abs(dx) > 100 || (fast && Math.abs(dx) > 40)) { if (dx > 0) go(1, pr, 1); else go(-1, pr, -1); pr = null; return; }
+      pr.cancel(); pr = null;
     }
-    el.addEventListener('pointerup', end); el.addEventListener('pointercancel', end);
+    // if the browser drops the drag (the card was moved under the finger), treat it as letting go
+    el.addEventListener('pointerup', end); el.addEventListener('pointercancel', end); el.addEventListener('lostpointercapture', end);
   }
 
   // the poster just under the top one shows the next title, or the previous one while you
@@ -997,11 +1018,14 @@ body.gridview .wall, body.gridview .top { display: none; }
     if (!t) { u.style.visibility = 'hidden'; return; }
     u.style.visibility = '';
     if (u._t === t) return;
+    for (var gk in gone) if (gone[gk] === u) delete gone[gk];
     u._t = t; u._art = artV; u.innerHTML = '<div class="sheet"><div class="face mount labeled"><div class="mat">' + front(t) + plabel(t) + '</div></div></div>';
   }
   // step +1 shows the next poster, -1 the previous one (the back button); dir is which way the
   // poster rolls off
-  var left = [], gone = {}, tidyT = 0, ARROW_MS = 820;
+  var left = [], gone = {}, tidyT = 0, ARROW_MS = 820, fingerDown = false;
+  // the back of the stack is rebuilt after a roll, but never under a finger: that would drop the drag mid-peel
+  function tidy() { if (fingerDown) { tidyT = setTimeout(tidy, 150); return; } render(); }
   // the card underneath becomes the top card straight away (nothing is rebuilt during the
   // roll); the one that left is kept so going back can reuse it
   function promote(old) {
@@ -1026,7 +1050,13 @@ body.gridview .wall, body.gridview .top { display: none; }
     var q = queue(), el = topEl(); stopNudge();
     if (step < 0 && pos === 0) { if (pr) pr.cancel(); return; }
     if (step > 0 && pos >= q.length) return;
-    learned(); pull(0, 0);
+    learned();
+    if (step < 0 && pr && el && !reduce) {
+      // swiped left: this poster rolls off to the left, uncovering the previous one underneath
+      underFor(-1); pr.leave(false); left.pop();
+      pos -= 1; promote(el); tidyT = setTimeout(tidy, 520);
+      return;
+    }
     if (step < 0) {
       // back: the previous poster rolls back in from the side it left by
       if (pr) pr.remove();
@@ -1038,7 +1068,7 @@ body.gridview .wall, body.gridview .top { display: none; }
     left.push(dir);
     if (el && !reduce) {
       underFor(step); if (pr) pr.leave(dir > 0); else peel(el, dir).leave(dir > 0, ARROW_MS);
-      pos += step; promote(el); tidyT = setTimeout(render, (pr ? 460 : ARROW_MS) + 60);
+      pos += step; promote(el); tidyT = setTimeout(tidy, (pr ? 460 : ARROW_MS) + 60);
       return;
     }
     if (pr) pr.remove();
@@ -1145,9 +1175,6 @@ body.gridview .wall, body.gridview .top { display: none; }
     var cv = document.createElement('canvas'); cv.width = Math.round((w + pad * 2) * s); cv.height = Math.round((h + pad * 2) * s);
     cv.style.cssText = 'position:absolute;left:' + -pad + 'px;top:' + -pad + 'px;width:' + (w + pad * 2) + 'px;height:' + (h + pad * 2) + 'px';
     var x = cv.getContext('2d'); box.appendChild(cv);
-    var yes = document.createElement('span'), no = document.createElement('span');
-    yes.className = 'tag yes'; yes.textContent = 'stash it'; no.className = 'tag no'; no.textContent = 'pass';
-    box.appendChild(yes); box.appendChild(no);
     deck.appendChild(box); el.style.opacity = '0'; peeling++;
     var cur = { p: 0, x: 0, y: 0, d: 0 }, raf = 0;
     function draw(p) {
@@ -1174,8 +1201,6 @@ body.gridview .wall, body.gridview .top { display: none; }
       cur = { p: p, x: tx, y: ty, d: dd };
       draw(p);
       box.style.transform = rest + ' translate(' + tx + 'px,' + ty + 'px) rotate(' + (tx / 22) + 'deg)';
-      var k = Math.min(1, Math.abs(dd) / 100);
-      yes.style.opacity = dd > 0 ? k : 0; no.style.opacity = dd < 0 ? k : 0;
     }
     set(0, 0, 0, 0);
     function tween(to, ms, done) {
@@ -1217,6 +1242,7 @@ body.gridview .wall, body.gridview .top { display: none; }
       '<p class="meta">' + t.year + ' · ' + esc(t.run) + ' · ' + esc(t.genre) + ' · ' + tier(t.score).toLowerCase() + '</p>' +
       '<p class="plot">' + esc(t.plot) + '</p>' +
       '<dl>' + (t.dir.length ? '<dt>' + (t.kind === 'tv' ? 'made by' : 'directed by') + '</dt><dd>' + esc(t.dir.join(', ')) + '</dd>' : '') + (t.cast.length ? '<dt>starring</dt><dd>' + esc(t.cast.join(', ')) + '</dd>' : '') + '<dt>category</dt><dd>' + esc((catsFor(t).join(', ') || 'highest rated').toLowerCase()) + '</dd><dt>watch on</dt><dd class="wo">' + watchLine(t) + '</dd></dl>' +
+      minePart(t) +
       '<div class="dacts"><button type="button" data-d="stash" aria-pressed="' + inTodo(t) + '"><span>' + (inTodo(t) ? 'in your stash' : 'add to stash') + '</span></button><button type="button" data-d="watched" aria-pressed="' + isWatched(t) + '"><span class="ck">✓</span><span>' + (isWatched(t) ? 'watched' : 'mark watched') + '</span></button></div>';
     detail.hidden = false; dbody.scrollTop = 0;
     // grow from the poster's own rectangle into the big card
@@ -1243,6 +1269,14 @@ body.gridview .wall, body.gridview .top { display: none; }
   document.getElementById('dclose').addEventListener('click', closeDetail);
   // stash or mark watched from the big card: it stays open and the button flips
   dbody.addEventListener('click', function (e) {
+    var r = e.target.closest('[data-r]');
+    if (r && openFrom) {
+      // tap a potato to score it; tap your current score again to clear it
+      var tt = openFrom._t, n = +r.dataset.r; setMine(tt, mine(tt) === n ? 0 : n);
+      var box = dbody.querySelector('.mine'); box.outerHTML = minePart(tt);
+      if (!sd.hidden) drawStash();
+      return;
+    }
     var b = e.target.closest('[data-d]'); if (!b || !openFrom) return;
     var t = openFrom._t;
     if (b.dataset.d === 'watched') toggleWatched(t); else toggleStash(t);
@@ -1263,7 +1297,16 @@ body.gridview .wall, body.gridview .top { display: none; }
   addEventListener('keydown', function (e) { if (e.key === 'Escape' && !detail.hidden) { closeDetail(); e.stopImmediatePropagation(); } });
   function trailer(t) {
     var a = ART[t.key], slot = dbody.querySelector('.trailer'); if (!a || !a.id) return;
-    function show(key) { if (!key || detail.hidden || openFrom === null || openFrom._t !== t) return; slot.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + encodeURIComponent(key) + '?playsinline=1&rel=0&fs=1" title="' + esc(t.title) + ' trailer" allow="encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>'; slot.hidden = false; }
+    // the TMDB still with a play button; YouTube's player (about a megabyte of script) only loads when you tap it
+    function show(key) {
+      if (!key || detail.hidden || openFrom === null || openFrom._t !== t) return;
+      var still = a.backdrop ? IMG + 'w780' + a.backdrop : '';
+      slot.innerHTML = '<button type="button" class="tplay" aria-label="Play the ' + esc(t.title) + ' trailer"' + (still ? ' style="background-image:url(' + still + ')"' : '') + '><span class="tbtn" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span><span class="tlbl">play trailer</span></button>';
+      slot.querySelector('.tplay').addEventListener('click', function () {
+        slot.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + encodeURIComponent(key) + '?playsinline=1&rel=0&fs=1&autoplay=1" title="' + esc(t.title) + ' trailer" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>';
+      });
+      slot.hidden = false;
+    }
     if (TRAILER[t.key] !== undefined) return show(TRAILER[t.key]);
     fetch('/api/trailer?kind=' + t.kind + '&id=' + a.id).then(function (r) { return r.ok ? r.json() : {}; })
       .then(function (j) { TRAILER[t.key] = j.key || ''; show(TRAILER[t.key]); }).catch(function () {});
@@ -1273,7 +1316,6 @@ body.gridview .wall, body.gridview .top { display: none; }
   var deck = document.getElementById('deck'), busy = false, HKEY = 'baked-potatoes-learned', knows = false;
   try { knows = localStorage.getItem(HKEY) === '1'; } catch (e) {}
   function learned() { busy = true; if (!knows) { knows = true; try { localStorage.setItem(HKEY, '1'); } catch (e) {} } }
-  function pull(k, p) { deck.style.setProperty('--pk', k); deck.style.setProperty('--pp', p); deck.classList.toggle('lean-k', k > .4); deck.classList.toggle('lean-p', p > .4); }
   document.getElementById('side-prev').addEventListener('click', function () { go(-1); });
   document.getElementById('side-next').addEventListener('click', function () { go(1); });
   document.getElementById('stashbtn').addEventListener('click', function () { var t = queue()[pos]; if (t) toggleStash(t); });
@@ -1397,7 +1439,7 @@ body.gridview .wall, body.gridview .top { display: none; }
     shown.forEach(function (k, i) {
       var t = byKey(k), w = isWatched(t), r = document.createElement('div'); r.className = 'prow' + (w ? ' is-watched' : ''); r.dataset.key = k;
       r.innerHTML = (stashTab === 'todo' ? '<span class="pn">' + (i + 1) + '</span>' : '') +
-        '<button type="button" class="open">' + miniPoster(t) + '<span class="tx"><span class="nm"></span><span class="mt" style="display:block">' + t.year + ' · ' + esc(t.run) + ' · ' + esc(t.genre) + '</span><span class="sc" style="display:block">' + SPUD + rating(t) + '<small>/10</small></span></span></button>' +
+        '<button type="button" class="open">' + miniPoster(t) + '<span class="tx"><span class="nm"></span><span class="mt" style="display:block">' + t.year + ' · ' + esc(t.run) + ' · ' + esc(t.genre) + '</span><span class="sc" style="display:block">' + SPUD + rating(t) + '<small>/10</small>' + (mine(t) ? ' <b class="you">· you ' + mine(t) + '</b>' : '') + '</span></span></button>' +
         '<span class="pact"><button type="button" class="wk" aria-pressed="' + w + '" aria-label="' + (w ? 'Mark ' + esc(t.title) + ' as not watched' : 'Mark ' + esc(t.title) + ' as watched') + '">✓</button>' +
         (canSort ? '<span class="grip" aria-label="Drag to reorder" role="img">≡</span>' : '') +
         '<button type="button" class="rm" aria-label="Remove ' + esc(t.title) + '">remove</button></span>';

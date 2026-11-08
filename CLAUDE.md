@@ -31,11 +31,16 @@ glints, paper-grain noise). The page colour (`--night`, #0a0c14, also `theme-col
 sky's average edge colour so Safari's own top and bottom bars blend in (a Safari tab can't
 draw under them); the sky canvases are 100lvh tall. The site is installable (manifest,
 apple-touch-icon, black-translucent status bar): from the Home Screen it runs full screen
-with stars to every edge. The sky has with a layer of stars that slowly twinkle. Every poster image
+with stars to every edge. The sky has a layer of stars that slowly twinkle (drawn at 1x resolution, ~14 times a
+second, paused while a poster is peeled or the details card is open: full-screen canvas
+redraws are the site's biggest steady cost on phones). Every poster image
 carries a very light, even paper texture, not specks (a generated tile, `GRAIN`, no blend
 modes; also painted into
-the peel snapshot). Swiping browses: a swipe either way rolls the poster off (in the direction of the swipe)
-and shows the next one. Going back is only the ‹ button (owner: no swipe back).
+the peel snapshot). Swiping browses: swipe right for the next poster, swipe left to go back (owner's call,
+2026-11-08; replaces "either way is next"). Either way the top poster rolls off in the
+direction of the swipe and the card underneath shows where you're going (`underFor()`): the
+next title on a right swipe, the previous one on a left swipe. Left on the first poster
+lays back flat.
 Nothing is removed from the deck. Drag a poster to peel it: it rolls up from the top corner opposite the swipe (top-left
 when you swipe right, top-right when you swipe left) like paper coming off a wall, and
 follows your finger the whole way. `peel()` draws it flat on one canvas each frame: the
@@ -44,7 +49,9 @@ along the line and its soft shadow. No 3D at all: every 3D version (strips, back
 tricks) glitched on iOS Safari. The twinkle pauses while a poster is peeled. Speed rules (owner: "moves slow"): nothing is built during a roll. `go()` promotes the
 cards already underneath (`promote()`) and rebuilds the back of the stack ~0.5s later;
 `render()` reuses poster nodes (and ones just passed, `gone`); snapshot prep waits for
-the roll to finish; the poster texture is the pre-made `GRAIN` tile (an SVG turbulence
+the roll to finish, and the deferred rebuild (`tidy()`) waits while a finger is down
+(rebuilding under a finger dropped the drag and left a half-peeled overlay frozen on
+screen; `lostpointercapture` also counts as letting go); the poster texture is the pre-made `GRAIN` tile (an SVG turbulence
 filter was costly), off on the cards behind. ‹ brings the previous poster back in, rolling
 open from the side it left by (`peel().enter()`). The ‹ › buttons roll slower (`ARROW_MS`,
 ~0.8s) than a swipe's finish (~0.46s). Let go far enough and it rolls the rest of the way off; let go early and it lays back flat. The next
@@ -88,7 +95,7 @@ is never ambiguous); the stash array's order is the priority. The circle marks a
 watched (`watched`, its own localStorage key) and moves it to the watched tab; posters show
 "✓ watched" on their label, and the details card has stash it and mark watched. Rows: the
 real mini poster (`miniPoster()`, the image only, not a shrunk card), title, year · runtime
-· genre, score, remove. Tapping a row opens that title's details card over the stash (owner's call, 2026-10-28); closing it (×, Esc, tap outside) leaves the stash open, and stash or watched changes made in the card update the rows underneath. A one/grid toggle (frosted glass, about as tall as the category heading, at the right end
+· genre, score, and **remove** as a real outlined button (owner: it was too hard to tap). Tapping a row opens that title's details card over the stash (owner's call, 2026-10-28); closing it (×, Esc, tap outside) leaves the stash open, and stash or watched changes made in the card update the rows underneath. A one/grid toggle (a solid dark tint; a live blur over the twinkling sky cost a redraw every frame, about as tall as the category heading, at the right end
 of the heading's row, level with it; owner's call 2026-10-27) switches to a
 scrolling grid of every poster left; tapping a tile opens the big details card right there
 (pass / stash from it update the grid). The category text moves above the tiles in grid
@@ -97,7 +104,12 @@ view. The choice of view is remembered; with no saved choice, computers (1000px 
 The details view, the nav and the drawers are **vintage flash cards**:
 cream paper, a heavy black rounded frame and a lowercase grotesque label (Inter Tight). No
 drawings (owner removed them, 2026-10-26). The top of the details view is the trailer
-(`/api/trailer`, youtube-nocookie embed, removed again on close).
+(`/api/trailer`): the TMDB still with a play button; the youtube-nocookie player (about a
+megabyte of script) only loads when that's tapped, and is removed again on close.
+Under the credits is **your score**: ten potatoes, tap one to score it 1–10, tap your score
+again to clear it (owner's call, 2026-11-08). Kept on this device (`baked-potatoes-mine`,
+key → number); the stash rows show it as "you 7". There are no shared or average user
+scores yet: that needs storage on the Worker.
 The wordmark sits top left on every page: the potato icon, then "baked potatoes", Arimo
 Bold, lowercase, on one line, cream, with the tagline "what to watch when you're baked"
 under it in small soft cream, lined up with the word (owner: make the purpose clear), sized to fill the space up to the buttons on the right (owner's call, 2026-10-26; the name is back on).
